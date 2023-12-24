@@ -11,7 +11,7 @@ const COLORS = {
 
 const FONT = {
   regular: "Poppins_400Regular",
-  medium: "Poppins_600SemiBold",
+  semi: "Poppins_600SemiBold",
   bold: "Poppins_700Bold",
 };
 

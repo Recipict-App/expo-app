@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
+import { COLORS, FONT, SIZES } from "../constants/theme";
+
 interface LatestIngredientProps {
   name: string;
   quantity: string;
@@ -63,14 +65,12 @@ export default function Home() {
             overflow: "visible",
           }}
         >
-          <Text style={{ fontWeight: "bold", fontSize: 35 }}>
+
+          <Text style={{ fontFamily: FONT.bold, fontSize: SIZES.xxxl }}>
             What's
             <Text
               style={{
-                color: "#1BD15D",
-                textShadowColor: "black",
-                textShadowRadius: 3,
-                textShadowOffset: { width: 1, height: 1 },
+                color: COLORS.green,
               }}
             >
               {" "}
@@ -86,7 +86,7 @@ export default function Home() {
               width: 320,
               height: 180,
               backgroundColor: "#F3F6C8",
-              padding: 20,
+              padding: 25,
               gap: 5,
               borderRadius: 28,
               overflow: "visible",
@@ -99,10 +99,10 @@ export default function Home() {
                 overflow: "visible",
               }}
             >
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              <Text style={{ fontFamily: FONT.semi, fontSize: 18 }}>
                 Get that wok moving with these recipes
               </Text>
-              <Text style={{ opacity: 0.4 }}>
+              <Text style={{ fontFamily: FONT.semi, opacity: 0.4, width: 183 }}>
                 Found 3 dishes ready to be made
               </Text>
               <TouchableOpacity>
@@ -148,9 +148,11 @@ export default function Home() {
                 />
               );
             })}
+
             <Text className="flex items-center justify-center font-ppb text-green text-2xl">
               Tailwindddd test
             </Text>
+
           </View>
         </View>
       </ScrollView>

@@ -65,12 +65,12 @@ export default function Home() {
             overflow: "visible",
           }}
         >
+
           <Text style={{ fontFamily: FONT.bold, fontSize: SIZES.xxxl }}>
             What's
             <Text
               style={{
                 color: COLORS.green,
-
               }}
             >
               {" "}
@@ -107,7 +107,7 @@ export default function Home() {
               </Text>
               <TouchableOpacity>
                 <Text
-                  style={{ color: "#EC7669", fontSize: 13, fontFamily: FONT.bold }}
+                  style={{ color: "#EC7669", fontWeight: "bold", fontSize: 15 }}
                 >
                   Show More
                 </Text>
@@ -148,6 +148,11 @@ export default function Home() {
                 />
               );
             })}
+
+            <Text className="flex items-center justify-center font-ppb text-green text-2xl">
+              Tailwindddd test
+            </Text>
+
           </View>
         </View>
       </ScrollView>

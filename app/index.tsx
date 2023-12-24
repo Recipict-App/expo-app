@@ -1,13 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
+import { Redirect } from "expo-router";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>ROUTTEREREREREwkwkkwkkw</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+  return <Redirect href="/home" />;
 }
 
 const styles = StyleSheet.create({

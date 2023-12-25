@@ -1,10 +1,4 @@
-import {
-  Text,
-  View,
-  SafeAreaView,
-  ScrollView,
-  Image,
-} from "react-native";
+import { Text, View, SafeAreaView, ScrollView, Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 
 interface LatestIngredientProps {
@@ -50,9 +44,7 @@ export default function Home() {
                 <Text className=" text-green"> Cooking?</Text>
               </Text>
             </View>
-            <View
-              className="flex justify-center w-full h-[190px] bg-[#F3F6C8] p-[24px] gap-[2px] overflow-visible rounded-3xl"
-            >
+            <View className="flex justify-center w-full h-[190px] bg-[#F3F6C8] p-[24px] gap-[2px] overflow-visible rounded-3xl">
               <View className="flex gap-[7px]">
                 <Text className=" font-pps text-xl">
                   Get that wok moving with these recipes
@@ -69,8 +61,8 @@ export default function Home() {
               <View className="overflow-visible">
                 <Image
                   className="w-[181px] h-[174px] absolute right-[-30px] top-[-90px]"
-                  style={{resizeMode: "contain"}}
-                  source={require("../images/Bowl.png")}
+                  style={{ resizeMode: "contain" }}
+                  source={require("../assets/images/Bowl.png")}
                 />
               </View>
             </View>

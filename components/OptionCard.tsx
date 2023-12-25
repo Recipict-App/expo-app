@@ -17,7 +17,9 @@ export default function OptionCard({ title, icon, func }: OptionCardProps) {
           <View className="bg-[#9B9B9B] rounded-lg h-8 w-8 justify-center items-center" />
 
           {/* Text */}
-          <Text className="text-sm font-pps ml-4 py-1">{title}</Text>
+          <Text numberOfLines={1} className="text-sm font-pps ml-4 py-1">
+            {title}
+          </Text>
         </View>
 
         {/* Arrow */}

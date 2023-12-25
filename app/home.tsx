@@ -51,7 +51,7 @@ export default function Home() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                gap: 14,
+                gap: 12,
               }}
             >
               <Text className=" text-lg font-ppr">Things you bought</Text>

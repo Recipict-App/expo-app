@@ -10,7 +10,9 @@ export interface ShelfProps {
 export const Shelf: React.FC<ShelfProps> = ({ category, ingredients }) => {
   return (
     <View className="w-11/12 mt-3">
-      <Text className="text-[#FE0303] text-lg font-pps mb-2">{category}</Text>
+      <Text numberOfLines={1} className="text-[#FE0303] text-lg font-pps mb-2">
+        {category}
+      </Text>
 
       <View
         style={{

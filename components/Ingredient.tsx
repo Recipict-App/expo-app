@@ -22,8 +22,10 @@ export const Ingredient: React.FC<IngredientProps> = ({
 
           {/* Text */}
           <View className="ml-4">
-            <Text className="text-sm font-pps">{name}</Text>
-            <Text className="text-xs font-ppr text-grey">
+            <Text numberOfLines={1} className="text-sm font-pps">
+              {name}
+            </Text>
+            <Text numberOfLines={1} className="text-xs font-ppr text-grey">
               {quantity} - {duration}
             </Text>
           </View>

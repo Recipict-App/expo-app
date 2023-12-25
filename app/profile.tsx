@@ -31,7 +31,7 @@ export default function profile() {
           {/* Options */}
           <View
             className="w-10/12 items-center justify-center mt-12 flex"
-            style={{ gap: 8 }}
+            style={{ gap: 12 }}
           >
             <OptionCard title="Preference" icon="" func={handlePrerefence} />
             <OptionCard title="Appereance" icon="" func={handleAppereance} />

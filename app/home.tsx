@@ -1,15 +1,11 @@
-import { StatusBar } from "expo-status-bar";
 import {
-  StyleSheet,
   Text,
   View,
   SafeAreaView,
   ScrollView,
   Image,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-
-import { COLORS, FONT, SIZES } from "../constants/theme";
+import { TouchableOpacity } from "react-native";
 
 interface LatestIngredientProps {
   name: string;
@@ -23,20 +19,10 @@ const LatestIngredient: React.FC<LatestIngredientProps> = ({
   duration,
 }) => {
   return (
-    <TouchableOpacity>
-      <View
-        style={{
-          width: 319,
-          height: 72,
-          borderRadius: 24,
-          backgroundColor: "#F8F8F6",
-          display: "flex",
-          justifyContent: "center",
-          padding: 20,
-        }}
-      >
-        <Text style={{ fontSize: 17, fontWeight: "500" }}>{name}</Text>
-        <Text style={{ fontSize: 15, opacity: 0.5 }}>
+    <TouchableOpacity className="w-full">
+      <View className="w-full h-[72px] rounded-lg bg-[#F8F8F6] flex justify-center p-[20px]">
+        <Text className=" text-base font-pps">{name}</Text>
+        <Text className=" text-base font-ppr opacity-50">
           {quantity} - {duration}
         </Text>
       </View>
@@ -46,7 +32,7 @@ const LatestIngredient: React.FC<LatestIngredientProps> = ({
 
 export default function Home() {
   const ListOfIngredients: LatestIngredientProps[] = [
-    { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
+    { name: "Sweet Soy Sauce", quantity: "500ml", duration: "3 months ago" },
     { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
     { name: "Erick Jovan", quantity: "56kg", duration: "19 years ago" },
     { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
@@ -56,103 +42,60 @@ export default function Home() {
   return (
     <SafeAreaView>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            flex: 1,
-            padding: 20,
-            paddingLeft: 40,
-            gap: 30,
-            overflow: "visible",
-          }}
-        >
-
-          <Text style={{ fontFamily: FONT.bold, fontSize: SIZES.xxxl }}>
-            What's
-            <Text
-              style={{
-                color: COLORS.green,
-              }}
+        <View className=" flex w-full items-center justify-center p-[20px] pt-[40px] overflow-visible">
+          <View className=" flex w-full gap-[20px] items-center justify-center overflow-visible">
+            <View className="w-full">
+              <Text className="font-ppb text-3xl">
+                What's
+                <Text className=" text-green"> Cooking?</Text>
+              </Text>
+            </View>
+            <View
+              className="flex justify-center w-full h-[190px] bg-[#F3F6C8] p-[24px] gap-[2px] overflow-visible rounded-3xl"
             >
-              {" "}
-              Cooking?
-            </Text>
-          </Text>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              flex: 1,
-              justifyContent: "center",
-              width: 320,
-              height: 180,
-              backgroundColor: "#F3F6C8",
-              padding: 25,
-              gap: 5,
-              borderRadius: 28,
-              overflow: "visible",
-            }}
-          >
+              <View className="flex gap-[7px]">
+                <Text className=" font-pps text-xl">
+                  Get that wok moving with these recipes
+                </Text>
+                <Text className=" font-ppr opacity-40 w-[183px]">
+                  Found 3 dishes ready to be made
+                </Text>
+                <TouchableOpacity>
+                  <Text className=" font-ppb text-base text-[#EC7669]">
+                    Show More
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View className="overflow-visible">
+                <Image
+                  className="w-[181px] h-[174px] absolute right-[-30px] top-[-90px]"
+                  style={{resizeMode: "contain"}}
+                  source={require("../images/Bowl.png")}
+                />
+              </View>
+            </View>
             <View
               style={{
-                flex: 1,
-                gap: 7,
-                overflow: "visible",
+                width: 320,
+                paddingTop: 60,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 25,
               }}
             >
-              <Text style={{ fontFamily: FONT.semi, fontSize: 18 }}>
-                Get that wok moving with these recipes
-              </Text>
-              <Text style={{ fontFamily: FONT.semi, opacity: 0.4, width: 183 }}>
-                Found 3 dishes ready to be made
-              </Text>
-              <TouchableOpacity>
-                <Text
-                  style={{ color: "#EC7669", fontWeight: "bold", fontSize: 15 }}
-                >
-                  Show More
-                </Text>
-              </TouchableOpacity>
+              <Text className=" text-xl font-pps">Things you bought</Text>
+              {ListOfIngredients.map((item, index) => {
+                return (
+                  <LatestIngredient
+                    key={index}
+                    name={item.name}
+                    quantity={item.quantity}
+                    duration={item.duration}
+                  />
+                );
+              })}
             </View>
-            <View style={{ overflow: "visible" }}>
-              <Image
-                source={require("../images/Bowl.png")}
-                style={{
-                  width: 181,
-                  height: 174,
-                  position: "absolute",
-                  right: -50,
-                  top: 50,
-                }}
-              />
-            </View>
-          </View>
-          <View
-            style={{
-              width: 320,
-              marginTop: 70,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 25,
-            }}
-          >
-            <Text style={{ fontSize: 20, fontWeight: "500" }}>
-              Things you bought
-            </Text>
-            {ListOfIngredients.map((item, index) => {
-              return (
-                <LatestIngredient
-                  name={item.name}
-                  quantity={item.quantity}
-                  duration={item.duration}
-                />
-              );
-            })}
-
-            <Text className="flex items-center justify-center font-ppb text-green text-2xl">
-              Tailwindddd test
-            </Text>
-
           </View>
         </View>
       </ScrollView>

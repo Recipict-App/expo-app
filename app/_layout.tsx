@@ -28,6 +28,7 @@ export default function HomeLayout() {
         tabBarActiveTintColor: "#1BD15D",
         tabBarActiveBackgroundColor: "#E8FBED",
         tabBarInactiveTintColor: "#C4C4C4",
+        // tabBarStyle: { borderTopWidth: 0},
       }}
     >
       <Tabs.Screen

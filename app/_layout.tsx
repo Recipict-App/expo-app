@@ -81,6 +81,7 @@ export default function HomeLayout() {
           tabBarIcon: () => (
             <Image
               className="w-[20px] h-[20px]"
+              style={{ resizeMode: "contain" }}
               source={require("../assets/icons/Profile.svg")}
             />
           ),

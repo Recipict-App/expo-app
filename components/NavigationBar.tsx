@@ -1,10 +1,10 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-export default function navigation() {
+export default function NavigationBar() {
   return (
     <View>
-      <Text>navigation</Text>
+      <Text>NavigationBar</Text>
     </View>
   );
 }

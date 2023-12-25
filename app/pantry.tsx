@@ -45,12 +45,14 @@ export default function pantry() {
               />
             </View>
 
-            {/* Shelf */}
-            <Shelf category="Meats" ingredients={dummyIngredients} />
-            <Shelf category="Vegetables" ingredients={dummyIngredients} />
-            <Shelf category="Spices" ingredients={dummyIngredients} />
-            <Shelf category="Beverages" ingredients={dummyIngredients} />
-            <Shelf category="Sauces" ingredients={dummyIngredients} />
+            <View className="w-11/12 justify-center items-center">
+              {/* Shelf */}
+              <Shelf category="Meats" ingredients={dummyIngredients} />
+              <Shelf category="Vegetables" ingredients={dummyIngredients} />
+              <Shelf category="Spices" ingredients={dummyIngredients} />
+              <Shelf category="Beverages" ingredients={dummyIngredients} />
+              <Shelf category="Sauces" ingredients={dummyIngredients} />
+            </View>
           </View>
         </View>
       </ScrollView>

@@ -2,20 +2,19 @@ import { Text, View, SafeAreaView, ScrollView, Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { IngredientProps, Ingredient } from "../components/Ingredient";
 
+const dummyIngredients: IngredientProps[] = [
+  { name: "Sweet Soy Sauce", quantity: "500ml", duration: "3 months ago" },
+  { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
+  { name: "Erick Jovan", quantity: "56kg", duration: "19 years ago" },
+  { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
+  { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
+];
 
 export default function Home() {
-  const ListOfIngredients: IngredientProps[] = [
-    { name: "Sweet Soy Sauce", quantity: "500ml", duration: "3 months ago" },
-    { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
-    { name: "Erick Jovan", quantity: "56kg", duration: "19 years ago" },
-    { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
-    { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
-  ];
-
   return (
     <SafeAreaView className="bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View className=" flex w-full items-center justify-center p-[20px] pt-[40px] overflow-visible">
+        <View className="flex w-full items-center justify-center p-[20px] pt-[40px] overflow-visible">
           <View className=" flex w-full gap-[20px] items-center justify-center overflow-visible">
             <View className="w-full">
               <Text className="font-ppr text-3xl">
@@ -56,7 +55,7 @@ export default function Home() {
               }}
             >
               <Text className=" text-lg font-ppr">Things you bought</Text>
-              {ListOfIngredients.map((item, index) => {
+              {dummyIngredients.map((item, index) => {
                 return (
                   <Ingredient
                     key={index}

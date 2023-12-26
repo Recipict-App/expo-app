@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
-
+import { SheetManager } from "react-native-actions-sheet";
 export interface RecipeBoxProps {
   name: string;
   ingredients: number;
@@ -10,7 +10,9 @@ export interface RecipeBoxProps {
   calories: number;
   image?: Image;
 }
-
+const handleShowRecipe = () => {
+    SheetManager.show("recipe-ingredient-sheet");
+  };
 export const RecipeBox: React.FC<RecipeBoxProps> = ({
   name,
   ingredients,
@@ -19,7 +21,7 @@ export const RecipeBox: React.FC<RecipeBoxProps> = ({
 }) => {
   return (
     <View className="flex w-full h-[100] justify-between rounded-3xl bg-[#F8F8F6]">
-      <TouchableOpacity className=" min-w-full min-h-full ">
+      <TouchableOpacity className=" min-w-full min-h-full " onPress={handleShowRecipe}>
         <View className="flex flex-row justify-between items-center w-full h-full p-[15px]">
           <View className="flex flex-row justify-center items-center">
             <View

@@ -4,7 +4,6 @@ import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { RecipeBoxProps, RecipeBox } from "./RecipeBox";
 
-
 const dummyRecipePreview: RecipeBoxProps[] = [
   { name: "Butter Chicken", ingredients: 5, duration: 50, calories: 500 },
   { name: "Pandan Chicken", ingredients: 2, duration: 30, calories: 510 },

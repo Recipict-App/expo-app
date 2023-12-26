@@ -8,6 +8,8 @@ import { useState } from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 
+import { SheetManager } from "react-native-actions-sheet";
+
 export default function App() {
   const [CameraPermission, requestCameraPermission] =
     Camera.useCameraPermissions();
@@ -43,6 +45,9 @@ export default function App() {
 
   const handleCapture = async () => {
     if (cameraRef.current) {
+      // show popup [SHOULD BE IN THE BOTTOM OF THIS METHOD]
+      SheetManager.show("scanned-items-sheet");
+
       const photo = await cameraRef.current.takePictureAsync();
 
       // uri will be passed to model

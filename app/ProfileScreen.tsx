@@ -2,12 +2,10 @@ import React from "react";
 import { View, Text, SafeAreaView, ScrollView, Alert } from "react-native";
 import { Image } from "expo-image";
 import OptionCard from "../components/OptionCard";
-import { SheetManager } from "react-native-actions-sheet";
 
 export default function profile() {
-  const handlePreference = () => {
-    SheetManager.show("scanned-items-sheet");
-  };
+
+  const handlePreference = () => {};
 
   const handleAppereance = () => {};
   const handleNotification = () => {};

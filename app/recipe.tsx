@@ -5,16 +5,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ReadyToBeMade from "../components/ReadyToBeMade";
 import AlmostThere from "../components/AlmostThere";
-
+import Explore from '../components/Explore';
 export default function recipe() {
-  const recipePreview = [1, 2, 3, 4];
+  
   return (
     <SafeAreaView className="bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
-          className=" flex w-full px-[24px] pt-[32px] overflow-visible min-h-screen"
-          style={{ gap: 20 }}
+          className=" flex w-full px-[24px] py-[32px] overflow-visible min-h-screen items-center"
         >
+          {/* Recipe Header */}
           <View className="flex w-full justify-between flex-row items-center">
             <Text className="font-pps text-3xl">Recipe</Text>
             <TouchableOpacity>
@@ -40,6 +40,9 @@ export default function recipe() {
           <ReadyToBeMade />
 
           <AlmostThere />
+
+          <Explore/>
+
         </View>
       </ScrollView>
     </SafeAreaView>

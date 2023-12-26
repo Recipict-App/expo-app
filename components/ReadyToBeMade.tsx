@@ -16,9 +16,9 @@ const RecipeItem = () => (
 export default function ReadyToBeMade() {
   const recipePreview = [1, 2, 3, 4];
   return (
-    <View className=" bg-[#BCBBFF] w-[341] h-[284] rounded-2xl mt-9 pt-[12px] justify-between flex">
+    <View className=" bg-[#BCBBFF] w-full h-[284] rounded-2xl mt-9 pt-[12px] justify-between flex">
       <View className="ml-[10px] flex flex-row" style={{ zIndex: 1 }}>
-        <Text className="font-pps text-xl text-white pl-1">
+        <Text className="font-pps text-2xl text-white pl-1">
           Ready To Be Made
         </Text>
         <Image

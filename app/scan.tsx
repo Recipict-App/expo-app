@@ -1,77 +1,119 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import Constants from 'expo-constants';
-import { Camera, CameraType } from 'expo-camera';
-import * as MediaLibrary from 'expo-media-library';
+import { Camera, CameraType, FlashMode } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+import * as ImagePicker from "expo-image-picker";
+
+import React from "react";
+import { useState } from "react";
+
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image } from "expo-image";
 
 export default function App() {
-    const [hasCameraPermission, setHasCameraPermission] = useState(null);
-    const [image, setImage] = useState(null);
-    const [type, setType] = useState(Camera.Constants.Type.back);
-    const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
-    const cameraRef = useRef(null);
-  
-    useEffect(() => {
-      (async () => {
-        MediaLibrary.requestPermissionsAsync();
-        const cameraStatus = await Camera.requestCameraPermissionsAsync();
-        setHasCameraPermission(cameraStatus.status === 'granted');
-      })();
-    }, []);
-  
-    const takePicture = async () => {
-      if (cameraRef) {
-        try {
-          const data = await cameraRef.current.takePictureAsync();
-          console.log(data);
-          setImage(data.uri);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-  
-    const savePicture = async () => {
-      if (image) {
-        try {
-          const asset = await MediaLibrary.createAssetAsync(image);
-          alert('Picture saved! 🎉');
-          setImage(null);
-          console.log('saved successfully');
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
+  const [CameraPermission, requestCameraPermission] =
+    Camera.useCameraPermissions();
+  const [galleryPermission, requestgalleryPermission] =
+    MediaLibrary.usePermissions();
+  const [imagePickerPermission, requestimagePickerPermission] =
+    ImagePicker.useMediaLibraryPermissions();
 
-  if (hasCameraPermission === false) {
-    return <Text>No access to camera</Text>;
+  const cameraRef = React.useRef<Camera>(null);
+
+  const [pickedImage, setPickedImage] = useState<String | null>(null);
+  const [torch, setTorch] = useState<FlashMode>(FlashMode.off);
+
+  if (!CameraPermission || !galleryPermission || !imagePickerPermission) {
+    // Camera permissions are still loading
+    return <View />;
   }
+
+  if (
+    !CameraPermission.granted ||
+    !galleryPermission.granted ||
+    !imagePickerPermission.granted
+  ) {
+    // Camera permissions are not granted yet
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to show the camera
+        </Text>
+      </View>
+    );
+  }
+
+  const handleCapture = async () => {
+    if (cameraRef.current) {
+      const photo = await cameraRef.current.takePictureAsync();
+
+      // uri will be passed to model
+      console.log(photo.uri);
+
+      // Save the image to the gallery
+      const asset = await MediaLibrary.createAssetAsync(photo.uri);
+      await MediaLibrary.createAlbumAsync("Recipict", asset, false);
+    }
+  };
+
+  const handleGallery = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    // wii be passed to model
+    console.log(result);
+
+    if (!result.canceled) {
+      setPickedImage(result.assets[0].uri);
+    }
+  };
+
+  const handleTorch = () => {
+    setTorch(torch === FlashMode.off ? FlashMode.torch : FlashMode.off);
+  };
 
   return (
     <View style={styles.container}>
-      {!image ? (
-        <Camera
-          style={styles.camera}
-          type={type}
-          ref={cameraRef}
-        //   flashMode={flash}
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: 30,
-            }}
-          >
-          </View>
-        </Camera>
-      ) : (
-        <Image source={{ uri: image }} style={styles.camera} />
-      )}
+      <Camera
+        style={styles.camera}
+        type={CameraType.back}
+        ref={cameraRef}
+        flashMode={torch}
+      >
+        {/* Inside camera */}
+        <View style={styles.buttonContainer}>
+          {/* Control bar */}
+          <View className="bg-[#F4F4F4] rounded-xl w-fit px-4 h-[38] flex items-center justify-center flex-row space-x-8">
+            {/* Gallery */}
+            <TouchableOpacity onPress={handleGallery}>
+              <Image
+                className="w-[20px] h-[20px]"
+                style={{ resizeMode: "contain" }}
+                source={require("../assets/icons/Gallery.svg")}
+              />
+            </TouchableOpacity>
 
-      <View style={styles.controls}>
-      </View>
+            <TouchableOpacity onPress={handleCapture}>
+              <Image
+                className="w-[36px] h-[30px]"
+                style={{ resizeMode: "contain" }}
+                source={require("../assets/icons/Camera.svg")}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={handleTorch}>
+              <Image
+                className="w-[20px] h-[20px]"
+                style={{ resizeMode: "contain" }}
+                source={require("../assets/icons/Flash.svg")}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Camera>
     </View>
   );
 }
@@ -79,32 +121,26 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#000',
-    padding: 8,
-  },
-  controls: {
-    flex: 0.5,
-  },
-  button: {
-    height: 40,
-    borderRadius: 6,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: '#E9730F',
-    marginLeft: 10,
+    justifyContent: "center",
   },
   camera: {
-    flex: 5,
-    borderRadius: 20,
-  },
-  topControls: {
     flex: 1,
+  },
+  buttonContainer: {
+    flex: 1,
+    flexDirection: "row",
+    margin: 64,
+    justifyContent: "center",
+    alignItems: "flex-end",
+  },
+  button: {
+    flex: 1,
+    alignSelf: "flex-end",
+    alignItems: "center",
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
   },
 });

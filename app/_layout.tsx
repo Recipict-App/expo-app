@@ -21,7 +21,7 @@ export default function HomeLayout() {
 
   return (
     <Tabs
-      initialRouteName="home"
+      initialRouteName="HomeScreen"
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
@@ -32,7 +32,7 @@ export default function HomeLayout() {
       }}
     >
       <Tabs.Screen
-        name="home"
+        name="HomeScreen"
         options={{
           tabBarIcon: () => (
             <Image
@@ -43,7 +43,7 @@ export default function HomeLayout() {
         }}
       />
       <Tabs.Screen
-        name="pantry"
+        name="PantryScreen"
         options={{
           tabBarIcon: () => (
             <Image
@@ -54,7 +54,7 @@ export default function HomeLayout() {
         }}
       />
       <Tabs.Screen
-        name="scan"
+        name="ScanScreen"
         options={{
           tabBarIcon: () => (
             <Image
@@ -65,7 +65,7 @@ export default function HomeLayout() {
         }}
       />
       <Tabs.Screen
-        name="recipe"
+        name="RecipeScreen"
         options={{
           tabBarIcon: () => (
             <Image
@@ -76,7 +76,7 @@ export default function HomeLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="ProfileScreen"
         options={{
           tabBarIcon: () => (
             <Image

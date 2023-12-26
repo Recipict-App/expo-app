@@ -5,7 +5,7 @@ import OptionCard from "../components/OptionCard";
 import { SheetManager } from "react-native-actions-sheet";
 
 export default function profile() {
-  const handlePreference = async () => {
+  const handlePreference = () => {
     SheetManager.show("scanned-items-sheet");
   };
 

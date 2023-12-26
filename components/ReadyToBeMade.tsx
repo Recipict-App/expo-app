@@ -70,14 +70,9 @@ export default function ReadyToBeMade() {
       {/* Modal */}
       <ActionSheet ref={actionSheetRef}>
         <View className=" w-full h-[92%] rounded-t-5xl pt-[12px] flex items-center gap-4 px-[20]">
-          <View
-            style={{
-              width: 124,
-              height: 4,
-              borderRadius: 10,
-              backgroundColor: "#9F9F9F",
-            }}
-          />
+          {/* Blackbar */}
+          <View className="w-32 h-1 bg-[#9F9F9F] rounded-xl" />
+          {/* Title */}
           <Text className="font-pps text-2xl">Eggs with Tomato</Text>
           {/* Image */}
           <View className=" bg-grey w-4/5 h-1/3 rounded-2xl"></View>
@@ -107,7 +102,6 @@ export default function ReadyToBeMade() {
               <Text className="font-pps text-base">Equipment(s): </Text>
               <Text className="font-ppr text-base">Pan, Wok</Text>
             </View>
-            
           </View>
         </View>
       </ActionSheet>

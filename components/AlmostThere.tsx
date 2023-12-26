@@ -16,12 +16,12 @@ const RecipeItem = () => (
 export default function AlmostThere() {
   const recipePreview = [1, 2, 3, 4];
   return (
-    <View className=" bg-[#FEC1A6] w-[341] h-[284] rounded-2xl mt-9 pt-[12px] justify-between flex">
+    <View className=" bg-[#FEC1A6] w-full h-[284] rounded-2xl mt-9 pt-[12px] justify-between flex">
       <View
         className="mr-[10px] flex flex-row justify-end"
         style={{ zIndex: 1 }}
       >
-        <Text className=" font-pps text-xl text-white text-right pr-1">
+        <Text className=" font-pps text-2xl text-white text-right pr-1">
           Almost There
         </Text>
         <Image

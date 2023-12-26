@@ -4,7 +4,9 @@ import { Image } from "expo-image";
 import OptionCard from "../components/OptionCard";
 
 export default function profile() {
+
   const handlePreference = () => {};
+
   const handleAppereance = () => {};
   const handleNotification = () => {};
   const handleLocation = () => {};

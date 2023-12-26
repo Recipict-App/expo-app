@@ -6,6 +6,7 @@ import ActionSheet, {
   ActionSheetRef,
   ActionSheetProps,
 } from "react-native-actions-sheet";
+import { SheetManager } from "react-native-actions-sheet";
 
 const dummyIngredients = [
   "Garlic",
@@ -19,15 +20,18 @@ const dummyIngredients = [
   "Bowly",
   "Satay",
 ];
+
+const handleShowRecipe = () => {
+  SheetManager.show("recipe-ingredient-sheet");
+};
+
 export default function ReadyToBeMade() {
   const recipePreview = [1, 2, 3, 4];
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   const RecipeItem = () => (
     <TouchableOpacity
-      onPress={() => {
-        actionSheetRef.current?.show();
-      }}
+      onPress={handleShowRecipe}
     >
       <View className="bg-[#444141] w-[127px] h-[210px] rounded-[20px] m-[5] flex justify-end items-center">
         <Text className="text-white font-pps w-3/5 flex text-center pb-4">
@@ -67,6 +71,7 @@ export default function ReadyToBeMade() {
           showsHorizontalScrollIndicator={false}
         />
       </View>
+
       {/* Modal */}
       <ActionSheet ref={actionSheetRef}>
         <View className=" w-full h-[92%] rounded-t-5xl pt-[12px] flex items-center gap-4 px-[20]">
@@ -105,6 +110,7 @@ export default function ReadyToBeMade() {
           </View>
         </View>
       </ActionSheet>
+
     </View>
   );
 }

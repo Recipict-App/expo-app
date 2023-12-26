@@ -1,7 +1,7 @@
 import { Text, View, SafeAreaView, ScrollView, Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { IngredientProps, Ingredient } from "../components/Ingredient";
-
+import { Link } from "expo-router";
 const dummyIngredients: IngredientProps[] = [
   { name: "Sweet Soy Sauce", quantity: "500ml", duration: "3 months ago" },
   { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
@@ -31,9 +31,11 @@ export default function Home() {
                   Found 3 dishes ready to be made
                 </Text>
                 <TouchableOpacity>
-                  <Text className=" text-sm font-pps text-[#EC7669]">
-                    Show More
-                  </Text>
+                  <Link href={"/RecipeScreen"}>
+                    <Text className=" text-sm font-pps text-[#EC7669]">
+                      Show More
+                    </Text>
+                  </Link>
                 </TouchableOpacity>
               </View>
               <View className="overflow-visible">

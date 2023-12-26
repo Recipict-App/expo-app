@@ -16,7 +16,7 @@ const dummyIngredients = [
 export default function RecipeIngredientSheet(props: SheetProps) {
   return (
     <ActionSheet id={props.sheetId}>
-      <View className=" max-h-[92%] h-fit flex items-center gap-4 px-5 py-2">
+      <View className=" max-h-[80%] h-fit flex items-center gap-4 px-5 py-2">
         <View
           style={{
             width: 124,

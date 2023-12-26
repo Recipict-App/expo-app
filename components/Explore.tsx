@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, FlatList, Touchable, Pressable } from "react-native";
+import { View, Text } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -25,47 +25,45 @@ export const RecipeBox: React.FC<RecipeBoxProps> = ({
   calories,
 }) => {
   return (
-      <View
-        className="flex items-center px-[13px] flex-row  justify-between"
-        style={{
-          width: "100%",
-          height: 100,
-          borderRadius: 24,
-          backgroundColor: "#F8F8F6",
-        }}
-      >
-        <View className="flex flex-row justify-center items-center">
-          <View
-            style={{
-              width: 80,
-              height: 78,
-              borderRadius: 15,
-              backgroundColor: "#D9D9D9",
-            }}
-          />
-          <View className="flex px-[24px] ml-[10px]">
-            <Text
-              numberOfLines={1}
-              className=" text-base font-pps text-clip max-w-[125px]"
-            >
-              {name}
-            </Text>
-            <Text className=" text-xs font-ppr">{ingredients} ingredients</Text>
-            <Text className=" text-xs font-ppr">{duration} minutes</Text>
-            <Text className=" text-xs font-ppr">{calories} kcal</Text>
+    <View className="flex w-full h-[100] justify-between rounded-3xl bg-[#F8F8F6]">
+      <TouchableOpacity className=" min-w-full min-h-full ">
+        <View className="flex flex-row justify-between items-center w-full h-full p-[15px]">
+          <View className="flex flex-row justify-center items-center">
+            <View
+              style={{
+                width: 80,
+                height: 78,
+                borderRadius: 15,
+                backgroundColor: "#D9D9D9",
+              }}
+            />
+            <View className="flex px-[24px] ml-[10px]">
+              <Text
+                numberOfLines={1}
+                className=" text-base font-pps text-clip max-w-[125px]"
+              >
+                {name}
+              </Text>
+              <Text className=" text-xs font-ppr">
+                {ingredients} ingredients
+              </Text>
+              <Text className=" text-xs font-ppr">{duration} minutes</Text>
+              <Text className=" text-xs font-ppr">{calories} kcal</Text>
+            </View>
           </View>
+          <Image
+            style={{ width: 25, height: 25 }}
+            source={require("../assets/icons/ArrowRecipe.svg")}
+          />
         </View>
-        <Image
-          style={{ width: 25, height: 25 }}
-          source={require("../assets/icons/ArrowRecipe.svg")}
-        />
-      </View>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 export default function Explore() {
   return (
-    <View className="flex items-center mt-[50px]" style={{ width: "100%" }}>
+    <View className="flex items-center mt-[50px] w-full">
       {/* Explore Header */}
       <View
         className="flex justify-center items-start pl-[23] mb-14 w-4/5"
@@ -98,12 +96,25 @@ export default function Explore() {
       </View>
       {/* List Of Recipes */}
       {/* <View className="flex items-center" style={{ width: "100%" }}> */}
-        <RecipeBox
-          name={"awdawd"}
-          ingredients={12}
-          duration={124}
-          calories={1231}
-        />
+      <View className="w-full flex" style={{gap: 10}}>
+        {dummyRecipePreview.map((item, index) => {
+          return (
+            <RecipeBox
+              key={index}
+              name={item.name}
+              duration={item.duration}
+              ingredients={item.ingredients}
+              calories={item.calories}
+            />
+          );
+        })}
+      </View>
+      <RecipeBox
+        name={"awdawd"}
+        ingredients={12}
+        duration={124}
+        calories={1231}
+      />
       {/* </View> */}
     </View>
   );

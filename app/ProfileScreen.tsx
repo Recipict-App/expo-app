@@ -1,10 +1,14 @@
 import React from "react";
-import { View, Text, SafeAreaView, ScrollView } from "react-native";
+import { View, Text, SafeAreaView, ScrollView, Alert } from "react-native";
 import { Image } from "expo-image";
 import OptionCard from "../components/OptionCard";
+import { SheetManager } from "react-native-actions-sheet";
 
 export default function profile() {
-  const handlePrerefence = () => {};
+  const handlePreference = async () => {
+    SheetManager.show("scanned-items-sheet");
+  };
+
   const handleAppereance = () => {};
   const handleNotification = () => {};
   const handleLocation = () => {};
@@ -33,7 +37,7 @@ export default function profile() {
             className="w-10/12 items-center justify-center mt-12 flex"
             style={{ gap: 12 }}
           >
-            <OptionCard title="Preference" icon="" func={handlePrerefence} />
+            <OptionCard title="Preference" icon="" func={handlePreference} />
             <OptionCard title="Appereance" icon="" func={handleAppereance} />
             <OptionCard
               title="Notification"

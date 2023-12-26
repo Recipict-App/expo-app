@@ -10,7 +10,7 @@ interface OptionCardProps {
 
 export default function OptionCard({ title, icon, func }: OptionCardProps) {
   return (
-    <TouchableOpacity style={{ width: "100%" }}>
+    <TouchableOpacity style={{ width: "100%" }} onPress={func}>
       <View className="w-full h-[72px] rounded-3xl bg-[#F8F8F6] flex-row pl-[20px] items-center justify-between">
         <View className="flex-row">
           {/* Image placeholder */}

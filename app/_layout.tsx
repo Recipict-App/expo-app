@@ -4,7 +4,8 @@ import {
   Poppins_600SemiBold,
   Poppins_700Bold,
 } from "@expo-google-fonts/poppins";
-
+import { SheetProvider } from "react-native-actions-sheet";
+import "../sheets.tsx";
 import { Tabs } from "expo-router/tabs";
 import { Image } from "expo-image";
 import { View } from "react-native";
@@ -20,6 +21,7 @@ export default function HomeLayout() {
   }
 
   return (
+    <SheetProvider>
     <Tabs
       initialRouteName="HomeScreen"
       screenOptions={{
@@ -93,7 +95,8 @@ export default function HomeLayout() {
         options={{
           href: null,
         }}
-      />
+      />    
     </Tabs>
+    </SheetProvider>
   );
 }

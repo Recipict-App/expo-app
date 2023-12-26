@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, FlatList } from "react-native";
+import { View, Text, ScrollView, FlatList, Button, Alert } from "react-native";
 import { Image } from "expo-image";
 import React, { useRef } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -69,7 +69,6 @@ export default function ReadyToBeMade() {
       </View>
       {/* Modal */}
       <ActionSheet ref={actionSheetRef}>
-        {/* <ScrollView> */}
         <View className=" w-full h-[92%] rounded-t-5xl pt-[12px] flex items-center gap-4 px-[20]">
           <View
             style={{
@@ -79,21 +78,21 @@ export default function ReadyToBeMade() {
               backgroundColor: "#9F9F9F",
             }}
           />
-          <Text className="font-pps text-2xl">Egg with Tomato</Text>
+          <Text className="font-pps text-2xl">Eggs with Tomato</Text>
           {/* Image */}
           <View className=" bg-grey w-4/5 h-1/3 rounded-2xl"></View>
           {/* Summary */}
           <View className="w-full flex flex-row ">
             {/* Ingredients */}
-            <View className=" flex h-[250px] w-[200px] items-center p-3">
-              <Text className="font-pps text-base">Ingredients:</Text>
+            <View className=" flex h-[350px] w-[200px] items-center p-3">
+              <Text className="font-pps text-lg">Ingredients:</Text>
               <FlatList
                 className="p-[10px]"
                 data={dummyIngredients}
                 renderItem={({ item }) => (
                   <View className="flex w-4/5 flex-row mx-2">
-                    <Text className="font-ppr text-sm">- </Text>
-                    <Text className="font-ppr text-sm">{item}</Text>
+                    <Text className="font-ppr text-base">- </Text>
+                    <Text className="font-ppr text-base">{item}</Text>
                   </View>
                 )}
                 showsVerticalScrollIndicator={true}
@@ -101,30 +100,16 @@ export default function ReadyToBeMade() {
             </View>
             {/* General Information */}
             <View className=" flex h-full w-[200px] space-y-2 p-3">
-              <Text className="font-pps">Duration:</Text>
-              <Text className="font-ppr">50 minutes</Text>
-              <Text className="font-pps">Calories: </Text>
-              <Text className="font-ppr">20 kcal</Text>
-              <Text className="font-pps">Equipment(s): </Text>
-              <Text className="font-ppr">Pan, Wok</Text>
+              <Text className="font-pps text-base">Duration:</Text>
+              <Text className="font-ppr text-base">50 minutes</Text>
+              <Text className="font-pps text-base">Calories: </Text>
+              <Text className="font-ppr text-base">20 kcal</Text>
+              <Text className="font-pps text-base">Equipment(s): </Text>
+              <Text className="font-ppr text-base">Pan, Wok</Text>
             </View>
-          </View>
-          <View className="flex items-center w-full">
-            <Text className="font-ppb text-lg">Instruction</Text>
-            <FlatList
-              className="p-[10px] w-full"
-              data={dummyIngredients}
-              renderItem={({ item }) => (
-                <View className="flex w-4/5 flex-row mx-2">
-                  <Text className="font-ppr text-sm">- </Text>
-                  <Text className="font-ppr text-sm">{item}</Text>
-                </View>
-              )}
-              showsVerticalScrollIndicator={true}
-            />
+            
           </View>
         </View>
-        {/* </ScrollView> */}
       </ActionSheet>
     </View>
   );

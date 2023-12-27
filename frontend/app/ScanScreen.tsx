@@ -45,17 +45,33 @@ export default function App() {
 
   const handleCapture = async () => {
     if (cameraRef.current) {
-      // show popup [SHOULD BE IN THE BOTTOM OF THIS METHOD]
-      SheetManager.show("scanned-items-sheet");
-
       const photo = await cameraRef.current.takePictureAsync();
-
-      // uri will be passed to model
       console.log(photo.uri);
 
       // Save the image to the gallery
       const asset = await MediaLibrary.createAssetAsync(photo.uri);
       await MediaLibrary.createAlbumAsync("Recipict", asset, false);
+
+      // Call to backend
+      const response = await fetch("http://192.168.1.231:3000/process-image", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imageUri: photo, // THIS GOES TO BACKEND ---
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("HTTP error " + response.status);
+      }
+
+      const result = await response.json();
+      console.log(result);
+
+      // show popup [SHOULD BE IN THE BOTTOM OF THIS METHOD]
+      SheetManager.show("scanned-items-sheet");
     }
   };
 

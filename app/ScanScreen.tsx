@@ -5,10 +5,17 @@ import * as ImagePicker from "expo-image-picker";
 import React from "react";
 import { useState } from "react";
 
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 
 import { SheetManager } from "react-native-actions-sheet";
+
+const { DocumentProcessorServiceClient } =
+  require("@google-cloud/documentai").v1;
+const client = new DocumentProcessorServiceClient();
+const projectId = "recipicttest";
+const location = "us"; // Format is 'us' or 'eu'
+const processorId = "9f398eb111a3ed90"; // Create processor in Cloud Console
 
 export default function App() {
   const [CameraPermission, requestCameraPermission] =
@@ -52,6 +59,21 @@ export default function App() {
 
       // uri will be passed to model
       console.log(photo.uri);
+
+      // Send the photo to Google Document AI for parsing
+      const request = {
+        name: `projects/${projectId}/locations/${location}/processors/${processorId}`, // Replace with your processor ID
+        rawDocument: {
+          content: photo.uri, // Replace with the content of your document
+          mimeType: "image/jpeg",
+        },
+      };
+
+      const [result] = await client.processDocument(request);
+
+      // Convert the response to JSON and log it
+      const jsonResult = result.toJSON();
+      console.log("JSON result:", jsonResult);
 
       // Save the image to the gallery
       const asset = await MediaLibrary.createAssetAsync(photo.uri);

@@ -40,7 +40,7 @@ export default function pantry() {
                 source={require("../assets/icons/Search.svg")}
               />
               <TextInput
-                className="flex ml-4 font-ppr text-sm w-full py-4 "
+                className="flex ml-4 font-ppr text-sm w-full justify-center "
                 placeholder="Search"
               />
             </View>

@@ -33,22 +33,20 @@ export default function SavedRecipesSheet(props: SheetProps) {
         className="w-full h-fit flex items-center px-5 py-2 pb-[100]"
         style={{ gap: 3 }}
       >
-        <View className="w-full h-[20]">
-          <TouchableOpacity
-            className=" min-h-full min-w-full"
-            onPress={handleCloseSavedRecipe}
+        <View className="w-full h-[20] flex justify-center items-center">
+          <View
+            style={{
+              width: "50%",
+              height: 4,
+              borderRadius: 10,
+              backgroundColor: "#9F9F9F",
+            }}
           >
-            <Image
-              style={{
-                width: 20,
-                height: 20,
-                position: "absolute",
-                right: 20,
-                top: 20,
-              }}
-              source={require("../../assets/icons/Exit.svg")}
+            <TouchableOpacity
+              className=" min-h-full min-w-full"
+              onPress={handleCloseSavedRecipe}
             />
-          </TouchableOpacity>
+          </View>
         </View>
         <View className="flex flex-row m-5 w-full justify-center items-center">
           <Text className=" font-ppr text-2xl">Saved Recipes</Text>

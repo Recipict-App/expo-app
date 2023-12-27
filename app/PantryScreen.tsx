@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Image } from "expo-image";
+import { SheetManager } from "react-native-actions-sheet";
 
 import { IngredientProps, Ingredient } from "../components/Ingredient";
 import { ShelfProps, Shelf } from "../components/Shelf";
@@ -19,7 +20,14 @@ const dummyIngredients: IngredientProps[] = [
   { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
 ];
 
+
+
 export default function pantry() {
+
+  const handleShowIngredient = () => {
+    SheetManager.show('edit-ingredients-sheet');
+  }
+
   return (
     <SafeAreaView className="bg-white ">
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -58,7 +66,7 @@ export default function pantry() {
       </ScrollView>
 
       {/* Add ingredient button */}
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleShowIngredient}>
         <Image
           className="w-[70px] h-[70px] object-contain fixed bottom-[80px] left-[300px] opacity-100 "
           source={require("../assets/icons/AddIngredient.svg")}

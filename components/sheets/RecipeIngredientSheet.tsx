@@ -72,7 +72,7 @@ export default function RecipeIngredientSheet(props: SheetProps) {
           <View className="flex w-[10%] h-full justify-center items-center rounded-xl" style={{backgroundColor: "#FFCCC5"}}>
             <TouchableOpacity
               className="min-w-full min-h-full justify-center flex items-center"
-              onPress={() => console.log("close...")}
+              onPress={handleCloseRecipe}
             >
               <Image
                 style={{

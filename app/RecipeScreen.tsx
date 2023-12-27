@@ -29,9 +29,9 @@ export default function recipe() {
   };
   
   return (
-    <View className="bg-white">
+    <SafeAreaView className="bg-white" style={{paddingBottom: 0}} edges={['top', 'right', 'left']}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View className=" flex w-full px-[24px] py-[32px] overflow-visible items-center ">
+        <View className=" flex w-full px-[24px] py-[32px] overflow-visible items-center">
           {/* Recipe Header */}
           <View className="flex w-full justify-between flex-row items-center">
             <Text className="font-pps text-3xl">Recipe</Text>
@@ -64,6 +64,6 @@ export default function recipe() {
           <Explore />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }

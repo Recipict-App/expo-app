@@ -40,35 +40,46 @@ export default function EditIngredientSheet(props: SheetProps) {
           />
         </View>
         <View className="flex justify-between flex-row w-full h-full">
-
           {/*Left Column*/}
-          <View
-            className="flex w-[45%] h-[60px] rounded-2xl"
-            style={{ gap: 10 }}
-          >
+          <View className="flex w-[45%] h-full rounded-2xl" style={{ gap: 10 }}>
             <Text className=" font-pps">Name:</Text>
             <TextInput
-              className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-full pl-2"
+              className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[60px] pl-2"
               multiline
               placeholder="Ingredient Name"
             />
             <Text className=" font-pps">Expiry Date:</Text>
             <TextInput
-              className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-full pl-2"
+              className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[60px] pl-2"
               multiline
               placeholder="DD/MM/YYYY"
             />
           </View>
 
           {/*Right Column*/}
-          <View className="flex w-[45%] h-[60px] rounded-2xl" style={{gap: 10}}>
-            <Text className=" font-pps">Quantity:</Text>
-            <TextInput
-              className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-full pl-2"
-              multiline
-              placeholder="Number"
-            />
-            
+          <View className="flex w-[45%] h-full" style={{ gap: 10 }}>
+            <View className="w-full" style={{ gap: 10 }}>
+              <Text className=" font-pps">Quantity:</Text>
+              <TextInput
+                className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[60px] pl-2"
+                multiline
+                placeholder="Number"
+              />
+            </View>
+            <View className="flex flex-row w-full h-full justify-center items-end" style={{gap: 20}}>
+              <TouchableOpacity onPress={handleCloseEdit}>
+                <Image
+                  style={{ width: 60, height: 60 }}
+                  source={require("../../assets/icons/DeleteIngredient.svg")}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleCloseEdit}>
+                <Image
+                  style={{ width: 60, height: 60 }}
+                  source={require("../../assets/icons/Approve.svg")}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>

@@ -1,14 +1,16 @@
+import React from "react";
+import { useState } from "react";
+
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image } from "expo-image";
+
 import { Camera, CameraType, FlashMode } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
 
-import React from "react";
-import { useState } from "react";
-
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Image } from "expo-image";
-
 import { SheetManager } from "react-native-actions-sheet";
+
+import CropModal from "../components/CropModal";
 
 export default function App() {
   const [CameraPermission, requestCameraPermission] =
@@ -20,7 +22,7 @@ export default function App() {
 
   const cameraRef = React.useRef<Camera>(null);
 
-  const [pickedImage, setPickedImage] = useState<String | null>(null);
+  const [pickedImageURI, setPickedImageURI] = useState<string | null>(null);
   const [torch, setTorch] = useState<FlashMode>(FlashMode.off);
 
   if (!CameraPermission || !galleryPermission || !imagePickerPermission) {
@@ -43,19 +45,37 @@ export default function App() {
     );
   }
 
+  const showCropModal = (photoURI: string) => {
+    return (
+      <CropModal
+        pickedImageURI={pickedImageURI}
+        setPickedImageURI={setPickedImageURI}
+      />
+    );
+  };
+
   const handleCapture = async () => {
     if (cameraRef.current) {
-      // show popup [SHOULD BE IN THE BOTTOM OF THIS METHOD]
-      SheetManager.show("scanned-items-sheet");
-
       const photo = await cameraRef.current.takePictureAsync();
 
       // uri will be passed to model
-      console.log(photo.uri);
+      console.log("photo taken - URI obtained");
+      setPickedImageURI(photo.uri);
 
-      // Save the image to the gallery
-      const asset = await MediaLibrary.createAssetAsync(photo.uri);
-      await MediaLibrary.createAlbumAsync("Recipict", asset, false);
+      //show crop modal [THE MODAL IS NOT SHOWINGNNGGGNGNGNG]
+      let res = await showCropModal(photo.uri);
+      console.log("crop modal shown");
+
+      if (!res) {
+        // Save the image to the gallery
+        const asset = await MediaLibrary.createAssetAsync(res);
+        await MediaLibrary.createAlbumAsync("Recipict", asset, false);
+        console.log("crop modal completed");
+      }
+
+      // show popup [SHOULD BE IN THE BOTTOM OF THIS METHOD]
+      SheetManager.show("scanned-items-sheet");
+      console.log("pop up shown");
     }
   };
 
@@ -72,7 +92,7 @@ export default function App() {
     console.log(result);
 
     if (!result.canceled) {
-      setPickedImage(result.assets[0].uri);
+      setPickedImageURI(result.assets[0].uri);
     }
   };
 

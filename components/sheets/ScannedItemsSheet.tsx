@@ -82,6 +82,66 @@ export default function ScannedItemsSheet(props: SheetProps) {
                 quantity="10 ml"
                 duration="5 days"
               />
+              <Ingredient
+                name="orange juice"
+                quantity="10 ml"
+                duration="5 days"
+              />
+              <Ingredient
+                name="orange juice"
+                quantity="10 ml"
+                duration="5 days"
+              />
+              <Ingredient
+                name="orange juice"
+                quantity="10 ml"
+                duration="5 days"
+              />
+              <Ingredient
+                name="orange juice"
+                quantity="10 ml"
+                duration="5 days"
+              />
+              <Ingredient
+                name="orange juice"
+                quantity="10 ml"
+                duration="5 days"
+              />
+              <Ingredient
+                name="orange juice"
+                quantity="10 ml"
+                duration="5 days"
+              />
+              <Ingredient
+                name="orange juice"
+                quantity="10 ml"
+                duration="5 days"
+              />
+              <Ingredient
+                name="orange juice"
+                quantity="10 ml"
+                duration="5 days"
+              />
+              <Ingredient
+                name="orange juice"
+                quantity="10 ml"
+                duration="5 days"
+              />
+              <Ingredient
+                name="orange juice"
+                quantity="10 ml"
+                duration="5 days"
+              />
+              <Ingredient
+                name="orange juice"
+                quantity="10 ml"
+                duration="5 days"
+              />
+              <Ingredient
+                name="orange juice"
+                quantity="10 ml"
+                duration="5 days"
+              />
 
               {/* Buttons */}
               <View className=" h-fit flex flex-row space-x-7 pb-1 pt-4 justify-center">

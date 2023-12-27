@@ -1,30 +1,43 @@
 import ActionSheet, { SheetProps } from "react-native-actions-sheet";
 import { View, Text, ScrollView, FlatList, Button, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { SheetManager } from "react-native-actions-sheet";
+import { Image } from "expo-image";
+
 const dummyIngredients = [
-    "Garlic",
-    "Chili",
-    "Rice",
-    "Dany",
-    "Other spices idk what but a long one",
-    "Recipict",
-    "Purply",
-    "Orangy",
-    "Bowly",
-    "Satay",
-  ];
+  "Garlic",
+  "Chili",
+  "Rice",
+  "Dany",
+  "Other spices idk what but a long one",
+  "Recipict",
+  "Purply",
+  "Orangy",
+  "Bowly",
+  "Satay",
+];
+const handleCloseRecipe = () => {
+  SheetManager.hide("recipe-ingredient-sheet");
+};
 export default function RecipeIngredientSheet(props: SheetProps) {
   return (
     <ActionSheet id={props.sheetId}>
-      <View className=" max-h-[80%] h-fit flex items-center gap-4 px-5 py-2">
-        <View
-          style={{
-            width: 124,
-            height: 4,
-            borderRadius: 10,
-            backgroundColor: "#9F9F9F",
-          }}
-        />
+      <View className=" max-h-[80%] h-fit flex items-center gap-4 px-5 py-2 ">
+        <View className="w-full h-[20] flex justify-center items-center">
+          <View
+            style={{
+              width: "50%",
+              height: 4,
+              borderRadius: 10,
+              backgroundColor: "#9F9F9F",
+            }}
+          >
+            <TouchableOpacity
+              className=" min-h-full min-w-full"
+              onPress={handleCloseRecipe}
+            />
+          </View>
+        </View>
         <Text className="font-pps text-2xl">Eggs with Tomato</Text>
         {/* Image */}
         <View className=" bg-grey w-4/5 h-1/3 rounded-2xl"></View>
@@ -41,7 +54,7 @@ export default function RecipeIngredientSheet(props: SheetProps) {
                   <Text className="font-ppr text-base">{item}</Text>
                 </View>
               )}
-              showsVerticalScrollIndicator={true}
+              showsVerticalScrollIndicator={false}
             />
           </View>
           {/* General Information */}
@@ -54,21 +67,37 @@ export default function RecipeIngredientSheet(props: SheetProps) {
             <Text className="font-ppr text-base">Pan, Wok</Text>
           </View>
         </View>
-        <View
-          className="flex w-full h-[40] justify-center items-center"
-          style={{ bottom: -10, left: 0 }}
-        >
-          <TouchableOpacity
-            className="flex min-w-full bg-green min-h-full justify-center items-center rounded-2xl"
-            style={{ width: 100 }}
-            onPress={() => {
-              console.log("pressed!");
-            }}
-          >
-            <Text className="font-pps text-white text-lg">
-              See Instructions
-            </Text>
-          </TouchableOpacity>
+        <View className="flex h-[40] w-full flex-row justify-center items-center" style={{gap: 20}}>
+          {/* close button */}
+          <View className="flex w-[10%] h-full justify-center items-center rounded-xl" style={{backgroundColor: "#FFCCC5"}}>
+            <TouchableOpacity
+              className="min-w-full min-h-full justify-center flex items-center"
+              onPress={() => console.log("close...")}
+            >
+              <Image
+                style={{
+                  width: 20,
+                  height: 20,
+                  position: "absolute"
+                }}
+                source={require("../../assets/icons/Exit.svg")}
+              />
+            </TouchableOpacity>
+          </View>
+          {/* see instruction button */}
+          <View className="flex w-[70%] h-full justify-center items-center bg-green rounded-2xl">
+            <TouchableOpacity
+              className="flex min-w-full min-h-full justify-center items-center rounded-2xl"
+              style={{ width: 100 }}
+              onPress={() => {
+                console.log("pressed!");
+              }}
+            >
+              <Text className="font-pps text-white text-lg">
+                See Instructions
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </ActionSheet>

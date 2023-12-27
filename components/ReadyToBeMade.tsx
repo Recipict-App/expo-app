@@ -4,7 +4,6 @@ import React, { useRef } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ActionSheet, {
   ActionSheetRef,
-  ActionSheetProps,
 } from "react-native-actions-sheet";
 import { SheetManager } from "react-native-actions-sheet";
 
@@ -24,6 +23,8 @@ const dummyIngredients = [
 const handleShowRecipe = () => {
   SheetManager.show("recipe-ingredient-sheet");
 };
+
+
 
 export default function ReadyToBeMade() {
   const recipePreview = [1, 2, 3, 4];
@@ -71,46 +72,6 @@ export default function ReadyToBeMade() {
           showsHorizontalScrollIndicator={false}
         />
       </View>
-
-      {/* Modal */}
-      <ActionSheet ref={actionSheetRef}>
-        <View className=" w-full h-[92%] rounded-t-5xl pt-[12px] flex items-center gap-4 px-[20]">
-          {/* Blackbar */}
-          <View className="w-32 h-1 bg-[#9F9F9F] rounded-xl" />
-          {/* Title */}
-          <Text className="font-pps text-2xl">Eggs with Tomato</Text>
-          {/* Image */}
-          <View className=" bg-grey w-4/5 h-1/3 rounded-2xl"></View>
-          {/* Summary */}
-          <View className="w-full flex flex-row ">
-            {/* Ingredients */}
-            <View className=" flex h-[350px] w-[200px] items-center p-3">
-              <Text className="font-pps text-lg">Ingredients:</Text>
-              <FlatList
-                className="p-[10px]"
-                data={dummyIngredients}
-                renderItem={({ item }) => (
-                  <View className="flex w-4/5 flex-row mx-2">
-                    <Text className="font-ppr text-base">- </Text>
-                    <Text className="font-ppr text-base">{item}</Text>
-                  </View>
-                )}
-                showsVerticalScrollIndicator={true}
-              />
-            </View>
-            {/* General Information */}
-            <View className=" flex h-full w-[200px] space-y-2 p-3">
-              <Text className="font-pps text-base">Duration:</Text>
-              <Text className="font-ppr text-base">50 minutes</Text>
-              <Text className="font-pps text-base">Calories: </Text>
-              <Text className="font-ppr text-base">20 kcal</Text>
-              <Text className="font-pps text-base">Equipment(s): </Text>
-              <Text className="font-ppr text-base">Pan, Wok</Text>
-            </View>
-          </View>
-        </View>
-      </ActionSheet>
-
     </View>
   );
 }

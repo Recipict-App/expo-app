@@ -10,6 +10,16 @@ import { Image } from "expo-image";
 
 import { SheetManager } from "react-native-actions-sheet";
 
+import RNFS from "react-native-fs";
+
+const { DocumentProcessorServiceClient } =
+  require("@google-cloud/documentai").v1;
+const client = new DocumentProcessorServiceClient();
+
+const projectId = "recipicttest";
+const locationId = "us"; // Format is 'us' or 'eu'
+const processorId = "9f398eb111a3ed90"; // Create processor in Cloud Console
+
 export default function App() {
   const [CameraPermission, requestCameraPermission] =
     Camera.useCameraPermissions();
@@ -43,32 +53,62 @@ export default function App() {
     );
   }
 
+  const sendDatatoBackend = async (imageURI: string) => {
+    const client = new DocumentProcessorServiceClient();
+
+    // Convert the image to a base64 string
+    const base64Image = await RNFS.readFile(imageURI, "base64");
+
+    const request = {
+      name: `projects/${projectId}/locations/${locationId}/processors/${processorId}`,
+      rawDocument: {
+        content: base64Image, // pass to API
+        mimeType: "image/jpeg",
+      },
+    };
+
+    try {
+      const [result] = await client.processDocument(request);
+      console.log(result);
+      // res.json(result);
+      // console.log(result);
+    } catch (error) {
+      // res.status(500).send(error.message);
+      // console.log(error.message);
+    }
+
+    // // Call to backend
+    // const response = await fetch("http://192.168.1.231:3000/process-image", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     imageURI: imageURI, // THIS GOES TO BACKEND ---
+    //   }),
+    // });
+
+    // if (!response.ok) {
+    //   throw new Error("HTTP error " + response.status);
+    // }
+
+    // const result = await response.json();
+    // console.log(result);
+  };
+
   const handleCapture = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
-      console.log(photo.uri);
+      const imageURI = photo.uri;
+
+      console.log("Captured image URI: " + imageURI + "\n");
 
       // Save the image to the gallery
-      const asset = await MediaLibrary.createAssetAsync(photo.uri);
+      const asset = await MediaLibrary.createAssetAsync(imageURI);
       await MediaLibrary.createAlbumAsync("Recipict", asset, false);
 
-      // Call to backend
-      const response = await fetch("http://192.168.1.231:3000/process-image", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          imageUri: photo, // THIS GOES TO BACKEND ---
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("HTTP error " + response.status);
-      }
-
-      const result = await response.json();
-      console.log(result);
+      // send to backend
+      sendDatatoBackend(imageURI);
 
       // show popup [SHOULD BE IN THE BOTTOM OF THIS METHOD]
       SheetManager.show("scanned-items-sheet");
@@ -81,14 +121,17 @@ export default function App() {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.1,
     });
 
     // wii be passed to model
     console.log(result);
 
     if (!result.canceled) {
-      setPickedImage(result.assets[0].uri);
+      const imageURI = result.assets[0].uri;
+      console.log("\npicked image URI: " + imageURI) + "\n";
+
+      sendDatatoBackend(imageURI);
     }
   };
 

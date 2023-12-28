@@ -12,17 +12,21 @@ const projectId = "recipicttest";
 const locationId = "us"; // Format is 'us' or 'eu'
 const processorId = "9f398eb111a3ed90"; // Create processor in Cloud Console
 
+const fs = require("fs");
+
 app.post("/process-image", async (req, res) => {
   const client = new DocumentProcessorServiceClient();
-  const { dataFromFrontend } = req.body;
+  const { imageURI } = req.body;
 
-  console.log(dataFromFrontend);
+  console.log("\nURI obtained: " + imageURI + "\n");
+
+  const base64Image = fs.readFileSync(imageURI, "base64");
 
   // Now you can use base64Image in your request
   const request = {
     name: `projects/${projectId}/locations/${locationId}/processors/${processorId}`,
     rawDocument: {
-      content: dataFromFrontend, // prone to error
+      content: base64Image, // pass to API
       mimeType: "image/jpeg",
     },
   };

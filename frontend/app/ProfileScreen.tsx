@@ -4,8 +4,25 @@ import { Image } from "expo-image";
 import OptionCard from "../components/OptionCard";
 
 export default function profile() {
+  const handlePreference = async () => {
 
-  const handlePreference = () => {};
+    const requestBody = {
+      name: "qwqwqwqwqwqwqwqwqw"
+    };
+    console.log(JSON.stringify(requestBody));
+    const response = await fetch(
+      "https://us-central1-recipicttest.cloudfunctions.net/functions-hello-worlds",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      }
+    );
+
+    console.log(response);
+  };
 
   const handleAppereance = () => {};
   const handleNotification = () => {};
@@ -18,7 +35,7 @@ export default function profile() {
         {/* Screen */}
         <View className="min-h-screen items-center mt-8">
           {/* Header */}
-          <View className="w-11/12 rounded-2xl bg-green  justify-center shadow-lg">
+          <View className="w-11/12 rounded-2xl bg-green justify-center shadow-lg">
             <Image
               className="w-[150px] h-[125px] ratio absolute rotate-2 left-[-30px] top-[-41]"
               style={{ resizeMode: "contain" }}
@@ -26,7 +43,7 @@ export default function profile() {
             />
             {/* Name */}
             <Text className="font-pps text-xl text-white py-[14] ml-[115]">
-              Hi, Daricky
+              Hi, Darick
             </Text>
           </View>
 

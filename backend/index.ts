@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 const app = express();
 const dot = require("dotenv").config();
 const { MongoClient, ServerApiVersion } = require("mongodb");
-
+var cors = require("cors");
+app.use(cors());
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 
 const URI = dot.parsed.MONDODB_URI;

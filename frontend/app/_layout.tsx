@@ -7,22 +7,46 @@ import {
 
 import { Tabs } from "expo-router/tabs";
 import { Image } from "expo-image";
-
+import { useEffect } from "react";
+import axios from "axios";
 import { SheetProvider } from "react-native-actions-sheet";
 import "../sheets.tsx";
 
 export default function HomeLayout() {
-
   let [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,
     Poppins_600SemiBold,
     Poppins_700Bold,
   });
+
+  const baseURL = "http://localhost:3000";
+  const fetchUser = async () => {
+    try {
+      await axios({
+        method: "get",
+        url: `http://localhost:3000/users`,
+        params: {
+          _id: "658d204b86ebeac0fcf45729",
+        },
+      })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+          console.log("Failed to get user data");
+        });
+    } catch (err) {
+      console.log("error");
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
   if (!fontsLoaded && !fontError) {
     return null;
   }
-
-  
 
   return (
     <SheetProvider>

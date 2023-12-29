@@ -5,21 +5,21 @@ import OptionCard from "../components/OptionCard";
 
 export default function profile() {
   const handlePreference = async () => {
+    const CloudFunctionURL: string =
+      process.env.CLOUD_FUNCTION_DOCUMENT_AI_URL || "";
+
     const requestBody = {
-      name: "bbbbb",
+      base64ImageData: "test call",
     };
 
-    const response = await fetch(
-      "https://us-central1-recipicttest.cloudfunctions.net/functions-hello-world",
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      }
-    );
+    const response = await fetch(CloudFunctionURL, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
 
     const data = await response.json();
     console.log(data);

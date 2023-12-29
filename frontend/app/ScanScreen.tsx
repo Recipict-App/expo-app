@@ -1,14 +1,18 @@
 import { Camera, CameraType, FlashMode } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 
 import React from "react";
 import { useState } from "react";
 
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 
 import { SheetManager } from "react-native-actions-sheet";
+
+const CloudFunctionURL: string =
+  process.env.CLOUD_FUNCTION_DOCUMENT_AI_URL || "";
 
 export default function App() {
   const [CameraPermission, requestCameraPermission] =
@@ -43,19 +47,88 @@ export default function App() {
     );
   }
 
+  const retrieveItems = async (imageURI: string) => {
+    // convert image to base64
+    const base64ImageData = await FileSystem.readAsStringAsync(imageURI, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    const requestBody = {
+      base64ImageData: base64ImageData, // goes to the cloud function
+    };
+
+    const response = await fetch(CloudFunctionURL, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const data = await response.json();
+
+    // access items from response data
+    const items = data.document.entities.map((item: any) => {
+      let date = "";
+      if (item.type == "date") {
+        date = item.mentionText;
+      } else if (item.type == "item_name") {
+        if (date) {
+          return {
+            name: item.mentionText,
+            quantity: "",
+            duration: date,
+          };
+        } else {
+          return {
+            name: item.mentionText,
+            quantity: "",
+            duration: "",
+          };
+        }
+      }
+    });
+
+    const filteredItems = items.filter((item: any) => item !== undefined);
+
+    // create a new object
+    const newObject = { items: filteredItems };
+
+    console.log(newObject);
+
+    console.log("------------------");
+    console.log(
+      data.document.entities.map((item: any) => {
+        console.log(item.mentionText);
+      })
+    );
+    console.log("------------------");
+
+    return newObject;
+  };
+
   const handleCapture = async () => {
     if (cameraRef.current) {
-      // show popup [SHOULD BE IN THE BOTTOM OF THIS METHOD]
-      SheetManager.show("scanned-items-sheet");
-
       const photo = await cameraRef.current.takePictureAsync();
 
       // uri will be passed to model
-      console.log(photo.uri);
+      console.log("Captured an image ✅");
 
       // Save the image to the gallery
       const asset = await MediaLibrary.createAssetAsync(photo.uri);
       await MediaLibrary.createAlbumAsync("Recipict", asset, false);
+
+      console.log("Image saved to gallery ✅");
+
+      // pass image to backend
+      // const items = await retrieveItems(photo.uri);
+
+      // show gallery
+      await handleGallery();
+
+      // show popup [SHOULD BE IN THE BOTTOM OF THIS METHOD]
+      // SheetManager.show("scanned-items-sheet"); // will pass items to the sheet
     }
   };
 
@@ -65,14 +138,19 @@ export default function App() {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.1,
     });
-
-    // wii be passed to model
-    console.log(result);
 
     if (!result.canceled) {
       setPickedImage(result.assets[0].uri);
+      console.log("Picked an image from gallery ✅");
+
+      // pass image to backend
+      const items = await retrieveItems(result.assets[0].uri);
+
+      SheetManager.show("scanned-items-sheet", {
+        payload: items,
+      });
     }
   };
 

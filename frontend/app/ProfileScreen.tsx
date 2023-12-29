@@ -4,8 +4,26 @@ import { Image } from "expo-image";
 import OptionCard from "../components/OptionCard";
 
 export default function profile() {
+  const handlePreference = async () => {
+    const CloudFunctionURL: string =
+      process.env.CLOUD_FUNCTION_DOCUMENT_AI_URL || "";
 
-  const handlePreference = () => {};
+    const requestBody = {
+      base64ImageData: "test call",
+    };
+
+    const response = await fetch(CloudFunctionURL, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const data = await response.json();
+    console.log(data);
+  };
 
   const handleAppereance = () => {};
   const handleNotification = () => {};

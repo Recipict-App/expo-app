@@ -12,6 +12,7 @@ import { SheetProvider } from "react-native-actions-sheet";
 import "../sheets.tsx";
 
 export default function HomeLayout() {
+
   let [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,
     Poppins_600SemiBold,
@@ -20,6 +21,8 @@ export default function HomeLayout() {
   if (!fontsLoaded && !fontError) {
     return null;
   }
+
+  
 
   return (
     <SheetProvider>

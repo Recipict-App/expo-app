@@ -3,7 +3,6 @@ import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 
 import ActionSheet, {
-  useScrollHandlers,
   ActionSheetRef,
   SheetProps,
   SheetManager,
@@ -13,15 +12,13 @@ import { IngredientProps, Ingredient } from "../Ingredient";
 
 export default function ScannedItemsSheet(props: SheetProps) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
-  const scrollHandlers = useScrollHandlers<ScrollView>(
-    "scrollview-1",
-    actionSheetRef
-  );
 
   const handleDelete = () => {
     SheetManager.hide("scanned-items-sheet");
   };
   const handleAdd = () => {};
+
+  console.log(props.payload);
 
   return (
     <ActionSheet id={props.sheetId}>
@@ -33,55 +30,18 @@ export default function ScannedItemsSheet(props: SheetProps) {
           <Text className="font-ppr text-xl">Scanned Items</Text>
         </View>
 
-        <ScrollView {...scrollHandlers}>
+        <ScrollView>
           <View className="flex items-center gap-4 pt-2">
             {/* Scrollllll */}
             <View style={{ gap: 12 }} className="justify-center w-10/12 flex">
-              <Ingredient
-                name="orange juic firstnisrtjsirjgrsitjcwecwecwee"
-                quantity="10 ml"
-                duration="5 days"
-              />
-              <Ingredient
-                name="orange juice"
-                quantity="10 ml"
-                duration="5 days"
-              />
-              <Ingredient
-                name="orange juice"
-                quantity="10 ml"
-                duration="5 days"
-              />
-              <Ingredient
-                name="orange juice"
-                quantity="10 ml"
-                duration="5 days"
-              />
-              <Ingredient
-                name="orange juice"
-                quantity="10 ml"
-                duration="5 days"
-              />
-              <Ingredient
-                name="orange juice"
-                quantity="10 ml"
-                duration="5 days"
-              />
-              <Ingredient
-                name="orange juice"
-                quantity="10 ml"
-                duration="5 days"
-              />
-              <Ingredient
-                name="orange juice"
-                quantity="10 ml"
-                duration="5 days"
-              />
-              <Ingredient
-                name="orange juice"
-                quantity="10 ml"
-                duration="5 days"
-              />
+              {props.payload?.items?.map((item: IngredientProps) => (
+                <Ingredient
+                  key={Math.floor(Math.random() * 9999)}
+                  name={item.name || "Unknown"}
+                  quantity={item.quantity || "1 (default)"}
+                  duration={item.duration || "1 days (default)"}
+                />
+              ))}
 
               {/* Buttons */}
               <View className=" h-fit flex flex-row space-x-7 pb-1 pt-4 justify-center">

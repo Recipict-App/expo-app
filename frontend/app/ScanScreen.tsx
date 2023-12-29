@@ -69,34 +69,66 @@ export default function App() {
     const data = await response.json();
 
     // access items from response data
-    const items = data.document.entities;
-    console.log("From Cloud Function: \n  ");
-    console.log(
-      data.document.entities.map((item: any) => console.log(item.mentionText))
-    );
+    const items = data.document.entities.map((item: any) => {
+      let date = "";
+      if (item.type == "date") {
+        date = item.mentionText;
+      } else if (item.type == "item_name") {
+        if (date) {
+          return {
+            name: item.mentionText,
+            quantity: "",
+            duration: date,
+          };
+        } else {
+          return {
+            name: item.mentionText,
+            quantity: "",
+            duration: "",
+          };
+        }
+      }
+    });
 
-    return data;
+    const filteredItems = items.filter((item: any) => item !== undefined);
+
+    // create a new object
+    const newObject = { items: filteredItems };
+
+    console.log(newObject);
+
+    console.log("------------------");
+    console.log(
+      data.document.entities.map((item: any) => {
+        console.log(item.mentionText);
+      })
+    );
+    console.log("------------------");
+
+    return newObject;
   };
 
   const handleCapture = async () => {
     if (cameraRef.current) {
-      const photo = await cameraRef.current.takePictureAsync({
-        quality: 0.05, // Adjust this value (0.0 - 1.0) for picture quality
-        skipProcessing: true, // Set to true to skip processing
-      });
+      const photo = await cameraRef.current.takePictureAsync();
 
       // uri will be passed to model
-      console.log("An image is Captured");
+      console.log("Captured an image ✅");
 
       // Save the image to the gallery
       const asset = await MediaLibrary.createAssetAsync(photo.uri);
       await MediaLibrary.createAlbumAsync("Recipict", asset, false);
 
+      console.log("Image saved to gallery ✅");
+
       // pass image to backend
-      const items = await retrieveItems(photo.uri);
+      // const items = await retrieveItems(photo.uri);
+
+      // show gallery
+      await handleGallery();
 
       // show popup [SHOULD BE IN THE BOTTOM OF THIS METHOD]
-      SheetManager.show("scanned-items-sheet"); // will pass items to the sheet
+      // SheetManager.show("scanned-items-sheet"); // will pass items to the sheet
     }
   };
 
@@ -111,10 +143,14 @@ export default function App() {
 
     if (!result.canceled) {
       setPickedImage(result.assets[0].uri);
-      console.log("An image is Captured");
+      console.log("Picked an image from gallery ✅");
 
       // pass image to backend
       const items = await retrieveItems(result.assets[0].uri);
+
+      SheetManager.show("scanned-items-sheet", {
+        payload: items,
+      });
     }
   };
 

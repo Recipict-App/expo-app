@@ -2,24 +2,55 @@ import React from "react";
 import { View, Text, SafeAreaView, ScrollView, Alert } from "react-native";
 import { Image } from "expo-image";
 import OptionCard from "../components/OptionCard";
-
+// const d2 = new Date();
+// const requestBody = {
+//   name: "awdawd",
+//   preferences: "",
+//   savedRecipes: [],
+//   subcription: "premium",
+//   ingredients: [
+//     {
+//       name: "tofu",
+//       unit: "ml",
+//       quantity: 2,
+//       expiryDate: d2,
+//       addedDate: d2,
+//     },
+//   ],
+// };
 export default function profile() {
+  const d1 = new Date();
   const handlePreference = async () => {
-    const CloudFunctionURL: string =
-      process.env.CLOUD_FUNCTION_DOCUMENT_AI_URL || "";
-
     const requestBody = {
-      base64ImageData: "test call",
+      user: "user_model",
+      ingredients: [
+        {
+          name: "White Onion",
+          quantity: 1,
+          unit: "gram",
+          addedDate: d1,
+          expiryDate: d1,
+        },
+        {
+          name: "Green Onion",
+          quantity: 2,
+          unit: "gram",
+          addedDate: d1,
+          expiryDate: d1,
+        },
+      ],
     };
-
-    const response = await fetch(CloudFunctionURL, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    });
+    const response = await fetch(
+      "https://us-central1-recipict-gcp.cloudfunctions.net/function-add-ingredients",
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      }
+    );
 
     const data = await response.json();
     console.log(data);

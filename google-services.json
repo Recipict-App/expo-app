@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "746895610022",
+    "project_id": "recipict-gcp",
+    "storage_bucket": "recipict-gcp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746895610022:android:542b3f4343ccd089bce467",
+        "android_client_info": {
+          "package_name": "com.recipict.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVqwvgAsUiNjry1YUbGJ1Ud8Mm4IDlgGs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

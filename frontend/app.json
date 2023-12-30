@@ -14,7 +14,17 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.recipict.Recipict",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.746895610022-j07khkro48h1imfum80fu1o1dr7ndkps"
+            ]
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -45,6 +55,12 @@
         "expo-image-picker",
         {
           "photosPermission": "Allow Recipict to access your photos"
+        }
+      ],
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.746895610022-j07khkro48h1imfum80fu1o1dr7ndkps"
         }
       ]
     ]

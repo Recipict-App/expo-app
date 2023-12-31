@@ -7,7 +7,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Image } from "expo-image";
-import { Link } from "expo-router";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -30,15 +29,14 @@ export default function App() {
 
   async function handleEffect() {
     const user = await getLocalUser();
-    console.log("user", user);
     if (!user) {
       if (response?.type === "success") {
         setToken(response?.authentication?.accessToken);
         getUserInfo(response?.authentication?.accessToken);
       }
     } else {
-      setUserInfo(user);
-      console.log("loaded locally");
+      setUserInfo(user.email);
+      console.log("previous session user detected");
     }
   }
 
@@ -61,9 +59,17 @@ export default function App() {
       const user = await response.json();
       await AsyncStorage.setItem("@user", JSON.stringify(user));
       setUserInfo(user);
+      console.log("user: " + user);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const logoutUser = async () => {
+    await AsyncStorage.removeItem("@user");
+    const user = await getLocalUser();
+    setUserInfo(user);
+    console.log("user: " + user);
   };
 
   return (
@@ -90,9 +96,7 @@ export default function App() {
           <Text style={styles.text}>{JSON.stringify(userInfo, null, 2)}</Text>
         </View>
       )}
-      <TouchableOpacity
-        onPress={async () => await AsyncStorage.removeItem("@user")}
-      >
+      <TouchableOpacity onPress={logoutUser}>
         <Text>Clear local storage</Text>
       </TouchableOpacity>
     </View>

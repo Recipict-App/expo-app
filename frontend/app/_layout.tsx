@@ -12,7 +12,6 @@ import { SheetProvider } from "react-native-actions-sheet";
 import "../sheets.tsx";
 
 export default function HomeLayout() {
-
   let [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,
     Poppins_600SemiBold,
@@ -21,8 +20,6 @@ export default function HomeLayout() {
   if (!fontsLoaded && !fontError) {
     return null;
   }
-
-  
 
   return (
     <SheetProvider>
@@ -87,7 +84,7 @@ export default function HomeLayout() {
             tabBarIcon: () => (
               <Image
                 className="w-[20px] h-[20px]"
-                style={{ resizeMode: "contain" }}
+                contentFit="contain"
                 source={require("../assets/icons/Profile.svg")}
               />
             ),

@@ -48,7 +48,7 @@ export default function ScannedItemsSheet(props: SheetProps) {
                 <TouchableOpacity onPress={handleDelete}>
                   <Image
                     className="w-[56px] h-[56px]"
-                    style={{ resizeMode: "contain" }}
+                    contentFit="contain"
                     source={require("../../assets/icons/DeleteIngredient.svg")}
                   />
                 </TouchableOpacity>
@@ -56,7 +56,7 @@ export default function ScannedItemsSheet(props: SheetProps) {
                 <TouchableOpacity onPress={handleAdd}>
                   <Image
                     className="w-[56px] h-[56px]"
-                    style={{ resizeMode: "contain" }}
+                    contentFit="contain"
                     source={require("../../assets/icons/ApproveIngredient.svg")}
                   />
                 </TouchableOpacity>

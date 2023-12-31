@@ -2,9 +2,7 @@ import { View, Text, ScrollView, FlatList, Button, Alert } from "react-native";
 import { Image } from "expo-image";
 import React, { useRef } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import ActionSheet, {
-  ActionSheetRef,
-} from "react-native-actions-sheet";
+import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import { SheetManager } from "react-native-actions-sheet";
 
 const dummyIngredients = [
@@ -24,16 +22,12 @@ const handleShowRecipe = () => {
   SheetManager.show("recipe-ingredient-sheet");
 };
 
-
-
 export default function ReadyToBeMade() {
   const recipePreview = [1, 2, 3, 4];
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   const RecipeItem = () => (
-    <TouchableOpacity
-      onPress={handleShowRecipe}
-    >
+    <TouchableOpacity onPress={handleShowRecipe}>
       <View className="bg-[#444141] w-[127px] h-[210px] rounded-[20px] m-[5] flex justify-end items-center">
         <Text className="text-white font-pps w-3/5 flex text-center pb-4">
           Eggs with Tomato
@@ -56,9 +50,9 @@ export default function ReadyToBeMade() {
             width: 120,
             height: 106,
             zIndex: 1,
-            resizeMode: "contain",
             transform: [{ rotate: "20deg" }],
           }}
+          contentFit="contain"
           source={require("../assets/images/Purply.png")}
         />
       </View>

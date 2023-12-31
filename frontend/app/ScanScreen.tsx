@@ -174,7 +174,7 @@ export default function App() {
             <TouchableOpacity onPress={handleGallery}>
               <Image
                 className="w-[20px] h-[20px]"
-                style={{ resizeMode: "contain" }}
+                contentFit="contain"
                 source={require("../assets/icons/Gallery.svg")}
               />
             </TouchableOpacity>
@@ -182,7 +182,7 @@ export default function App() {
             <TouchableOpacity onPress={handleCapture}>
               <Image
                 className="w-[36px] h-[30px]"
-                style={{ resizeMode: "contain" }}
+                contentFit="contain"
                 source={require("../assets/icons/Camera.svg")}
               />
             </TouchableOpacity>
@@ -190,7 +190,7 @@ export default function App() {
             <TouchableOpacity onPress={handleTorch}>
               <Image
                 className="w-[20px] h-[20px]"
-                style={{ resizeMode: "contain" }}
+                contentFit="contain"
                 source={require("../assets/icons/Flash.svg")}
               />
             </TouchableOpacity>

@@ -49,9 +49,9 @@ export default function AlmostThere() {
             top: -60,
             width: 117,
             height: 127,
-            resizeMode: "contain",
             transform: [{ rotate: "20deg" }],
           }}
+          contentFit="contain"
           source={require("../assets/images/Orangy.png")}
         />
       </View>

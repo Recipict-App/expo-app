@@ -95,7 +95,7 @@ export default function HomeLayout() {
           name="index"
           options={{
             href: null,
-            tabBarStyle: { display: "none" },
+            // tabBarStyle: { display: "none" }, // hide for development
           }}
         />
 

@@ -1,4 +1,4 @@
-package com.recipict.Recipict;
+package com.recipict.recipict;
 
 import android.os.Build;
 import android.os.Bundle;

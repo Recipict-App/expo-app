@@ -12,7 +12,7 @@ import { Link } from "expo-router";
 WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
-  const [token, setToken] = useState<string>("");
+  const [token, setToken] = useState<string | undefined>("");
   const [userInfo, setUserInfo] = useState<any>(null);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -33,7 +33,7 @@ export default function App() {
     console.log("user", user);
     if (!user) {
       if (response?.type === "success") {
-        // setToken(response.authentication.accessToken);
+        setToken(response?.authentication?.accessToken);
         getUserInfo(response?.authentication?.accessToken);
       }
     } else {

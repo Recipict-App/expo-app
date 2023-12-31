@@ -81,9 +81,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.recipict.Recipict'
+    namespace 'com.recipict.recipict'
     defaultConfig {
-        applicationId 'com.recipict.Recipict'
+        applicationId 'com.recipict.recipict'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

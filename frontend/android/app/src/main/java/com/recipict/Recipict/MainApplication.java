@@ -1,4 +1,4 @@
-package com.recipict.Recipict;
+package com.recipict.recipict;
 
 import android.app.Application;
 import android.content.res.Configuration;

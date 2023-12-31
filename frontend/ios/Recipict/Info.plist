@@ -27,8 +27,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>expo-app</string>
-          <string>com.recipict.Recipict</string>
+          <string>com.googleusercontent.apps.746895610022-j07khkro48h1imfum80fu1o1dr7ndkps</string>
         </array>
       </dict>
     </array>

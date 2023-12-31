@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-import { Redirect } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Image } from "expo-image";
+
+import { Redirect } from "expo-router";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -35,8 +36,9 @@ export default function App() {
         getUserInfo(response?.authentication?.accessToken);
       }
     } else {
-      setUserInfo(user.email);
-      console.log("previous session user detected");
+      setUserInfo(user);
+      console.log("previous session user detected: redirecting to home screen");
+      <Redirect href="/HomeScreen" />;
     }
   }
 
@@ -64,6 +66,10 @@ export default function App() {
       console.log(error);
     }
   };
+
+  if (userInfo) {
+    return <Redirect href="/HomeScreen" />;
+  }
 
   const logoutUser = async () => {
     await AsyncStorage.removeItem("@user");

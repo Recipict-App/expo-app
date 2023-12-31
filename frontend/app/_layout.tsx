@@ -93,9 +93,17 @@ export default function HomeLayout() {
 
         <Tabs.Screen
           name="index"
-          // options={{
-          //   href: null,
-          // }}
+          options={{
+            href: null,
+            tabBarStyle: { display: "none" },
+          }}
+        />
+
+        <Tabs.Screen
+          name="oauthredirect"
+          options={{
+            href: null,
+          }}
         />
       </Tabs>
     </SheetProvider>

@@ -1,34 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, SafeAreaView, ScrollView, Alert } from "react-native";
 import { Image } from "expo-image";
 import OptionCard from "../components/OptionCard";
+import { Redirect } from "expo-router";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function profile() {
-  const handlePreference = async () => {
-    const CloudFunctionURL: string =
-      process.env.CLOUD_FUNCTION_DOCUMENT_AI_URL || "";
+  const [shouldRedirect, setShouldRedirect] = useState<boolean>(false);
 
-    const requestBody = {
-      base64ImageData: "test call",
-    };
-
-    const response = await fetch(CloudFunctionURL, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    const data = await response.json();
-    console.log(data);
-  };
+  const handlePreference = async () => {};
 
   const handleAppereance = () => {};
   const handleNotification = () => {};
   const handleLocation = () => {};
   const handleAboutUs = () => {};
+
+  const handleLogOut = async () => {
+    await AsyncStorage.removeItem("@user");
+    console.log("Logging out");
+
+    setShouldRedirect(true);
+  };
+
+  // if (shouldRedirect) {
+  //   return <Redirect href="/" />;
+  // }
 
   return (
     <SafeAreaView className="bg-white ">
@@ -62,6 +59,7 @@ export default function profile() {
             />
             <OptionCard title="Location" icon="" func={handleLocation} />
             <OptionCard title="About us" icon="" func={handleAboutUs} />
+            <OptionCard title="Log out" icon="" func={handleLogOut} />
           </View>
         </View>
       </ScrollView>

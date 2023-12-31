@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "Recipict",
-    "slug": "Recipict",
-    "scheme": "expo-app",
+    "slug": "recipict",
+    "scheme": "recipict",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,13 +14,33 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Allow Recipict to access your photos.",
+        "NSPhotoLibraryAddUsageDescription": "Allow Recipict to save photos.",
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.746895610022-j07khkro48h1imfum80fu1o1dr7ndkps"
+            ]
+          }
+        ]
+      },
+      "bundleIdentifier": "com.recipict.recipict"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_MEDIA_LOCATION"
+      ],
+      "package": "com.recipict.recipict"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -47,6 +67,15 @@
           "photosPermission": "Allow Recipict to access your photos"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "6a2a944a-004a-4bcb-92c6-3dfcbd7b4822"
+      }
+    },
+    "owner": "recipict"
   }
 }

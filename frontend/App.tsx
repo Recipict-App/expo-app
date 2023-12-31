@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
 import { SheetProvider } from "react-native-actions-sheet";
-import "sheets.tsx";
+import "./sheets";
 
 export default function App() {
   return (

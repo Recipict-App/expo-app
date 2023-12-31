@@ -36,7 +36,7 @@ export default function profile() {
           <View className="w-11/12 rounded-2xl bg-green  justify-center shadow-lg">
             <Image
               className="w-[150px] h-[125px] ratio absolute rotate-2 left-[-30px] top-[-41]"
-              style={{ resizeMode: "contain" }}
+              contentFit="contain"
               source={require("../assets/images/Salady.png")}
             />
             {/* Name */}

@@ -39,8 +39,8 @@ export default function Explore() {
             width: 122,
             height: 128,
             zIndex: 1,
-            resizeMode: "contain",
           }}
+          contentFit="contain"
           source={require("../assets/images/Satay.png")}
         />
       </View>

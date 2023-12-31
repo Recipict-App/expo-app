@@ -1,4 +1,5 @@
-import { Text, View, SafeAreaView, ScrollView, Image } from "react-native";
+import { Text, View, SafeAreaView, ScrollView } from "react-native";
+import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { IngredientProps, Ingredient } from "../components/Ingredient";
 import { Link } from "expo-router";
@@ -41,7 +42,7 @@ export default function Home() {
               <View className="overflow-visible">
                 <Image
                   className="w-[181px] h-[174px] absolute right-[-30px] top-[-90px]"
-                  style={{ resizeMode: "contain" }}
+                  contentFit="contain"
                   source={require("../assets/images/Bowl.png")}
                 />
               </View>

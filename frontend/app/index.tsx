@@ -20,8 +20,8 @@ export default function App() {
       "746895610022-8vssk9oqlglohdvj4m6hgc4oljpa69ck.apps.googleusercontent.com",
     iosClientId:
       "746895610022-j07khkro48h1imfum80fu1o1dr7ndkps.apps.googleusercontent.com",
-    // webClientId:
-    //   "746895610022-tfkvvdm4ps5t8r1b1cs7pdmvv3rprn35.apps.googleusercontent.com",
+    webClientId:
+      "746895610022-tfkvvdm4ps5t8r1b1cs7pdmvv3rprn35.apps.googleusercontent.com",
   });
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export default function App() {
             Verified: {userInfo.verified_email ? "yes" : "no"}
           </Text>
           <Text style={styles.text}>Name: {userInfo.name}</Text>
-          {/* <Text style={styles.text}>{JSON.stringify(userInfo, null, 2)}</Text> */}
+          <Text style={styles.text}>{JSON.stringify(userInfo, null, 2)}</Text>
         </View>
       )}
       <TouchableOpacity

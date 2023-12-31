@@ -12,14 +12,19 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Allow Recipict to access your photos.",
-        "NSPhotoLibraryAddUsageDescription": "Allow Recipict to save photos."
+        "NSPhotoLibraryAddUsageDescription": "Allow Recipict to save photos.",
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.746895610022-j07khkro48h1imfum80fu1o1dr7ndkps"
+            ]
+          }
+        ]
       },
       "bundleIdentifier": "com.recipict.Recipict"
     },

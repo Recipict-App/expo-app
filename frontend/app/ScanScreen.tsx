@@ -27,10 +27,6 @@ export default function App() {
   const [pickedImage, setPickedImage] = useState<String | null>(null);
   const [torch, setTorch] = useState<FlashMode>(FlashMode.off);
 
-  console.log("Camera permissions: ", CameraPermission);
-  // console.log("Gallery permissions: ", galleryPermission);
-  // console.log("Image picker permissions: ", imagePickerPermission);
-
   if (!CameraPermission || !galleryPermission || !imagePickerPermission) {
     // Camera permissions are still loading
     return <View />;

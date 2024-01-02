@@ -32,16 +32,34 @@ export default function App() {
     return <View />;
   }
 
-  if (
-    !CameraPermission.granted ||
-    !galleryPermission.granted ||
-    !imagePickerPermission.granted
-  ) {
+  if (!CameraPermission.granted) {
     // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: "center" }}>
           We need your permission to show the camera
+        </Text>
+      </View>
+    );
+  }
+
+  if (!galleryPermission.granted) {
+    // Camera permissions are not granted yet
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to access the gallery
+        </Text>
+      </View>
+    );
+  }
+
+  if (!imagePickerPermission.granted) {
+    // Camera permissions are not granted yet
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to pick an image
         </Text>
       </View>
     );

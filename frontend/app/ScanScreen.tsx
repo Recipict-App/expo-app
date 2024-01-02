@@ -20,28 +20,53 @@ export default function App() {
   const [galleryPermission, requestgalleryPermission] =
     MediaLibrary.usePermissions();
   const [imagePickerPermission, requestimagePickerPermission] =
-    ImagePicker.useMediaLibraryPermissions();
+    ImagePicker.useCameraPermissions();
 
   const cameraRef = React.useRef<Camera>(null);
 
   const [pickedImage, setPickedImage] = useState<String | null>(null);
   const [torch, setTorch] = useState<FlashMode>(FlashMode.off);
 
+  console.log("Camera permissions: ", CameraPermission);
+  // console.log("Gallery permissions: ", galleryPermission);
+  // console.log("Image picker permissions: ", imagePickerPermission);
+
   if (!CameraPermission || !galleryPermission || !imagePickerPermission) {
     // Camera permissions are still loading
     return <View />;
   }
 
-  if (
-    !CameraPermission.granted ||
-    !galleryPermission.granted ||
-    !imagePickerPermission.granted
-  ) {
+  if (!CameraPermission.granted) {
+    requestCameraPermission();
     // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: "center" }}>
           We need your permission to show the camera
+        </Text>
+      </View>
+    );
+  }
+
+  if (!galleryPermission.granted) {
+    requestgalleryPermission();
+    // Camera permissions are not granted yet
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to access the gallery
+        </Text>
+      </View>
+    );
+  }
+
+  if (!imagePickerPermission.granted) {
+    requestimagePickerPermission();
+    // Camera permissions are not granted yet
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to pick an image
         </Text>
       </View>
     );

@@ -134,7 +134,7 @@ export default function App() {
   };
 
   const getUserData = async (user: any) => {
-    const checkUserRespose = await fetch(
+    const checkUserResponse = await fetch(
       "https://us-central1-recipict-gcp.cloudfunctions.net/function-retrieve-user",
       {
         method: "POST",
@@ -146,7 +146,7 @@ export default function App() {
       }
     );
 
-    if (checkUserRespose.status == 404) {
+    if (checkUserResponse.status == 404) {
       console.log("User not found in Firebase, creating new user... 🤔");
       const localUserData: userDataProps = {
         name: user.name,
@@ -183,7 +183,7 @@ export default function App() {
     } else {
       console.log("User found in Firebase, retrieving user data... 🤩");
 
-      const user = await checkUserRespose.json();
+      const user = await checkUserResponse.json();
       const userDatabase = user.userData;
 
       await setUserData(userDatabase);

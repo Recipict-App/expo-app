@@ -127,6 +127,11 @@ export default function App() {
     return <Redirect href="/HomeScreen" />;
   }
 
+  const logoutUser = async () => {
+    await AsyncStorage.removeItem("@user");
+    const user = await getLocalUser();
+    setUserInfo(user);
+  };
 
   const getUserData = async (user: any) => {
     const checkUserResponse = await fetch(
@@ -209,6 +214,9 @@ export default function App() {
           <Text style={styles.text}>{JSON.stringify(userInfo, null, 2)}</Text>
         </View>
       )}
+      <TouchableOpacity onPress={logoutUser}>
+        <Text>Clear local storage</Text>
+      </TouchableOpacity>
     </View>
   );
 }

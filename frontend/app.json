@@ -12,7 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -73,7 +75,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "6a2a944a-004a-4bcb-92c6-3dfcbd7b4822"
+        "projectId": "9c5ed856-e8f6-4915-952e-ca6943abd650"
       }
     },
     "owner": "recipict"

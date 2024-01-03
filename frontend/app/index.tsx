@@ -62,7 +62,6 @@ const testing: ingredient = {
 };
 
 export default function App() {
-  const [token, setToken] = useState<string | undefined>("");
   const [userInfo, setUserInfo] = useState<any>(null);
   const [userData, setUserData] = useState<userDataProps>();
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -76,7 +75,7 @@ export default function App() {
 
   useEffect(() => {
     handleEffect();
-  }, [response, token]);
+  }, [response]);
 
   async function handleEffect() {
     const user = await getLocalUser();
@@ -85,8 +84,6 @@ export default function App() {
     if (!user) {
       console.log("No user detected in local storage 😡");
       if (response?.type === "success") {
-        setToken(response?.authentication?.accessToken);
-
         await getUserInfo(response?.authentication?.accessToken);
       }
     } else {

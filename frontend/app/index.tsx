@@ -8,6 +8,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Image } from "expo-image";
 
 import { Redirect } from "expo-router";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -77,24 +78,21 @@ export default function App() {
     handleEffect();
   }, [response, token]);
 
-  console.log("userInfo ->  " + userInfo);
-
   async function handleEffect() {
     const user = await getLocalUser();
+    setUserInfo(user);
+
     if (!user) {
+      console.log("No user detected in local storage 😡");
       if (response?.type === "success") {
         setToken(response?.authentication?.accessToken);
+
         await getUserInfo(response?.authentication?.accessToken);
-        await getUserData(response?.authentication?.accessToken);
       }
     } else {
-      console.log("Google has your token");
+      console.log("Previous user detected in local storage ✅");
 
-      setUserInfo(user);
-      await getUserData(user.id);
-
-      console.log(userData);
-      console.log("previous session user detected: redirecting to home screen");
+      getUserData(user);
 
       <Redirect href="/ " />;
     }
@@ -119,7 +117,10 @@ export default function App() {
       const user = await response.json();
       await AsyncStorage.setItem("@user", JSON.stringify(user));
       setUserInfo(user);
-      console.log("user: ", userInfo);
+
+      // Get user data from Firebase
+      console.log("Authenticating user... 🚜");
+      await getUserData(user);
     } catch (error) {
       console.log(error);
     }
@@ -133,12 +134,10 @@ export default function App() {
     await AsyncStorage.removeItem("@user");
     const user = await getLocalUser();
     setUserInfo(user);
-    console.log("user: " + user);
   };
 
-  const getUserData = async (tokenTest: String | undefined) => {
-    console.log("Finding user...");
-    const response = await fetch(
+  const getUserData = async (user: any) => {
+    const checkUserRespose = await fetch(
       "https://us-central1-recipict-gcp.cloudfunctions.net/function-retrieve-user",
       {
         method: "POST",
@@ -146,28 +145,24 @@ export default function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ token: tokenTest }),
+        body: JSON.stringify({ token: user.id }),
       }
     );
-    console.log(response.status);
-    if (response.status == 404) {
-      // while(!userInfo){}
-      console.log("What the user is not there!");
-      console.log(userInfo);
 
+    if (checkUserRespose.status == 404) {
+      console.log("User not found in Firebase, creating new user... 🤔");
       const localUserData: userDataProps = {
-        name: userInfo.name,
-        email: userInfo.email,
-        googleToken: `${userInfo.id}`,
+        name: user.name,
+        email: user.email,
+        googleToken: `${user.id}`,
         ingredients: [],
         preferences: { diet: [], cuisine: [] },
         subscription: "Regular",
       };
-      
-      console.log("Not Found");
+
       setUserData(localUserData);
 
-      const response = await fetch(
+      const createUserResponse = await fetch(
         "https://us-central1-recipict-gcp.cloudfunctions.net/function-create-user",
         {
           method: "POST",
@@ -179,16 +174,22 @@ export default function App() {
         }
       );
 
-      console.log("Added User: " + localUserData);
-    } else {
-      console.log("User Found!");
+      if (createUserResponse.status == 200) {
+        console.log("User created in Firebase, retrieving user data... 🥰");
+        const user = await createUserResponse.json();
+        const userDatabase = user.userData;
 
-      const user = await response.json();
+        await setUserData(userDatabase);
+      } else {
+        console.log("Error creating user in Firebase 😡");
+      }
+    } else {
+      console.log("User found in Firebase, retrieving user data... 🤩");
+
+      const user = await checkUserRespose.json();
       const userDatabase = user.userData;
 
       await setUserData(userDatabase);
-      
-      console.log("user database: "+ userDatabase);
     }
   };
 

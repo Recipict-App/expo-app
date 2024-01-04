@@ -38,7 +38,7 @@ export enum subscriptionTypes {
   "Pro",
 }
 
-export interface ingredient {
+export interface ingredientProps {
   name: String;
   quantity: number;
   unit: String;
@@ -56,12 +56,12 @@ export interface userDataProps {
   name: String;
   email: String;
   googleToken: String;
-  ingredients: ingredient[];
+  ingredients: ingredientProps[];
   preferences: preferences;
   subscription: String;
 }
 
-const testing: ingredient = {
+const testing: ingredientProps = {
   name: "Bawang Goreng",
   quantity: 2,
   unit: "gram",

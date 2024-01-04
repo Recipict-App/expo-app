@@ -1,29 +1,20 @@
 import { Text, View, SafeAreaView, ScrollView } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
-import { IngredientProps, Ingredient } from "../components/Ingredient";
+import { Ingredient } from "../components/Ingredient";
 import { Link } from "expo-router";
 
+import { ingredientProps } from "./index";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
 import { userDataProps } from "./index";
 
-const dummyIngredients: IngredientProps[] = [
-  { name: "Sweet Soy Sauce", quantity: "500ml", duration: "3 months ago" },
-  { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
-  { name: "Erick Jovan", quantity: "56kg", duration: "19 years ago" },
-  { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
-  { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
-];
-
-
-
 export default function Home() {
+  const { userData, setUserData } = useContext(UserContext);
 
-  const {userData, setUserData} = useContext(UserContext);
-  
-  console.log(userData);
-  
+  const data = userData[0];
+  const ingredients = data.ingredients;
+  console.log(data);
   return (
     <SafeAreaView className="bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -70,13 +61,16 @@ export default function Home() {
               }}
             >
               <Text className=" text-lg font-ppr">Things you bought</Text>
-              {dummyIngredients.map((item, index) => {
+              {ingredients.map((item: ingredientProps, index: number) => {
                 return (
                   <Ingredient
                     key={index}
                     name={item.name}
                     quantity={item.quantity}
-                    duration={item.duration}
+                    unit={item.unit}
+                    dateAdded={item.dateAdded}
+                    expiryDate={item.expiryDate}
+                    type={item.type}
                   />
                 );
               })}

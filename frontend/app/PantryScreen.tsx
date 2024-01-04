@@ -9,20 +9,19 @@ import {
 import { Image } from "expo-image";
 import { SheetManager } from "react-native-actions-sheet";
 
-import { IngredientProps, Ingredient } from "../components/Ingredient";
+import { Ingredient } from "../components/Ingredient";
 import { ShelfProps, Shelf } from "../components/Shelf";
+import { ingredientProps } from "../app/index";
 
-const dummyIngredients: IngredientProps[] = [
-  { name: "Sweet Soy Sauce", quantity: "500ml", duration: "3 months ago" },
-  { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
-  { name: "Erick Jovan", quantity: "56kg", duration: "99 years ago" },
-  { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
-  { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
-];
-
-
+import { useContext } from "react";
+import { UserContext } from "../userContext";
 
 export default function pantry() {
+
+  const { userData, setUserData } = useContext(UserContext);
+
+  const data = userData[0];
+  const ingredients = data.ingredients;
 
   const handleShowIngredient = () => {
     SheetManager.show('edit-ingredients-sheet');
@@ -55,11 +54,7 @@ export default function pantry() {
 
             <View className="w-11/12 justify-center items-center">
               {/* Shelf */}
-              <Shelf category="Meats" ingredients={dummyIngredients} />
-              <Shelf category="Vegetables" ingredients={dummyIngredients} />
-              <Shelf category="Spices" ingredients={dummyIngredients} />
-              <Shelf category="Beverages" ingredients={dummyIngredients} />
-              <Shelf category="Sauces" ingredients={dummyIngredients} />
+              <Shelf category="Category Name" ingredients={ingredients} />
             </View>
           </View>
         </View>

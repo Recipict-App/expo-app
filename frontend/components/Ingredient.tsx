@@ -2,21 +2,21 @@ import { Text, View } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
+import { ingredientProps } from "../app/index";
 
-export interface IngredientProps {
-  name: string;
-  quantity: string;
-  duration: string;
-}
-
-export const Ingredient: React.FC<IngredientProps> = ({
+export const Ingredient: React.FC<ingredientProps> = ({
   name,
   quantity,
-  duration,
+  unit,
+  expiryDate,
+  dateAdded,
+  type,
 }) => {
   const handleShowIngredient = () => {
-    SheetManager.show('edit-ingredients-sheet');
-  }
+    SheetManager.show("edit-ingredients-sheet");
+  };
+  console.log(typeof(dateAdded));
+  const showDate = dateAdded;
   return (
     <TouchableOpacity className="w-full" onPress={handleShowIngredient}>
       <View className="w-full h-[72px] rounded-3xl bg-[#F8F8F6] flex-row pl-[20px] items-center justify-between">
@@ -33,7 +33,7 @@ export const Ingredient: React.FC<IngredientProps> = ({
               numberOfLines={1}
               className="text-xs font-ppr text-grey max-w-[220px]"
             >
-              {quantity} - {duration}
+              {quantity + " " + unit + " - " + showDate}
             </Text>
           </View>
         </View>

@@ -11,11 +11,11 @@ import { Image } from "expo-image";
 import { SheetProvider } from "react-native-actions-sheet";
 import "../sheets.tsx";
 import { useState } from "react";
-import { UserContext } from "../userContext.tsx";
-import { ingredient, userDataProps } from "./index.js";
+import { UserContext } from "../userContext";
+import { ingredientProps, userDataProps } from "./index";
 
 export default function HomeLayout() {
-  const [userData, setUserData] = useState<userDataProps>();
+  const [userData, setUserData] = useState<userDataProps[]>();
   let [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,
     Poppins_600SemiBold,
@@ -24,9 +24,8 @@ export default function HomeLayout() {
   if (!fontsLoaded && !fontError) {
     return null;
   }
-
   return (
-    <UserContext.Provider value={{userData, setUserData}}>
+    <UserContext.Provider value={{ userData, setUserData }}>
       <SheetProvider>
         <Tabs
           initialRouteName="HomeScreen"

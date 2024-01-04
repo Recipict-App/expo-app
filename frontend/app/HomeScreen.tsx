@@ -14,7 +14,7 @@ export default function Home() {
 
   const data = userData[0];
   const ingredients = data.ingredients;
-
+  console.log(data);
   return (
     <SafeAreaView className="bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>

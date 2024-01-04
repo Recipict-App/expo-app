@@ -3,6 +3,11 @@ import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { IngredientProps, Ingredient } from "../components/Ingredient";
 import { Link } from "expo-router";
+
+import { UserContext } from "../userContext";
+import { useContext } from "react";
+import { userDataProps } from "./index";
+
 const dummyIngredients: IngredientProps[] = [
   { name: "Sweet Soy Sauce", quantity: "500ml", duration: "3 months ago" },
   { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
@@ -11,7 +16,14 @@ const dummyIngredients: IngredientProps[] = [
   { name: "Dany Raihan", quantity: "500kg", duration: "19 years ago" },
 ];
 
+
+
 export default function Home() {
+
+  const {userData, setUserData} = useContext(UserContext);
+  
+  console.log(userData);
+  
   return (
     <SafeAreaView className="bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>

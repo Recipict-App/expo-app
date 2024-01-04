@@ -4,6 +4,14 @@ import {
   Poppins_600SemiBold,
   Poppins_700Bold,
 } from "@expo-google-fonts/poppins";
+import { useState } from "react";
+import HomeScreen from './HomeScreen';
+import Index from './index';
+import oauthredirect from './oauthredirect';
+import PantryScreen from './PantryScreen';
+import ProfileScreen from './ProfileScreen';
+import ScanScreen from './ScanScreen';
+import RecipeScreen from './RecipeScreen';
 
 import { Tabs } from "expo-router/tabs";
 import { Image } from "expo-image";
@@ -11,7 +19,13 @@ import { Image } from "expo-image";
 import { SheetProvider } from "react-native-actions-sheet";
 import "../sheets.tsx";
 
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 export default function HomeLayout() {
+  const Tab = createBottomTabNavigator();
+  const [userData, setUserData] = useState<any>();
+  
+
   let [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,
     Poppins_600SemiBold,
@@ -23,8 +37,7 @@ export default function HomeLayout() {
 
   return (
     <SheetProvider>
-      <Tabs
-        initialRouteName="HomeScreen"
+      <Tab.Navigator
         screenOptions={{
           headerShown: false,
           tabBarShowLabel: false,
@@ -34,7 +47,7 @@ export default function HomeLayout() {
           // tabBarStyle: { borderTopWidth: 0},
         }}
       >
-        <Tabs.Screen
+        <Tab.Screen
           name="HomeScreen"
           options={{
             tabBarIcon: () => (
@@ -44,9 +57,12 @@ export default function HomeLayout() {
               />
             ),
           }}
-        />
-        <Tabs.Screen
+        >
+          {() => <HomeScreen />}
+        </Tab.Screen>
+        <Tab.Screen
           name="PantryScreen"
+          component={PantryScreen}
           options={{
             tabBarIcon: () => (
               <Image
@@ -56,8 +72,9 @@ export default function HomeLayout() {
             ),
           }}
         />
-        <Tabs.Screen
+        <Tab.Screen
           name="ScanScreen"
+          component={ScanScreen}
           options={{
             tabBarIcon: () => (
               <Image
@@ -67,8 +84,9 @@ export default function HomeLayout() {
             ),
           }}
         />
-        <Tabs.Screen
+        <Tab.Screen
           name="RecipeScreen"
+          component={RecipeScreen}
           options={{
             tabBarIcon: () => (
               <Image
@@ -78,8 +96,9 @@ export default function HomeLayout() {
             ),
           }}
         />
-        <Tabs.Screen
+        <Tab.Screen
           name="ProfileScreen"
+          component={ProfileScreen}
           options={{
             tabBarIcon: () => (
               <Image
@@ -91,21 +110,23 @@ export default function HomeLayout() {
           }}
         />
 
-        <Tabs.Screen
+        <Tab.Screen
           name="index"
+          component={Index}
           options={{
             href: null,
             // tabBarStyle: { display: "none" }, // hide for development
           }}
         />
 
-        <Tabs.Screen
+        {/* <Tab.Screen
           name="oauthredirect"
+          component={oauthredirect}
           options={{
             href: null,
           }}
-        />
-      </Tabs>
+        /> */}
+      </Tab.Navigator>
     </SheetProvider>
   );
 }

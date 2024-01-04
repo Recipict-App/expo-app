@@ -14,7 +14,7 @@ import { SheetManager } from "react-native-actions-sheet";
 const CloudFunctionURL: string =
   process.env.CLOUD_FUNCTION_DOCUMENT_AI_URL || "";
 
-export default function App() {
+export default function ScanScreen() {
   const [CameraPermission, requestCameraPermission] =
     Camera.useCameraPermissions();
   const [galleryPermission, requestgalleryPermission] =

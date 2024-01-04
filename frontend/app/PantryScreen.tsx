@@ -22,7 +22,7 @@ const dummyIngredients: IngredientProps[] = [
 
 
 
-export default function pantry() {
+export default function Pantry() {
 
   const handleShowIngredient = () => {
     SheetManager.show('edit-ingredients-sheet');

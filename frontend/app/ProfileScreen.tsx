@@ -6,7 +6,7 @@ import { Redirect } from "expo-router";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function profile() {
+export default function Profile() {
   const [shouldRedirect, setShouldRedirect] = useState<boolean>(false);
 
   const handlePreference = async () => {};

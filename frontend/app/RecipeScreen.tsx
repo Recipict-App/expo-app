@@ -22,7 +22,7 @@ const dummyIngredients = [
   "Satay",
 ];
 
-export default function recipe() {
+export default function Recipe() {
 
   const handleShowRecipe = () => {
     SheetManager.show("saved-recipes-sheet");

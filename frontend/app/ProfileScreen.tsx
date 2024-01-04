@@ -9,7 +9,19 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function profile() {
   const [shouldRedirect, setShouldRedirect] = useState<boolean>(false);
 
-  const handlePreference = async () => {};
+  const handlePreference = async () => {
+    const name = "apple";
+    const CategoryResponse = await fetch(
+      `https://us-central1-recipict-gcp.cloudfunctions.net/function-ingredient-classifier-py?name=${name}`,
+      {
+        method: "GET",
+        mode: "cors",
+      }
+    );
+
+    const data = await CategoryResponse.json();
+    console.log(data.category);
+  };
 
   const handleAppereance = () => {};
   const handleNotification = () => {};

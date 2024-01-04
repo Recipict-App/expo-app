@@ -4,7 +4,13 @@ import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { Image } from "expo-image";
 
 import { Redirect } from "expo-router";
@@ -185,8 +191,8 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator color="##1BD15D" size={"large"}/>
-      {/* {!userInfo ? (
+      {/* <ActivityIndicator color="##1BD15D" size={"large"}/> */}
+      {!userInfo ? (
         <TouchableOpacity
           disabled={!request}
           onPress={() => {
@@ -207,7 +213,7 @@ export default function App() {
           <Text style={styles.text}>Name: {userInfo.name}</Text>
           <Text style={styles.text}>{JSON.stringify(userInfo, null, 2)}</Text>
         </View>
-      )} */}
+      )}
     </View>
   );
 }

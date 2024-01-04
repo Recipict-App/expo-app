@@ -18,7 +18,9 @@ export default function ScannedItemsSheet(props: SheetProps) {
   };
   const handleAdd = () => {};
 
+  console.log("------- Log from ScannedItemSheet -------");
   console.log(props.payload);
+  console.log("------------------");
 
   return (
     <ActionSheet id={props.sheetId}>

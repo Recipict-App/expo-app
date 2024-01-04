@@ -11,6 +11,8 @@ import { Image } from "expo-image";
 
 import { SheetManager } from "react-native-actions-sheet";
 
+import { ingredientTypes, ingredient } from "../firebase-type";
+
 const CloudFunctionURL: string =
   process.env.CLOUD_FUNCTION_DOCUMENT_AI_URL || "";
 
@@ -68,67 +70,6 @@ export default function App() {
     );
   }
 
-  const retrieveItems = async (imageURI: string) => {
-    // convert image to base64
-    const base64ImageData = await FileSystem.readAsStringAsync(imageURI, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-
-    const requestBody = {
-      base64ImageData: base64ImageData, // goes to the cloud function
-    };
-
-    const response = await fetch(CloudFunctionURL, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    const data = await response.json();
-
-    // access items from response data
-    const items = data.document.entities.map((item: any) => {
-      let date = "";
-      if (item.type == "date") {
-        date = item.mentionText;
-      } else if (item.type == "item_name") {
-        if (date) {
-          return {
-            name: item.mentionText,
-            quantity: "",
-            duration: date,
-          };
-        } else {
-          return {
-            name: item.mentionText,
-            quantity: "",
-            duration: "",
-          };
-        }
-      }
-    });
-
-    const filteredItems = items.filter((item: any) => item !== undefined);
-
-    // create a new object
-    const newObject = { items: filteredItems };
-
-    console.log(newObject);
-
-    console.log("------------------");
-    console.log(
-      data.document.entities.map((item: any) => {
-        console.log(item.mentionText);
-      })
-    );
-    console.log("------------------");
-
-    return newObject;
-  };
-
   const handleCapture = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
@@ -177,6 +118,95 @@ export default function App() {
 
   const handleTorch = () => {
     setTorch(torch === FlashMode.off ? FlashMode.torch : FlashMode.off);
+  };
+
+  // helpers
+  const retrieveItems = async (imageURI: string) => {
+    // convert image to base64
+    const base64ImageData = await FileSystem.readAsStringAsync(imageURI, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    const requestBody = {
+      base64ImageData: base64ImageData, // goes to the cloud function
+    };
+
+    const response = await fetch(CloudFunctionURL, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const data = await response.json();
+
+    // access items from response data
+    const items = await Promise.all(
+      data.document.entities.map(async (item: any) => {
+        let date = "";
+
+        // Assign category for each item
+        if (item.type == "date") {
+          date = item.mentionText;
+        } else if (item.type == "item_name") {
+          // call helper to get category
+          const category = await getCategory(item.mentionText);
+
+          // create json object based on date
+          if (date) {
+            return {
+              name: item.mentionText,
+              quantity: 1,
+              unit: "gr",
+              expiryDate: date,
+              dateAdded: date,
+              type: category,
+            };
+          } else {
+            return {
+              name: item.mentionText,
+              quantity: 1,
+              unit: "gr",
+              expiryDate: "Now (no date found)",
+              dateAdded: "Now (no date found)",
+              type: category,
+            };
+          }
+        }
+      })
+    );
+
+    const filteredItems = items.filter((item: any) => item !== undefined);
+
+    // create a new object
+    const newObject = { items: filteredItems };
+
+    console.log("------- Log from ScanScreen -------");
+    console.log(
+      data.document.entities.map((item: any) => {
+        console.log(item.mentionText);
+      })
+    );
+    console.log("------------------");
+
+    return newObject;
+  };
+
+  const getCategory = async (name: string) => {
+    // pass item name to vertex for classification
+    const CategoryResponse = await fetch(
+      `https://us-central1-recipict-gcp.cloudfunctions.net/function-ingredient-classifier-py?name=${name}`,
+      {
+        method: "GET",
+        mode: "cors",
+      }
+    );
+
+    const categoryResponseJSON = await CategoryResponse.json();
+    console.log(categoryResponseJSON.category);
+    return categoryResponseJSON.category;
   };
 
   return (

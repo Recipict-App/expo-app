@@ -12,13 +12,14 @@ import { SheetManager } from "react-native-actions-sheet";
 import { Ingredient } from "../components/Ingredient";
 import { ShelfProps, Shelf } from "../components/Shelf";
 import { ingredientProps } from "../firebase-type";
+import { Link, Redirect } from "expo-router";
 
 import { useContext } from "react";
 import { UserContext } from "../userContext";
 
 export default function pantry() {
   const { userData, setUserData } = useContext(UserContext);
-  if(!userData)return null;
+  if(!userData)return <Redirect href="/" />;
   const data = userData[0];
   const ingredients = data.ingredients;
 
@@ -31,7 +32,7 @@ export default function pantry() {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Screen */}
         <View className="min-h-screen">
-          <View className="px-[24px] pt-[32px] overflow-visibe">
+          <View className="px-[24px] pt-[32px] overflow-visible">
             <Text className="font-pps text-3xl">Pantry</Text>
           </View>
 

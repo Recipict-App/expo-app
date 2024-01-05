@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
-import { ingredientProps } from "../app/index";
+import { ingredientProps } from "../firebase-type";
 
 export const Ingredient: React.FC<ingredientProps> = ({
   name,
@@ -16,7 +16,7 @@ export const Ingredient: React.FC<ingredientProps> = ({
     SheetManager.show("edit-ingredients-sheet");
   };
   console.log(typeof(dateAdded));
-  const showDate = dateAdded.slice(0, 10);
+  const showDate = dateAdded.toString().slice(0, 10);
   return (
     <TouchableOpacity className="w-full" onPress={handleShowIngredient}>
       <View className="w-full h-[72px] rounded-3xl bg-[#F8F8F6] flex-row pl-[20px] items-center justify-between">

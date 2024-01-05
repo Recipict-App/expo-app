@@ -6,9 +6,13 @@ import { Redirect } from "expo-router";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { useContext } from "react";
+import { UserContext } from "../userContext";
+
 export default function profile() {
   const [shouldRedirect, setShouldRedirect] = useState<boolean>(false);
-
+  const { userData, setUserData } = useContext(UserContext);
+  if(!userData)return <Redirect href="/" />;
   const handlePreference = async () => {
     const name = "apple";
     const CategoryResponse = await fetch(
@@ -30,9 +34,8 @@ export default function profile() {
 
   const handleLogOut = async () => {
     await AsyncStorage.removeItem("@user");
+    setUserData(null);
     console.log("Logging out");
-
-    setShouldRedirect(true);
   };
 
   // if (shouldRedirect) {

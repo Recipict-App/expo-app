@@ -9,6 +9,17 @@ import { UserContext } from "../userContext";
 import { useContext } from "react";
 import Explore from "../components/Explore";
 
+const debounce = (cb:any, delay = 1000) => {
+  let timeout: any
+
+  return (...args: any) => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      cb(...args)
+    }, delay)
+  }
+}
+
 export default function Home() {
   const { userData, setUserData } = useContext(UserContext);
   if(!userData)return <Redirect href="/" />;
@@ -18,8 +29,8 @@ export default function Home() {
   return (
     <SafeAreaView className="bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="flex w-full items-center p-[20px] pt-[40px] overflow-visible min-h-screen">
-          <View className=" flex w-full gap-[20px] items-center justify-center overflow-visible">
+        <View className="flex w-full items-center p-[20px] py-[40px] overflow-visible min-h-screen" style={{gap: 75}}>
+          <View className=" flex w-full items-center justify-center overflow-visible py-[32px]" style={{gap: 20}}>
             <View className="w-full">
               <Text className="font-ppr text-3xl">
                 What's

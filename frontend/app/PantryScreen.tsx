@@ -31,7 +31,7 @@ export default function pantry() {
     <SafeAreaView className="bg-white ">
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Screen */}
-        <View className="min-h-screen">
+        <View className="min-h-screen py-[32px]">
           <View className="px-[24px] pt-[32px] overflow-visible">
             <Text className="font-pps text-3xl">Pantry</Text>
           </View>

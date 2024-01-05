@@ -14,6 +14,24 @@ export interface RecipeBoxProps {
 const handleShowRecipe = () => {
   SheetManager.show("recipe-ingredient-sheet");
 };
+
+function throttle(cb: any, delay = 1000) {
+  let shouldWait = false;
+
+  return (...args: any) => {
+    if (shouldWait) {
+      return;
+    }
+
+    cb(...args);
+    shouldWait = true;
+
+    setTimeout(() => {
+      shouldWait = false;
+    }, delay);
+  };
+}
+
 export const RecipeBox: React.FC<RecipeBoxProps> = ({
   name,
   ingredients,
@@ -24,7 +42,7 @@ export const RecipeBox: React.FC<RecipeBoxProps> = ({
     <View className="flex w-full h-[100] justify-between rounded-3xl bg-[#F8F8F6]">
       <TouchableOpacity
         className=" min-w-full min-h-full "
-        onPress={handleShowRecipe}
+        onPress={throttle(handleShowRecipe)}
       >
         <View className="flex flex-row justify-between items-center w-full h-full p-[15px]">
           <View className="flex flex-row justify-center items-center">

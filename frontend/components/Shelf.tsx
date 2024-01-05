@@ -1,10 +1,11 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { IngredientProps, Ingredient } from "../components/Ingredient";
+import { Ingredient } from "../components/Ingredient";
+import { ingredientProps } from "../app/index";
 
 export interface ShelfProps {
   category: string;
-  ingredients: IngredientProps[];
+  ingredients: ingredientProps[];
 }
 
 export const Shelf: React.FC<ShelfProps> = ({ category, ingredients }) => {
@@ -31,7 +32,10 @@ export const Shelf: React.FC<ShelfProps> = ({ category, ingredients }) => {
               key={index}
               name={item.name}
               quantity={item.quantity}
-              duration={item.duration}
+              unit={item.unit}
+              expiryDate={item.expiryDate}
+              dateAdded={item.dateAdded}
+              type={item.type}
             />
           );
         })}

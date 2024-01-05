@@ -16,7 +16,7 @@ export const Ingredient: React.FC<ingredientProps> = ({
     SheetManager.show("edit-ingredients-sheet");
   };
   console.log(typeof(dateAdded));
-  const showDate = dateAdded;
+  const showDate = dateAdded.slice(0, 10);
   return (
     <TouchableOpacity className="w-full" onPress={handleShowIngredient}>
       <View className="w-full h-[72px] rounded-3xl bg-[#F8F8F6] flex-row pl-[20px] items-center justify-between">

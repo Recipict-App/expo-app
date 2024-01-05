@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <SafeAreaView className="bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="flex w-full items-center justify-center p-[20px] pt-[40px] overflow-visible">
+        <View className="flex w-full items-center p-[20px] pt-[40px] overflow-visible min-h-screen">
           <View className=" flex w-full gap-[20px] items-center justify-center overflow-visible">
             <View className="w-full">
               <Text className="font-ppr text-3xl">

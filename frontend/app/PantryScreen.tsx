@@ -11,21 +11,20 @@ import { SheetManager } from "react-native-actions-sheet";
 
 import { Ingredient } from "../components/Ingredient";
 import { ShelfProps, Shelf } from "../components/Shelf";
-import { ingredientProps } from "../app/index";
+import { ingredientProps } from "../firebase-type";
 
 import { useContext } from "react";
 import { UserContext } from "../userContext";
 
 export default function pantry() {
-
   const { userData, setUserData } = useContext(UserContext);
 
   const data = userData[0];
   const ingredients = data.ingredients;
 
   const handleShowIngredient = () => {
-    SheetManager.show('edit-ingredients-sheet');
-  }
+    SheetManager.show("edit-ingredients-sheet");
+  };
 
   return (
     <SafeAreaView className="bg-white ">

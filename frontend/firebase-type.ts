@@ -1,16 +1,21 @@
 export enum ingredientTypes {
-  "Vegetables",
-  "Fruits",
-  "Liquids",
-  "Grains",
-  "Meats",
-  "Dairy",
-  "Seafood",
-  "Herbs & spices",
-  "Seeds",
-  "Oils",
-  "Condiments",
-  "Not Ingredients",
+  Vegetables = "Vegetables",
+  Fruits = "Fruits",
+  Liquids = "Liquids",
+  Grains = "Grains",
+  Meats = "Meats",
+  Dairy = "Dairy",
+  Seafood = "Seafood",
+  HerbsAndSpices = "Herbs & spices",
+  Seeds = "Seeds",
+  Oils = "Oils",
+  Condiments = "Condiments",
+  NotIngredients = "Not ingredients",
+}
+
+export enum subscriptionTypes {
+  Regular = "Regular",
+  Pro = "Pro",
 }
 
 export interface ingredient {
@@ -20,11 +25,6 @@ export interface ingredient {
   expiryDate: Date;
   dateAdded: Date;
   type: ingredientTypes;
-}
-
-export enum subscriptionTypes {
-  "Regular",
-  "Pro",
 }
 
 export interface preferences {
@@ -39,4 +39,13 @@ export interface userDataProps {
   ingredients: ingredient[];
   preferences: preferences;
   subscription: String;
+}
+
+export interface ingredientProps {
+  name: String;
+  quantity: number;
+  unit: String;
+  expiryDate: Date;
+  dateAdded: Date;
+  type: ingredientTypes;
 }

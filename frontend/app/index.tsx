@@ -182,8 +182,8 @@ export default function App() {
           position: "absolute",
           left: -58,
           top: -80,
-          width: 171,
-          height: 171,
+          width: 200,
+          height: 200,
           transform: [{ scaleX: -1 }],
         }}
         contentFit="contain"
@@ -196,8 +196,8 @@ export default function App() {
           position: "absolute",
           left: -50,
           top: 65,
-          width: 440,
-          height: 440,
+          width: 400,
+          height: 400,
         }}
         contentFit="contain"
         source={require("../assets/images/Blob1.svg")}
@@ -240,7 +240,7 @@ export default function App() {
           zIndex: 0,
           position: "absolute",
           left: 40,
-          top: 440,
+          top: 400,
           width: 130,
           height: 130,
           transform: [{ rotate: "-190deg" }],
@@ -250,7 +250,7 @@ export default function App() {
       />
 
       {!userInfo ? (
-        <View className="z-5 absolute bottom-[100] space-y-4">
+        <View className="z-5 absolute bottom-[130] space-y-4">
           {/* Sign in  */}
           <TouchableOpacity
             disabled={!request}
@@ -306,10 +306,10 @@ export default function App() {
         style={{
           zIndex: 6,
           position: "absolute",
-          left: -15,
-          bottom: -15,
-          width: 150,
-          height: 150,
+          left: -10,
+          bottom: -10,
+          width: 130,
+          height: 130,
           transform: [{ rotate: "30deg" }],
         }}
         contentFit="contain"

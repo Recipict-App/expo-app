@@ -18,7 +18,7 @@ import { UserContext } from "../userContext";
 
 export default function pantry() {
   const { userData, setUserData } = useContext(UserContext);
-
+  if(!userData)return null;
   const data = userData[0];
   const ingredients = data.ingredients;
 

@@ -10,10 +10,10 @@ import { useContext } from "react";
 
 export default function Home() {
   const { userData, setUserData } = useContext(UserContext);
-
+  if(!userData)return null;
   const data = userData[0];
   const ingredients = data.ingredients;
-  console.log(data);
+
   return (
     <SafeAreaView className="bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>

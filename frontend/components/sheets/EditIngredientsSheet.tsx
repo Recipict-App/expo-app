@@ -1,25 +1,66 @@
 import ActionSheet, { SheetProps } from "react-native-actions-sheet";
-import { View, Text, ScrollView, FlatList, Button, Alert } from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { SheetManager } from "react-native-actions-sheet";
 import { Image } from "expo-image";
 
-import { ingredientProps } from "../../app/index";
-import { ingredientTypes } from "../../app/index";
 import { useState } from "react";
 
-import { Dropdown } from "react-native-element-dropdown";
+import { SelectCountry } from "react-native-element-dropdown";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
-const typeData = [
-  "Produce",
-  "Grains",
-  "Meats and Poultry",
-  "Dairy",
-  "Seafood",
-  "Herbs and Spices",
-  "Nuts & Seeds",
-  "Oils",
-  "Sweeteners & Condiments",
+export enum ingredientTypes {
+  Vegetables = "Vegetables",
+  Fruits = "Fruits",
+  Liquids = "Liquids",
+  Grains = "Grains",
+  Meats = "Meats",
+  Dairy = "Dairy",
+  Seafood = "Seafood",
+  HerbsAndSpices = "Herbs & spices",
+  Seeds = "Seeds",
+  Oils = "Oils",
+  Condiments = "Condiments",
+  NotIngredients = "Not ingredients",
+}
+
+const type_data = [
+  {
+    value: ingredientTypes.Vegetables,
+  },
+  {
+    value: ingredientTypes.Fruits,
+  },
+  {
+    value: ingredientTypes.Liquids,
+  },
+  {
+    value: ingredientTypes.Grains,
+  },
+  {
+    value: ingredientTypes.Meats,
+  },
+  {
+    value: ingredientTypes.Dairy,
+  },
+  {
+    value: ingredientTypes.Seafood,
+  },
+  {
+    value: ingredientTypes.HerbsAndSpices,
+  },
+  {
+    value: ingredientTypes.Seeds,
+  },
+  {
+    value: ingredientTypes.Oils,
+  },
+  {
+    value: ingredientTypes.Condiments,
+  },
+  {
+    value: ingredientTypes.NotIngredients,
+  },
 ];
 
 export default function EditIngredientSheet(
@@ -34,6 +75,17 @@ export default function EditIngredientSheet(
 ) {
   const ingredient = props.payload;
   if (!ingredient) return null;
+
+  const [typeValue, setTypeValue] = useState<ingredientTypes>(ingredient.type);
+
+  // const [date, setDate] = useState(new Date());
+
+  // const onChange = (e: any, selectedDate: any) => {
+  //   setDate(selectedDate);
+  // };
+
+  //--------------------//
+
   const [nameSheet, setNameSheet] = useState<string>(ingredient.name);
   const [quantitySheet, setQuantitySheet] = useState<string>(
     ingredient.quantity.toString()
@@ -62,14 +114,14 @@ export default function EditIngredientSheet(
 
   const handleEditIngredient = () => {
     const newExpiryDate = new Date(expirySheet);
-    if(!newExpiryDate){
+    if (!newExpiryDate) {
       console.log("date is not valid");
     }
-  }
+  };
 
-  const handleCheckEnter = (e:any) => {
-   console.log(e) 
-  }
+  const handleCheckEnter = (e: any) => {
+    console.log(e);
+  };
 
   return (
     <ActionSheet id={props.sheetId}>
@@ -86,10 +138,12 @@ export default function EditIngredientSheet(
           }}
         >
           <TouchableOpacity
-            className=" min-h-full min-w-full"
+            className="min-h-full min-w-full"
             onPress={handleCloseEdit}
           />
         </View>
+
+        {/* Screen */}
         <View className="flex justify-between flex-row w-full h-fit">
           {/*Left Column*/}
           <View className="flex w-[45%] h-full rounded-2xl" style={{ gap: 10 }}>
@@ -103,13 +157,13 @@ export default function EditIngredientSheet(
               value={nameSheet}
             />
             <Text className=" font-pps">Expiry Date:</Text>
-            <TextInput
-              className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[60px] pl-2"
-              multiline
-              placeholder="YYYY-MM-DD"
-              onChangeText={handleChangeExpiry}
-              value={expirySheet.toString().slice(0, 10)}
-            />
+
+            {/* <DateTimePicker
+              value={date}
+              mode={"date"}
+              is24Hour={true}
+              onChange={onChange}
+            /> */}
           </View>
 
           {/*Right Column*/}
@@ -126,18 +180,31 @@ export default function EditIngredientSheet(
             </View>
             <View className="w-full" style={{ gap: 10 }}>
               <Text className=" font-pps">Type:</Text>
-              <TextInput
-                className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[60px] pl-2"
-                multiline
-                placeholder="Number"
-                onChangeText={handleChangeType}
-                value={typeSheet.toString()}
+              <SelectCountry
+                style={styles.dropdown}
+                selectedTextStyle={styles.selectedTextStyle}
+                placeholderStyle={styles.placeholderStyle}
+                imageStyle={styles.imageStyle}
+                iconStyle={styles.iconStyle}
+                maxHeight={100}
+                value={typeValue}
+                data={type_data}
+                valueField="value"
+                labelField="value"
+                imageField="image"
+                placeholder="Select type"
+                searchPlaceholder="Search..."
+                onChange={(e) => {
+                  setTypeValue(e.value);
+                }}
               />
             </View>
           </View>
         </View>
+
+        {/* Buttons */}
         <View
-          className="flex flex-row w-full justify-center items-end "
+          className="flex flex-row w-full justify-center items-end"
           style={{ gap: 50 }}
         >
           <TouchableOpacity onPress={handleCloseEdit}>
@@ -157,3 +224,29 @@ export default function EditIngredientSheet(
     </ActionSheet>
   );
 }
+
+const styles = StyleSheet.create({
+  dropdown: {
+    height: 50,
+    width: "100%",
+    backgroundColor: "#F8F8F6",
+    borderRadius: 10,
+    paddingHorizontal: 8,
+  },
+  imageStyle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+});

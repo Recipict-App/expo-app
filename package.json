@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "firebase-tools": "^13.0.2",
-    "react-native-element-dropdown": "^2.10.1"
-  }
-}

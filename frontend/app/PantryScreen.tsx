@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { SheetManager } from "react-native-actions-sheet";
+import { Redirect } from "expo-router";
 
 import { Ingredient } from "../components/Ingredient";
 import { ShelfProps, Shelf } from "../components/Shelf";
@@ -17,15 +18,15 @@ import { useContext } from "react";
 import { UserContext } from "../userContext";
 
 export default function pantry() {
-
   const { userData, setUserData } = useContext(UserContext);
+  if (!userData) return <Redirect href="/" />;
 
   const data = userData[0];
   const ingredients = data.ingredients;
 
   const handleShowIngredient = () => {
-    SheetManager.show('edit-ingredients-sheet');
-  }
+    SheetManager.show("edit-ingredients-sheet");
+  };
 
   return (
     <SafeAreaView className="bg-white ">

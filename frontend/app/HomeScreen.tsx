@@ -2,7 +2,7 @@ import { Text, View, SafeAreaView, ScrollView } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { Ingredient } from "../components/Ingredient";
-import { Link } from "expo-router";
+import { Link, Redirect } from "expo-router";
 
 import { ingredientProps } from "./index";
 import { UserContext } from "../userContext";
@@ -11,6 +11,7 @@ import { userDataProps } from "./index";
 
 export default function Home() {
   const { userData, setUserData } = useContext(UserContext);
+  if (!userData) return <Redirect href="/" />;
 
   const data = userData[0];
   const ingredients = data.ingredients;

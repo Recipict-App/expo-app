@@ -63,6 +63,18 @@ const type_data = [
   },
 ];
 
+const unit_data = [
+  {
+    value: "gr",
+  },
+  {
+    value: "ml",
+  },
+  {
+    value: "ea",
+  },
+];
+
 export default function EditIngredientSheet(
   props: SheetProps<{
     name: string;
@@ -76,13 +88,17 @@ export default function EditIngredientSheet(
   const ingredient = props.payload;
   if (!ingredient) return null;
 
+  // for type dropdown
   const [typeValue, setTypeValue] = useState<ingredientTypes>(ingredient.type);
 
-  // const [date, setDate] = useState(new Date());
+  // for expiry date
+  const [date, setDate] = useState(new Date());
+  const onChange = (e: any, selectedDate: any) => {
+    setDate(selectedDate);
+  };
 
-  // const onChange = (e: any, selectedDate: any) => {
-  //   setDate(selectedDate);
-  // };
+  // for quantity and unit
+  const [unitValue, setUnitValue] = useState<string>();
 
   //--------------------//
 
@@ -108,6 +124,8 @@ export default function EditIngredientSheet(
     setTypeSheet(e);
   };
 
+  //--------------------//
+
   const handleCloseEdit = () => {
     SheetManager.hide("edit-ingredients-sheet");
   };
@@ -117,10 +135,6 @@ export default function EditIngredientSheet(
     if (!newExpiryDate) {
       console.log("date is not valid");
     }
-  };
-
-  const handleCheckEnter = (e: any) => {
-    console.log(e);
   };
 
   return (
@@ -152,47 +166,65 @@ export default function EditIngredientSheet(
               className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[60px] pl-2"
               multiline
               placeholder="Ingredient Name"
-              onKeyPress={handleCheckEnter}
               onChangeText={handleChangeName}
               value={nameSheet}
             />
             <Text className=" font-pps">Expiry Date:</Text>
-
-            {/* <DateTimePicker
-              value={date}
-              mode={"date"}
-              is24Hour={true}
-              onChange={onChange}
-            /> */}
+            <View className="items-center">
+              <DateTimePicker
+                value={date}
+                mode={"date"}
+                is24Hour={true}
+                onChange={onChange}
+              />
+            </View>
           </View>
 
           {/*Right Column*/}
           <View className="flex w-[45%] h-full" style={{ gap: 10 }}>
-            <View className="w-full" style={{ gap: 10 }}>
-              <Text className=" font-pps">Quantity:</Text>
-              <TextInput
-                className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[60px] pl-2"
-                multiline
-                placeholder="Number"
-                onChangeText={handleChangeQuantity}
-                value={quantitySheet.toString()}
-              />
+            <View className="w-full flex-grow" style={{ gap: 10 }}>
+              <Text className="font-pps">Quantity:</Text>
+              {/* Quantity */}
+              <View className="flex flex-row space-x-3">
+                <TextInput
+                  className="flex  justify-center items-center font-ppr text-sm bg-[#F8F8F6] rounded-xl h-[50px] pl-2 w-[45%] "
+                  placeholder="Number"
+                  onChangeText={handleChangeQuantity}
+                  value={quantitySheet.toString()}
+                />
+                <SelectCountry
+                  style={unitDropdownStyles.dropdown}
+                  selectedTextStyle={unitDropdownStyles.selectedTextStyle}
+                  placeholderStyle={unitDropdownStyles.placeholderStyle}
+                  maxHeight={100}
+                  value={unitValue}
+                  data={unit_data}
+                  valueField="value"
+                  labelField="value"
+                  imageField="image"
+                  placeholder="Unit"
+                  searchPlaceholder="Search..."
+                  onChange={(e) => {
+                    setUnitValue(e.value);
+                  }}
+                />
+              </View>
             </View>
             <View className="w-full" style={{ gap: 10 }}>
               <Text className=" font-pps">Type:</Text>
               <SelectCountry
-                style={styles.dropdown}
-                selectedTextStyle={styles.selectedTextStyle}
-                placeholderStyle={styles.placeholderStyle}
-                imageStyle={styles.imageStyle}
-                iconStyle={styles.iconStyle}
+                style={typeDropdownStyles.dropdown}
+                selectedTextStyle={typeDropdownStyles.selectedTextStyle}
+                placeholderStyle={typeDropdownStyles.placeholderStyle}
+                imageStyle={typeDropdownStyles.imageStyle}
+                iconStyle={typeDropdownStyles.iconStyle}
                 maxHeight={100}
                 value={typeValue}
                 data={type_data}
                 valueField="value"
                 labelField="value"
                 imageField="image"
-                placeholder="Select type"
+                placeholder="Type"
                 searchPlaceholder="Search..."
                 onChange={(e) => {
                   setTypeValue(e.value);
@@ -225,12 +257,12 @@ export default function EditIngredientSheet(
   );
 }
 
-const styles = StyleSheet.create({
+const typeDropdownStyles = StyleSheet.create({
   dropdown: {
     height: 50,
     width: "100%",
     backgroundColor: "#F8F8F6",
-    borderRadius: 10,
+    borderRadius: 12,
     paddingHorizontal: 8,
   },
   imageStyle: {
@@ -248,5 +280,23 @@ const styles = StyleSheet.create({
   iconStyle: {
     width: 20,
     height: 20,
+  },
+});
+
+const unitDropdownStyles = StyleSheet.create({
+  dropdown: {
+    height: 50,
+    width: "45%",
+    backgroundColor: "#F8F8F6",
+    borderRadius: 12,
+    paddingHorizontal: 8,
+  },
+
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    marginLeft: 8,
   },
 });

@@ -8,22 +8,20 @@ import { ingredientProps } from "../../app/index";
 import { ingredientTypes } from "../../app/index";
 import { useState } from "react";
 
-const dummyIngredients = [
-  "Garlic",
-  "Chili",
-  "Rice",
-  "Dany",
-  "Other spices idk what but a long one",
-  "Recipict",
-  "Purply",
-  "Orangy",
-  "Bowly",
-  "Satay",
+import { Dropdown } from "react-native-element-dropdown";
+
+const typeData = [
+  "Produce",
+  "Grains",
+  "Meats and Poultry",
+  "Dairy",
+  "Seafood",
+  "Herbs and Spices",
+  "Nuts & Seeds",
+  "Oils",
+  "Sweeteners & Condiments",
 ];
 
-const handleCloseEdit = () => {
-  SheetManager.hide("edit-ingredients-sheet");
-};
 export default function EditIngredientSheet(
   props: SheetProps<{
     name: string;
@@ -37,14 +35,41 @@ export default function EditIngredientSheet(
   const ingredient = props.payload;
   if (!ingredient) return null;
   const [nameSheet, setNameSheet] = useState<string>(ingredient.name);
-  const [quantitySheet, setQuantitySheet] = useState<number>(
-    ingredient.quantity
+  const [quantitySheet, setQuantitySheet] = useState<string>(
+    ingredient.quantity.toString()
   );
-  const [expirySheet, setExpirySheet] = useState<Date>(ingredient.expiryDate);
+  const [expirySheet, setExpirySheet] = useState<string>(
+    ingredient.expiryDate.toString()
+  );
+  const [typeSheet, setTypeSheet] = useState<ingredientTypes>(ingredient.type);
 
   const handleChangeName = (e: any) => {
-    setNameSheet(e.target.value);
+    setNameSheet(e);
   };
+  const handleChangeQuantity = (e: any) => {
+    setQuantitySheet(e);
+  };
+  const handleChangeExpiry = (e: any) => {
+    setExpirySheet(e);
+  };
+  const handleChangeType = (e: any) => {
+    setTypeSheet(e);
+  };
+
+  const handleCloseEdit = () => {
+    SheetManager.hide("edit-ingredients-sheet");
+  };
+
+  const handleEditIngredient = () => {
+    const newExpiryDate = new Date(expirySheet);
+    if(!newExpiryDate){
+      console.log("date is not valid");
+    }
+  }
+
+  const handleCheckEnter = (e:any) => {
+   console.log(e) 
+  }
 
   return (
     <ActionSheet id={props.sheetId}>
@@ -73,15 +98,17 @@ export default function EditIngredientSheet(
               className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[60px] pl-2"
               multiline
               placeholder="Ingredient Name"
-              onChange={handleChangeName}
+              onKeyPress={handleCheckEnter}
+              onChangeText={handleChangeName}
               value={nameSheet}
             />
             <Text className=" font-pps">Expiry Date:</Text>
             <TextInput
               className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[60px] pl-2"
               multiline
-              placeholder="DD/MM/YYYY"
-              value={props.payload?.expiryDate.slice(0, 10)}
+              placeholder="YYYY-MM-DD"
+              onChangeText={handleChangeExpiry}
+              value={expirySheet.toString().slice(0, 10)}
             />
           </View>
 
@@ -93,7 +120,8 @@ export default function EditIngredientSheet(
                 className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[60px] pl-2"
                 multiline
                 placeholder="Number"
-                value={props.payload?.quantity.toString()}
+                onChangeText={handleChangeQuantity}
+                value={quantitySheet.toString()}
               />
             </View>
             <View className="w-full" style={{ gap: 10 }}>
@@ -101,8 +129,9 @@ export default function EditIngredientSheet(
               <TextInput
                 className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[60px] pl-2"
                 multiline
-                placeholder="Type"
-                value={props.payload?.type.toString()}
+                placeholder="Number"
+                onChangeText={handleChangeType}
+                value={typeSheet.toString()}
               />
             </View>
           </View>
@@ -117,7 +146,7 @@ export default function EditIngredientSheet(
               source={require("../../assets/icons/DeleteIngredient.svg")}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleCloseEdit}>
+          <TouchableOpacity onPress={handleEditIngredient}>
             <Image
               style={{ width: 60, height: 60 }}
               source={require("../../assets/icons/Approve.svg")}

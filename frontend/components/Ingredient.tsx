@@ -6,6 +6,7 @@ import { ingredientProps } from "../app/index";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
 
+
 export const Ingredient: React.FC<ingredientProps> = ({
   name,
   quantity,
@@ -22,7 +23,7 @@ export const Ingredient: React.FC<ingredientProps> = ({
         unit: unit,
         expiryDate: expiryDate,
         dateAdded: dateAdded,
-        type: type
+        type: type,
       },
     });
   };

@@ -7,6 +7,7 @@ import { Link, Redirect } from "expo-router";
 import { ingredientProps, userDataProps } from "../firebase-type";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
+import Explore from "../components/Explore";
 
 export default function Home() {
   const { userData, setUserData } = useContext(UserContext);
@@ -75,6 +76,7 @@ export default function Home() {
               })}
             </View>
           </View>
+          <Explore />
         </View>
       </ScrollView>
     </SafeAreaView>

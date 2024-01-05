@@ -44,7 +44,7 @@ export default function RecipeIngredientSheet(props: SheetProps) {
         {/* Summary */}
         <View className="w-full flex flex-row ">
           {/* Ingredients */}
-          <View className=" flex h-[300px] w-[200px] items-center p-3">
+          <View className=" flex h-[275px] w-[200px] items-center p-3">
             <Text className="font-pps text-lg">Ingredients:</Text>
             <FlatList
               data={dummyIngredients}

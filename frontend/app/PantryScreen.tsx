@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { SheetManager } from "react-native-actions-sheet";
+import { Redirect } from "expo-router";
 
 import { Ingredient } from "../components/Ingredient";
 import { ShelfProps, Shelf } from "../components/Shelf";
@@ -18,6 +19,7 @@ import { UserContext } from "../userContext";
 
 export default function pantry() {
   const { userData, setUserData } = useContext(UserContext);
+  if (!userData) return <Redirect href="/" />;
 
   const data = userData[0];
   const ingredients = data.ingredients;

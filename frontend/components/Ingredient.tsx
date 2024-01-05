@@ -3,6 +3,9 @@ import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
 import { ingredientProps } from "../app/index";
+import { UserContext } from "../userContext";
+import { useContext } from "react";
+
 
 export const Ingredient: React.FC<ingredientProps> = ({
   name,
@@ -13,9 +16,17 @@ export const Ingredient: React.FC<ingredientProps> = ({
   type,
 }) => {
   const handleShowIngredient = () => {
-    SheetManager.show("edit-ingredients-sheet");
+    SheetManager.show("edit-ingredients-sheet", {
+      payload: {
+        name: name,
+        quantity: quantity,
+        unit: unit,
+        expiryDate: expiryDate,
+        dateAdded: dateAdded,
+        type: type,
+      },
+    });
   };
-  console.log(typeof(dateAdded));
   const showDate = dateAdded.slice(0, 10);
   return (
     <TouchableOpacity className="w-full" onPress={handleShowIngredient}>

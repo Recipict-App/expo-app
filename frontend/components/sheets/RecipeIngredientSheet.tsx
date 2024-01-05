@@ -16,6 +16,24 @@ const dummyIngredients = [
   "Bowly",
   "Satay",
 ];
+
+function throttle(cb: any, delay = 1000) {
+  let shouldWait = false;
+
+  return (...args: any) => {
+    if (shouldWait) {
+      return;
+    }
+
+    cb(...args);
+    shouldWait = true;
+
+    setTimeout(() => {
+      shouldWait = false;
+    }, delay);
+  };
+}
+
 const handleCloseRecipe = () => {
   SheetManager.hide("recipe-ingredient-sheet");
 };
@@ -34,7 +52,7 @@ export default function RecipeIngredientSheet(props: SheetProps) {
           >
             <TouchableOpacity
               className=" min-h-full min-w-full"
-              onPress={handleCloseRecipe}
+              onPress={throttle(handleCloseRecipe)}
             />
           </View>
         </View>

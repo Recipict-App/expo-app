@@ -9,16 +9,6 @@ import { UserContext } from "../userContext";
 import { useContext } from "react";
 import Explore from "../components/Explore";
 
-const debounce = (cb:any, delay = 1000) => {
-  let timeout: any
-
-  return (...args: any) => {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => {
-      cb(...args)
-    }, delay)
-  }
-}
 
 export default function Home() {
   const { userData, setUserData } = useContext(UserContext);

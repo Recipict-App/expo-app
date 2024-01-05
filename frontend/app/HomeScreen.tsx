@@ -4,10 +4,9 @@ import { TouchableOpacity } from "react-native";
 import { Ingredient } from "../components/Ingredient";
 import { Link } from "expo-router";
 
-import { ingredientProps } from "./index";
+import { ingredientProps, userDataProps } from "../firebase-type";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
-import { userDataProps } from "./index";
 
 export default function Home() {
   const { userData, setUserData } = useContext(UserContext);

@@ -19,47 +19,15 @@ import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { useContext } from "react";
 import { UserContext } from "../userContext";
 
+import {
+  ingredientTypes,
+  subscriptionTypes,
+  ingredientProps,
+  preferences,
+  userDataProps,
+} from "../firebase-type";
+
 WebBrowser.maybeCompleteAuthSession();
-
-export enum ingredientTypes {
-  "Produce",
-  "Grains",
-  "Meats and Poultry",
-  "Dairy",
-  "Seafood",
-  "Herbs and Spices",
-  "Nuts & Seeds",
-  "Oils",
-  "Sweeteners & Condiments",
-}
-
-export enum subscriptionTypes {
-  "Regular",
-  "Pro",
-}
-
-export interface ingredientProps {
-  name: String;
-  quantity: number;
-  unit: String;
-  expiryDate: Date;
-  dateAdded: Date;
-  type: ingredientTypes;
-}
-
-export interface preferences {
-  diet: String[];
-  cuisine: String[];
-}
-
-export interface userDataProps {
-  name: String;
-  email: String;
-  googleToken: String;
-  ingredients: ingredientProps[];
-  preferences: preferences;
-  subscription: String;
-}
 
 const testing: ingredientProps = {
   name: "Bawang Goreng",
@@ -67,7 +35,7 @@ const testing: ingredientProps = {
   unit: "gram",
   expiryDate: new Date(),
   dateAdded: new Date(),
-  type: ingredientTypes["Herbs and Spices"],
+  type: ingredientTypes.HerbsAndSpices,
 };
 
 export default function App() {
@@ -194,18 +162,159 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <Image
+        style={{
+          zIndex: 4,
+          position: "absolute",
+          right: -40,
+          top: 0,
+          width: 143,
+          height: 132,
+          transform: [{ rotate: "20deg" }],
+        }}
+        contentFit="contain"
+        source={require("../assets/images/Orangy.png")}
+      />
+
+      <Image
+        style={{
+          zIndex: 4,
+          position: "absolute",
+          left: -58,
+          top: -80,
+          width: 171,
+          height: 171,
+          transform: [{ scaleX: -1 }],
+        }}
+        contentFit="contain"
+        source={require("../assets/images/Bowl.png")}
+      />
+
+      <Image
+        style={{
+          zIndex: 2,
+          position: "absolute",
+          left: -50,
+          top: 65,
+          width: 440,
+          height: 440,
+        }}
+        contentFit="contain"
+        source={require("../assets/images/Blob1.svg")}
+      />
+
+      <Image
+        style={{
+          zIndex: 3,
+          position: "absolute",
+          right: -430,
+          top: -140,
+          width: 600,
+          height: 600,
+        }}
+        contentFit="contain"
+        source={require("../assets/images/Blob2.svg")}
+      />
+
+      <Image
+        style={{
+          zIndex: 4,
+          position: "absolute",
+          right: -60,
+          top: 320,
+          width: 171,
+          height: 171,
+          transform: [{ rotate: "-45deg" }],
+        }}
+        contentFit="contain"
+        source={require("../assets/images/Burgery.png")}
+      />
+
+      <View className="z-10 absolute top-[230] left-[25]">
+        <Text className="font-pps text-4xl text-left">GET READY TO</Text>
+        <Text className="font-ppb text-4xl text-left">DISCOVER</Text>
+      </View>
+
+      <Image
+        style={{
+          zIndex: 0,
+          position: "absolute",
+          left: 40,
+          top: 440,
+          width: 130,
+          height: 130,
+          transform: [{ rotate: "-190deg" }],
+        }}
+        contentFit="contain"
+        source={require("../assets/images/Satay.png")}
+      />
+
       {!userInfo ? (
-        <TouchableOpacity
-          disabled={!request}
-          onPress={() => {
-            promptAsync();
-          }}
-        >
-          <Text>Sign in with Google</Text>
-        </TouchableOpacity>
+        <View className="z-5 absolute bottom-[100] space-y-4">
+          {/* Sign in  */}
+          <TouchableOpacity
+            disabled={!request}
+            onPress={() => {
+              promptAsync();
+            }}
+          >
+            <View className="flex w-[319px] h-[72px] left-0 top-0 bg-green rounded-3xl justify-center">
+              <Text className="pl-6 text-white text-base font-ppr">
+                Sign In
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Sign up  */}
+          <TouchableOpacity
+            disabled={!request}
+            onPress={() => {
+              promptAsync();
+            }}
+          >
+            <View className="flex w-[319px] h-[72px] left-0 top-0 rounded-3xl justify-center border-green border-[1px]">
+              <Text className="pl-6 text-green text-base font-ppr">
+                Sign Up
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       ) : (
-        <ActivityIndicator color="##1BD15D" size={"large"} />
+        <ActivityIndicator
+          size="large"
+          color="#00ff00"
+          style={{ zIndex: 6 }}
+          className="absolute bottom-[200] space-y-4"
+        />
       )}
+
+      <Image
+        style={{
+          zIndex: 6,
+          position: "absolute",
+          right: -50,
+          bottom: -40,
+          width: 200,
+          height: 200,
+          transform: [{ rotate: "-55deg" }],
+        }}
+        contentFit="contain"
+        source={require("../assets/images/Salady.png")}
+      />
+
+      <Image
+        style={{
+          zIndex: 6,
+          position: "absolute",
+          left: -15,
+          bottom: -15,
+          width: 150,
+          height: 150,
+          transform: [{ rotate: "30deg" }],
+        }}
+        contentFit="contain"
+        source={require("../assets/images/Purply.png")}
+      />
     </View>
   );
 }

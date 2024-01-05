@@ -12,7 +12,7 @@ import { SheetProvider } from "react-native-actions-sheet";
 import "../sheets.tsx";
 import { useState } from "react";
 import { UserContext } from "../userContext";
-import { ingredientProps, userDataProps } from "./index";
+import { ingredientProps, userDataProps } from "../firebase-type";
 
 export default function HomeLayout() {
   const [userData, setUserData] = useState<userDataProps[]>();
@@ -99,7 +99,7 @@ export default function HomeLayout() {
             name="index"
             options={{
               href: null,
-              // tabBarStyle: { display: "none" }, // hide for development
+              tabBarStyle: { display: "none" }, // comment for development
             }}
           />
 

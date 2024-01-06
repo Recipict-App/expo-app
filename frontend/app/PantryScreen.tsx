@@ -13,7 +13,6 @@ import { Redirect } from "expo-router";
 import { Ingredient } from "../components/Ingredient";
 import { ShelfProps, Shelf } from "../components/Shelf";
 import { ingredientProps } from "../firebase-type";
-import { Link, Redirect } from "expo-router";
 
 import { useContext } from "react";
 import { UserContext } from "../userContext";

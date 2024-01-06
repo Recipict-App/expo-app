@@ -169,7 +169,7 @@ export default function EditIngredientSheet(
             />
             <Text className=" font-pps">Expiry Date:</Text>
 
-            <View className="h-[50px] rounded-xl bg-[#F8F8F6] px-2">
+            <View className="h-[50px] rounded-xl bg-[#F8F8F6]">
               {/* pop up */}
               <View className="">
                 <Modal
@@ -180,6 +180,13 @@ export default function EditIngredientSheet(
                   {/*All views of Modal*/}
                   <View style={modalStyles.modal}>
                     <DateTimePicker
+                      headerContainerStyle={{
+                        opacity: 1,
+                        backgroundColor: "#F8F8F6",
+                        borderTopLeftRadius: 24,
+                        borderTopRightRadius: 24,
+                      }}
+                      yearContainerStyle={{backgroundColor: 'red'}}
                       value={dateValue}
                       mode={"date"}
                       selectedItemColor="#1BD15D"
@@ -190,6 +197,7 @@ export default function EditIngredientSheet(
                     />
                     <Button
                       title="Done"
+                      color={"#1BD15D"}
                       onPress={() => {
                         setDateModal(!dateModal);
                       }}
@@ -199,12 +207,16 @@ export default function EditIngredientSheet(
               </View>
 
               {/*Button will change state to true and view will re-render*/}
-              <Button
-                title={dateValue.toString().substring(0, 10)}
+              <TouchableOpacity
+                className="h-full w-full"
                 onPress={() => {
                   setDateModal(true);
                 }}
-              />
+              >
+                <View className=" w-full h-full justify-center items-center">
+                  <Text>{dateValue.toString().substring(0, 10)}</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -336,8 +348,8 @@ const modalStyles = StyleSheet.create({
     backgroundColor: "#F8F8F6",
     height: 300,
     width: "80%",
-    borderRadius: 10,
-    borderWidth: 1,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
     borderColor: "#fff",
     marginTop: 100,
     marginLeft: 40,

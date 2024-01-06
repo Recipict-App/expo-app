@@ -1,5 +1,5 @@
 import ActionSheet, { SheetProps } from "react-native-actions-sheet";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, Button, Modal } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { SheetManager } from "react-native-actions-sheet";
 import { Image } from "expo-image";
@@ -7,7 +7,9 @@ import { Image } from "expo-image";
 import { useState } from "react";
 
 import { SelectCountry } from "react-native-element-dropdown";
-import DateTimePicker from "@react-native-community/datetimepicker";
+
+import DateTimePicker from "react-native-ui-datepicker";
+import dayjs from "dayjs";
 
 export enum ingredientTypes {
   Vegetables = "Vegetables",
@@ -92,10 +94,8 @@ export default function EditIngredientSheet(
   const [typeValue, setTypeValue] = useState<ingredientTypes>(ingredient.type);
 
   // for expiry date
-  const [date, setDate] = useState(new Date());
-  const onChange = (e: any, selectedDate: any) => {
-    setDate(selectedDate);
-  };
+  const [dateValue, setDateValue] = useState<any>(dayjs());
+  const [dateModal, setDateModal] = useState<boolean>(false);
 
   // for quantity and unit
   const [unitValue, setUnitValue] = useState<string>();
@@ -163,19 +163,41 @@ export default function EditIngredientSheet(
           <View className="flex w-[45%] h-full rounded-2xl" style={{ gap: 10 }}>
             <Text className=" font-pps">Name:</Text>
             <TextInput
-              className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[60px] pl-2"
-              multiline
+              className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[50px] pl-2"
               placeholder="Ingredient Name"
               onChangeText={handleChangeName}
               value={nameSheet}
             />
             <Text className=" font-pps">Expiry Date:</Text>
-            <View className="items-center">
-              <DateTimePicker
-                value={date}
-                mode={"date"}
-                is24Hour={true}
-                onChange={onChange}
+
+            <View className="h-[50px] rounded-xl bg-[#F8F8F6] px-2">
+              <Modal
+                animationType={"slide"}
+                transparent={true}
+                visible={dateModal}
+              >
+                {/*All views of Modal*/}
+                <View style={modalStyles.modal}>
+                  <DateTimePicker
+                    value={dateValue}
+                    mode={"date"}
+                    onValueChange={(date) => setDateValue(date)}
+                  />
+                  <Button
+                    title="Done"
+                    onPress={() => {
+                      setDateModal(!dateModal);
+                    }}
+                  />
+                </View>
+              </Modal>
+
+              {/*Button will change state to true and view will re-render*/}
+              <Button
+                title={dateValue.toString()}
+                onPress={() => {
+                  setDateModal(true);
+                }}
               />
             </View>
           </View>
@@ -298,5 +320,25 @@ const unitDropdownStyles = StyleSheet.create({
   selectedTextStyle: {
     fontSize: 16,
     marginLeft: 8,
+  },
+});
+
+const modalStyles = StyleSheet.create({
+  modal: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F8F8F6",
+    height: 300,
+    width: "80%",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#fff",
+    marginTop: 80,
+    marginLeft: 40,
+  },
+  text: {
+    color: "#3f2949",
+    fontSize: 12,
+    marginTop: 10,
   },
 });

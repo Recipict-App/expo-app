@@ -99,7 +99,7 @@ export default function HomeLayout() {
             name="index"
             options={{
               href: null,
-              tabBarStyle: { display: "none" }, // comment for development
+              // tabBarStyle: { display: "none" }, // comment for development
             }}
           />
 

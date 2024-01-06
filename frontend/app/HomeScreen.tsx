@@ -15,7 +15,6 @@ export default function Home() {
   if(!userData)return <Redirect href="/" />;
   const data = userData[0];
   const ingredients = data.ingredients;
-
   return (
     <SafeAreaView className="bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>

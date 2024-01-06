@@ -41,7 +41,16 @@ export const Ingredient: React.FC<ingredientProps> = ({
   type,
 }) => {
   const handleShowIngredient = () => {
-    SheetManager.show("edit-ingredients-sheet");
+    SheetManager.show("edit-ingredients-sheet", {
+      payload: {
+        name: name,
+        quantity: quantity,
+        unit: unit,
+        expiryDate: expiryDate,
+        dateAdded: dateAdded,
+        type: type,
+      },
+    });
   };
   console.log(typeof dateAdded);
   const showDate = dateAdded.toString().slice(0, 10);

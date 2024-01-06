@@ -65,6 +65,7 @@ export default function Home() {
                 return (
                   <Ingredient
                     key={index}
+                    id={item.id}
                     name={item.name}
                     quantity={item.quantity}
                     unit={item.unit}

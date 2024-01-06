@@ -3,7 +3,9 @@ import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
 import { ingredientProps } from "../firebase-type";
-
+import { useContext } from "react";
+import { UserContext } from "../userContext";
+import { Redirect } from "expo-router";
 const debounce = (cb: any, delay = 1000) => {
   let timeout: any;
 
@@ -39,9 +41,17 @@ export const Ingredient: React.FC<ingredientProps> = ({
   expiryDate,
   dateAdded,
   type,
+  id,
 }) => {
-  const handleShowIngredient = () => {
-    SheetManager.show("edit-ingredients-sheet", {
+  const { userData, setUserData } = useContext(UserContext);
+  if (!userData) return <Redirect href="/" />;
+  const data = userData[0];
+  const token = data.googleToken;
+
+  const handleShowIngredient = async () => {
+    console.log(token);
+    console.log(typeof(token));
+    const newIngredient = await SheetManager.show("edit-ingredients-sheet", {
       payload: {
         name: name,
         quantity: quantity,
@@ -49,10 +59,29 @@ export const Ingredient: React.FC<ingredientProps> = ({
         expiryDate: expiryDate,
         dateAdded: dateAdded,
         type: type,
+        id: id,
       },
     });
+
+    const response = await fetch(
+      "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: token, ingredient: newIngredient }),
+      }
+    );
+
+    const result = await response.json();
+
+    console.log(response.status);
+    console.log(result);
+
+
   };
-  console.log(typeof dateAdded);
   const showDate = dateAdded.toString().slice(0, 10);
   return (
     <TouchableOpacity
@@ -62,7 +91,7 @@ export const Ingredient: React.FC<ingredientProps> = ({
       <View className="w-full h-[72px] rounded-3xl bg-[#F8F8F6] flex-row pl-[20px] items-center justify-between">
         <View className="flex flex-row">
           {/* Image placeholder */}
-          <View className="bg-[#9B9B9B] rounded-lg h-8 w-8 justify-center flex "></View>
+          <View className="bg-[#9B9B9B] rounded-lg h-8 w-8 justify-center flex " />
 
           {/* Text */}
           <View className="ml-4">

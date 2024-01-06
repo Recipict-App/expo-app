@@ -30,6 +30,7 @@ export const Shelf: React.FC<ShelfProps> = ({ category, ingredients }) => {
           return (
             <Ingredient
               key={index}
+              id = {item.id}
               name={item.name}
               quantity={item.quantity}
               unit={item.unit}

@@ -9,6 +9,7 @@ import { useState } from "react";
 import { SelectCountry } from "react-native-element-dropdown";
 
 import DateTimePicker from "react-native-ui-datepicker";
+import { ingredientProps } from "../../firebase-type";
 
 export enum ingredientTypes {
   Vegetables = "Vegetables",
@@ -84,6 +85,7 @@ export default function EditIngredientSheet(
     expiryDate: Date;
     dateAdded: Date;
     type: ingredientTypes;
+    id: string;
   }>
 ) {
   const ingredient = props.payload;
@@ -93,20 +95,19 @@ export default function EditIngredientSheet(
   const [typeValue, setTypeValue] = useState<ingredientTypes>(ingredient.type);
 
   // for expiry date
-  const [dateValue, setDateValue] = useState<any>(Date());
+  const [dateValue, setDateValue] = useState<Date>(
+    new Date(ingredient.expiryDate)
+  );
   const [dateModal, setDateModal] = useState<boolean>(false);
 
   // for quantity and unit
-  const [unitValue, setUnitValue] = useState<string>();
+  const [unitValue, setUnitValue] = useState<string>(ingredient.unit);
 
   //--------------------//
 
   const [nameSheet, setNameSheet] = useState<string>(ingredient.name);
   const [quantitySheet, setQuantitySheet] = useState<string>(
     ingredient.quantity.toString()
-  );
-  const [expirySheet, setExpirySheet] = useState<string>(
-    ingredient.expiryDate.toString()
   );
 
   const handleChangeName = (e: any) => {
@@ -119,16 +120,25 @@ export default function EditIngredientSheet(
   //--------------------//
 
   const handleCloseEdit = () => {
-    SheetManager.hide("edit-ingredients-sheet");
+    SheetManager.hide("edit-ingredients-sheet", {
+      payload: false,
+    });
   };
 
   const handleEditIngredient = () => {
-    const newExpiryDate = new Date(expirySheet);
-    if (!newExpiryDate) {
-      console.log("date is not valid");
+    const newIngredient: ingredientProps = {
+      id: ingredient.id,
+      name: nameSheet,
+      quantity: parseInt(quantitySheet),
+      unit: unitValue,
+      expiryDate: dateValue,
+      dateAdded: ingredient.dateAdded,
+      type: typeValue,
     }
+    SheetManager.hide("edit-ingredients-sheet", {
+      payload: newIngredient,
+    });
   };
-
   return (
     <ActionSheet id={props.sheetId}>
       <View
@@ -179,11 +189,11 @@ export default function EditIngredientSheet(
                         borderTopLeftRadius: 24,
                         borderTopRightRadius: 24,
                       }}
-                      yearContainerStyle={{backgroundColor: 'red'}}
+                      yearContainerStyle={{ backgroundColor: "red" }}
                       value={dateValue}
                       mode={"date"}
                       selectedItemColor="#1BD15D"
-                      onValueChange={(date) => {
+                      onValueChange={(date: any) => {
                         setDateValue(date);
                       }}
                     />

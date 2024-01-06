@@ -108,19 +108,12 @@ export default function EditIngredientSheet(
   const [expirySheet, setExpirySheet] = useState<string>(
     ingredient.expiryDate.toString()
   );
-  const [typeSheet, setTypeSheet] = useState<ingredientTypes>(ingredient.type);
 
   const handleChangeName = (e: any) => {
     setNameSheet(e);
   };
   const handleChangeQuantity = (e: any) => {
     setQuantitySheet(e);
-  };
-  const handleChangeExpiry = (e: any) => {
-    setExpirySheet(e);
-  };
-  const handleChangeType = (e: any) => {
-    setTypeSheet(e);
   };
 
   //--------------------//
@@ -192,7 +185,6 @@ export default function EditIngredientSheet(
                       selectedItemColor="#1BD15D"
                       onValueChange={(date) => {
                         setDateValue(date);
-                        console.log(date);
                       }}
                     />
                     <Button
@@ -231,6 +223,7 @@ export default function EditIngredientSheet(
                   placeholder="Number"
                   onChangeText={handleChangeQuantity}
                   value={quantitySheet.toString()}
+                  keyboardType="numeric"
                 />
                 <SelectCountry
                   style={unitDropdownStyles.dropdown}

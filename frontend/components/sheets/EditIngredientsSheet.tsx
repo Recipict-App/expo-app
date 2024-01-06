@@ -9,7 +9,6 @@ import { useState } from "react";
 import { SelectCountry } from "react-native-element-dropdown";
 
 import DateTimePicker from "react-native-ui-datepicker";
-import dayjs from "dayjs";
 
 export enum ingredientTypes {
   Vegetables = "Vegetables",
@@ -94,7 +93,7 @@ export default function EditIngredientSheet(
   const [typeValue, setTypeValue] = useState<ingredientTypes>(ingredient.type);
 
   // for expiry date
-  const [dateValue, setDateValue] = useState<any>(dayjs());
+  const [dateValue, setDateValue] = useState<any>(Date());
   const [dateModal, setDateModal] = useState<boolean>(false);
 
   // for quantity and unit
@@ -171,34 +170,37 @@ export default function EditIngredientSheet(
             <Text className=" font-pps">Expiry Date:</Text>
 
             <View className="h-[50px] rounded-xl bg-[#F8F8F6] px-2">
-              <Modal
-                animationType={"slide"}
-                transparent={true}
-                visible={dateModal}
-              >
-                {/*All views of Modal*/}
-                <View style={modalStyles.modal}>
-                  <DateTimePicker
-                    value={dateValue}
-                    mode={"date"}
-                    selectedItemColor="#1BD15D"
-                    onValueChange={(date) => {
-                      setDateValue(date);
-                      console.log(date);
-                    }}
-                  />
-                  <Button
-                    title="Done"
-                    onPress={() => {
-                      setDateModal(!dateModal);
-                    }}
-                  />
-                </View>
-              </Modal>
+              {/* pop up */}
+              <View className="">
+                <Modal
+                  animationType={"slide"}
+                  transparent={true}
+                  visible={dateModal}
+                >
+                  {/*All views of Modal*/}
+                  <View style={modalStyles.modal}>
+                    <DateTimePicker
+                      value={dateValue}
+                      mode={"date"}
+                      selectedItemColor="#1BD15D"
+                      onValueChange={(date) => {
+                        setDateValue(date);
+                        console.log(date);
+                      }}
+                    />
+                    <Button
+                      title="Done"
+                      onPress={() => {
+                        setDateModal(!dateModal);
+                      }}
+                    />
+                  </View>
+                </Modal>
+              </View>
 
               {/*Button will change state to true and view will re-render*/}
               <Button
-                title={dateValue.toString()}
+                title={dateValue.toString().substring(0, 10)}
                 onPress={() => {
                   setDateModal(true);
                 }}
@@ -337,7 +339,7 @@ const modalStyles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#fff",
-    marginTop: 80,
+    marginTop: 100,
     marginLeft: 40,
   },
   text: {

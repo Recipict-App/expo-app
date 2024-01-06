@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function profile() {
   const [shouldRedirect, setShouldRedirect] = useState<boolean>(false);
 
+  // temporary function to test classifier api
   const handlePreference = async () => {
     const name = "apple";
     const CategoryResponse = await fetch(
@@ -23,7 +24,31 @@ export default function profile() {
     console.log(data.category);
   };
 
-  const handleAppereance = () => {};
+  // temporary function to test get recipe api
+  const handleAppereance = async () => {
+    const requestBody = {
+      ingredients: "milk,flour,chocolate",
+      subscription: "regular",
+      mode: "ready",
+      cuisines: "American,Japanese",
+      equipments: "blender,frying pan,bowl",
+    };
+
+    const apiResponse = await fetch(
+      `https://us-central1-recipict-gcp.cloudfunctions.net/function-spoonacular-recipe-by-ingredient`,
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      }
+    );
+
+    const result = await apiResponse.json();
+    console.log(result);
+  };
   const handleNotification = () => {};
   const handleLocation = () => {};
   const handleAboutUs = () => {};

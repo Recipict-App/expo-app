@@ -2,10 +2,9 @@ import { Text, View } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
-import { ingredientProps } from "../app/index";
+import { ingredientProps } from "../firebase-type";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
-
 
 export const Ingredient: React.FC<ingredientProps> = ({
   name,
@@ -27,7 +26,10 @@ export const Ingredient: React.FC<ingredientProps> = ({
       },
     });
   };
-  const showDate = dateAdded.slice(0, 10);
+
+  const showDate = dateAdded ? dateAdded.toString().slice(0, 10) : "Hmm...";
+  const showUnit = unit ? unit : "Hmm...";
+
   return (
     <TouchableOpacity className="w-full" onPress={handleShowIngredient}>
       <View className="w-full h-[72px] rounded-3xl bg-[#F8F8F6] flex-row pl-[20px] items-center justify-between">

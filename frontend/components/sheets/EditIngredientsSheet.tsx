@@ -181,7 +181,11 @@ export default function EditIngredientSheet(
                   <DateTimePicker
                     value={dateValue}
                     mode={"date"}
-                    onValueChange={(date) => setDateValue(date)}
+                    selectedItemColor="#1BD15D"
+                    onValueChange={(date) => {
+                      setDateValue(date);
+                      console.log(date);
+                    }}
                   />
                   <Button
                     title="Done"

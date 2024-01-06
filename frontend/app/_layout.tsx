@@ -13,6 +13,7 @@ import "../sheets.tsx";
 import { useState } from "react";
 import { UserContext } from "../userContext";
 import { ingredientProps, userDataProps } from "../firebase-type";
+import { Redirect } from "expo-router";
 
 export default function HomeLayout() {
   const [userData, setUserData] = useState<userDataProps[]>();

@@ -19,8 +19,7 @@ import { UserContext } from "../userContext";
 
 export default function pantry() {
   const { userData, setUserData } = useContext(UserContext);
-  if (!userData) return <Redirect href="/" />;
-
+  if(!userData)return <Redirect href="/" />;
   const data = userData[0];
   const ingredients = data.ingredients;
 
@@ -32,8 +31,8 @@ export default function pantry() {
     <SafeAreaView className="bg-white ">
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Screen */}
-        <View className="min-h-screen">
-          <View className="px-[24px] pt-[32px] overflow-visibe">
+        <View className="min-h-screen py-[32px]">
+          <View className="px-[24px] pt-[32px] overflow-visible">
             <Text className="font-pps text-3xl">Pantry</Text>
           </View>
 

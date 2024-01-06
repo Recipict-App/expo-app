@@ -52,7 +52,7 @@ export default function recipe() {
               source={require("../assets/icons/Search.svg")}
             />
             <TextInput
-              className="flex ml-4 font-ppr text-sm w-full py-4 "
+              className="flex ml-4 font-ppr text-sm w-full justify-center "
               placeholder="Search"
             />
           </View>
@@ -61,7 +61,6 @@ export default function recipe() {
 
           <AlmostThere />
 
-          <Explore />
         </View>
       </ScrollView>
     </SafeAreaView>

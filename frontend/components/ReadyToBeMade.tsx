@@ -18,6 +18,23 @@ const dummyIngredients = [
   "Satay",
 ];
 
+function throttle(cb: any, delay = 1000) {
+  let shouldWait = false;
+
+  return (...args: any) => {
+    if (shouldWait) {
+      return;
+    }
+
+    cb(...args);
+    shouldWait = true;
+
+    setTimeout(() => {
+      shouldWait = false;
+    }, delay);
+  };
+}
+
 const handleShowRecipe = () => {
   SheetManager.show("recipe-ingredient-sheet");
 };
@@ -27,7 +44,7 @@ export default function ReadyToBeMade() {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   const RecipeItem = () => (
-    <TouchableOpacity onPress={handleShowRecipe}>
+    <TouchableOpacity onPress={throttle(handleShowRecipe)}>
       <View className="bg-[#444141] w-[127px] h-[210px] rounded-[20px] m-[5] flex justify-end items-center">
         <Text className="text-white font-pps w-3/5 flex text-center pb-4">
           Eggs with Tomato

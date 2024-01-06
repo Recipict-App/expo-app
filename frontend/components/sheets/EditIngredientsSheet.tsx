@@ -1,5 +1,5 @@
 import ActionSheet, { SheetProps } from "react-native-actions-sheet";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, Button, Modal } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { SheetManager } from "react-native-actions-sheet";
 import { Image } from "expo-image";
@@ -7,7 +7,8 @@ import { Image } from "expo-image";
 import { useState } from "react";
 
 import { SelectCountry } from "react-native-element-dropdown";
-import DateTimePicker from "@react-native-community/datetimepicker";
+
+import DateTimePicker from "react-native-ui-datepicker";
 
 export enum ingredientTypes {
   Vegetables = "Vegetables",
@@ -92,10 +93,8 @@ export default function EditIngredientSheet(
   const [typeValue, setTypeValue] = useState<ingredientTypes>(ingredient.type);
 
   // for expiry date
-  const [date, setDate] = useState(new Date());
-  const onChange = (e: any, selectedDate: any) => {
-    setDate(selectedDate);
-  };
+  const [dateValue, setDateValue] = useState<any>(Date());
+  const [dateModal, setDateModal] = useState<boolean>(false);
 
   // for quantity and unit
   const [unitValue, setUnitValue] = useState<string>();
@@ -163,20 +162,61 @@ export default function EditIngredientSheet(
           <View className="flex w-[45%] h-full rounded-2xl" style={{ gap: 10 }}>
             <Text className=" font-pps">Name:</Text>
             <TextInput
-              className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[60px] pl-2"
-              multiline
+              className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[50px] pl-2"
               placeholder="Ingredient Name"
               onChangeText={handleChangeName}
               value={nameSheet}
             />
             <Text className=" font-pps">Expiry Date:</Text>
-            <View className="items-center">
-              <DateTimePicker
-                value={date}
-                mode={"date"}
-                is24Hour={true}
-                onChange={onChange}
-              />
+
+            <View className="h-[50px] rounded-xl bg-[#F8F8F6]">
+              {/* pop up */}
+              <View className="">
+                <Modal
+                  animationType={"slide"}
+                  transparent={true}
+                  visible={dateModal}
+                >
+                  {/*All views of Modal*/}
+                  <View style={modalStyles.modal}>
+                    <DateTimePicker
+                      headerContainerStyle={{
+                        opacity: 1,
+                        backgroundColor: "#F8F8F6",
+                        borderTopLeftRadius: 24,
+                        borderTopRightRadius: 24,
+                      }}
+                      yearContainerStyle={{backgroundColor: 'red'}}
+                      value={dateValue}
+                      mode={"date"}
+                      selectedItemColor="#1BD15D"
+                      onValueChange={(date) => {
+                        setDateValue(date);
+                        console.log(date);
+                      }}
+                    />
+                    <Button
+                      title="Done"
+                      color={"#1BD15D"}
+                      onPress={() => {
+                        setDateModal(!dateModal);
+                      }}
+                    />
+                  </View>
+                </Modal>
+              </View>
+
+              {/*Button will change state to true and view will re-render*/}
+              <TouchableOpacity
+                className="h-full w-full"
+                onPress={() => {
+                  setDateModal(true);
+                }}
+              >
+                <View className=" w-full h-full justify-center items-center">
+                  <Text>{dateValue.toString().substring(0, 10)}</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -298,5 +338,25 @@ const unitDropdownStyles = StyleSheet.create({
   selectedTextStyle: {
     fontSize: 16,
     marginLeft: 8,
+  },
+});
+
+const modalStyles = StyleSheet.create({
+  modal: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F8F8F6",
+    height: 300,
+    width: "80%",
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    borderColor: "#fff",
+    marginTop: 100,
+    marginLeft: 40,
+  },
+  text: {
+    color: "#3f2949",
+    fontSize: 12,
+    marginTop: 10,
   },
 });

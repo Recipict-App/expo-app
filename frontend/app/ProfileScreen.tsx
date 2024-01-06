@@ -6,6 +6,77 @@ import { Redirect } from "expo-router";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+// spoonacular testing ------
+import {
+  ingredient,
+  ingredientTypes,
+  preferences,
+  userDataProps,
+} from "../firebase-type";
+const dummyIngredients: ingredient[] = [
+  {
+    name: "apple",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Fruits,
+  },
+  {
+    name: "banana",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Fruits,
+  },
+  {
+    name: "orange",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Fruits,
+  },
+  {
+    name: "milk",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Dairy,
+  },
+  {
+    name: "flour",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Grains,
+  },
+  {
+    name: "chocolate",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Condiments,
+  },
+];
+const dummyPreferences: preferences = {
+  diet: ["Primal,Whole30"],
+  cuisine: ["American,Chinese,Meditteranian,Italian,French"],
+};
+const dummyUserData: userDataProps = {
+  name: "alhamdullilah pass phil220",
+  email: "aaaaa@aaa.com",
+  googleToken: "123",
+  ingredients: dummyIngredients,
+  preferences: dummyPreferences,
+  subscription: "Regular",
+};
+// spoonacular testing ------
+
 export default function profile() {
   const [shouldRedirect, setShouldRedirect] = useState<boolean>(false);
 
@@ -26,12 +97,37 @@ export default function profile() {
 
   // temporary function to test get recipe api
   const handleAppereance = async () => {
+    // extract and append ingredients' name to string
+    let ingredientsString = "";
+    dummyUserData.ingredients.forEach((ingredient) => {
+      ingredientsString += ingredient.name + ",";
+    });
+    ingredientsString = ingredientsString.slice(0, -1);
+
+    // extract and append cuisines' name to string
+    let cuisinesString = "";
+    dummyUserData.preferences.cuisine.forEach((eachCuisine) => {
+      cuisinesString += eachCuisine + ",";
+    });
+    cuisinesString = cuisinesString.slice(0, -1);
+
+    // extract and append cuisines' name to string
+    let dietsString = "";
+    dummyUserData.preferences.diet.forEach((eachDiet) => {
+      dietsString += eachDiet + ",";
+    });
+    dietsString = dietsString.slice(0, -1);
+
+    console.log(ingredientsString);
+    console.log(cuisinesString);
+    console.log(dietsString);
+
     const requestBody = {
-      ingredients: "milk,flour,chocolate",
-      subscription: "regular",
+      ingredients: ingredientsString,
+      subscription: dummyUserData.subscription,
       mode: "ready",
-      cuisines: "American,Japanese",
-      equipments: "blender,frying pan,bowl",
+      cuisines: cuisinesString,
+      diets: dietsString,
     };
 
     const apiResponse = await fetch(
@@ -49,6 +145,7 @@ export default function profile() {
     const result = await apiResponse.json();
     console.log(result);
   };
+
   const handleNotification = () => {};
   const handleLocation = () => {};
   const handleAboutUs = () => {};

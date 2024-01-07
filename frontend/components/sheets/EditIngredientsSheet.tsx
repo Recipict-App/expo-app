@@ -153,14 +153,14 @@ export default function EditIngredientSheet(
       type: typeValue,
     };
 
-    const updatedIngredients = ingredients.map((eachIngredient) => {
+    const newIngredients = ingredients.map((eachIngredient) => {
       if (eachIngredient.id === newIngredient.id) {
         return newIngredient;
       }
       return eachIngredient;
     });
 
-    console.log(updatedIngredients);
+    console.log(newIngredients);
 
     const response = await fetch(
       "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
@@ -172,7 +172,7 @@ export default function EditIngredientSheet(
         },
         body: JSON.stringify({
           token: userGoogleToken,
-          ingredients: { updatedIngredients },
+          ingredients: newIngredients,
         }),
       }
     );
@@ -181,6 +181,8 @@ export default function EditIngredientSheet(
 
     console.log(response.status);
     console.log(result);
+    console.log(result.returnObject);
+    console.log("------");
 
     SheetManager.hide("edit-ingredients-sheet");
   };

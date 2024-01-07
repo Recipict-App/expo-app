@@ -23,6 +23,8 @@ export default function pantry() {
   const data = userData[0];
   const ingredients = data.ingredients;
 
+  console.log(data);
+
   const handleShowIngredient = () => {
     SheetManager.show("edit-ingredients-sheet", {
       payload: {

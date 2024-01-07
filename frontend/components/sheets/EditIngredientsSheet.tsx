@@ -244,13 +244,19 @@ export default function EditIngredientSheet(
                         setDateValue(date);
                       }}
                     />
-                    <Button
-                      title="Done"
-                      color={"#1BD15D"}
+
+                    <TouchableOpacity
                       onPress={() => {
                         setDateModal(!dateModal);
                       }}
-                    />
+                    >
+                      <View className="w-[300] h-[50] items-center justify-center">
+                        <Image
+                          className="flex w-[12px] h-[20px] object-contain rotate-90 "
+                          source={require("../../assets/icons/ArrowWhite.svg")}
+                        />
+                      </View>
+                    </TouchableOpacity>
                   </View>
                 </Modal>
               </View>

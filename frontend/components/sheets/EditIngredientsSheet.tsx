@@ -4,6 +4,8 @@ import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { SheetManager } from "react-native-actions-sheet";
 import { Image } from "expo-image";
 
+import { UserContext } from "../../userContext";
+
 import { useState } from "react";
 
 import { SelectCountry } from "react-native-element-dropdown";
@@ -79,16 +81,21 @@ const unit_data = [
 
 export default function EditIngredientSheet(
   props: SheetProps<{
-    name: string;
-    quantity: number;
-    unit: string;
-    expiryDate: Date;
-    dateAdded: Date;
-    type: ingredientTypes;
-    id: string;
+    userGooleToken: string;
+    ingredient: {
+      name: string;
+      quantity: number;
+      unit: string;
+      expiryDate: Date;
+      dateAdded: Date;
+      type: ingredientTypes;
+      id: string;
+    };
   }>
 ) {
-  const ingredient = props.payload;
+  const userGoogleToken = props.payload?.userGooleToken;
+  const ingredient = props.payload?.ingredient;
+
   if (!ingredient) return null;
 
   // for type dropdown
@@ -103,29 +110,31 @@ export default function EditIngredientSheet(
   // for quantity and unit
   const [unitValue, setUnitValue] = useState<string>(ingredient.unit);
 
-  //--------------------//
-
+  // for name
   const [nameSheet, setNameSheet] = useState<string>(ingredient.name);
-  const [quantitySheet, setQuantitySheet] = useState<string>(
-    ingredient.quantity.toString()
-  );
-
   const handleChangeName = (e: any) => {
     setNameSheet(e);
   };
+
+  // for quantity
+  const [quantitySheet, setQuantitySheet] = useState<string>(
+    ingredient?.quantity?.toString() || "undefined"
+  );
   const handleChangeQuantity = (e: any) => {
     setQuantitySheet(e);
   };
 
-  //--------------------//
+  // handling buttons
 
-  const handleCloseEdit = () => {
-    SheetManager.hide("edit-ingredients-sheet", {
-      payload: false,
-    });
+  const handleClose = () => {
+    SheetManager.hide("edit-ingredients-sheet");
   };
 
-  const handleEditIngredient = () => {
+  const handleDelete = () => {
+    SheetManager.hide("edit-ingredients-sheet");
+  };
+
+  const handleEdit = async () => {
     const newIngredient: ingredientProps = {
       id: ingredient.id,
       name: nameSheet,
@@ -134,10 +143,29 @@ export default function EditIngredientSheet(
       expiryDate: dateValue,
       dateAdded: ingredient.dateAdded,
       type: typeValue,
-    }
-    SheetManager.hide("edit-ingredients-sheet", {
-      payload: newIngredient,
-    });
+    };
+
+    const response = await fetch(
+      "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: userGoogleToken,
+          ingredient: newIngredient,
+        }),
+      }
+    );
+
+    const result = await response.json();
+
+    console.log(response.status);
+    console.log(result);
+
+    SheetManager.hide("edit-ingredients-sheet");
   };
   return (
     <ActionSheet id={props.sheetId}>
@@ -155,7 +183,7 @@ export default function EditIngredientSheet(
         >
           <TouchableOpacity
             className="min-h-full min-w-full"
-            onPress={handleCloseEdit}
+            onPress={handleClose}
           />
         </View>
 
@@ -282,13 +310,13 @@ export default function EditIngredientSheet(
           className="flex flex-row w-full justify-center items-end"
           style={{ gap: 50 }}
         >
-          <TouchableOpacity onPress={handleCloseEdit}>
+          <TouchableOpacity onPress={handleDelete}>
             <Image
               style={{ width: 60, height: 60 }}
               source={require("../../assets/icons/DeleteIngredient.svg")}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleEditIngredient}>
+          <TouchableOpacity onPress={handleEdit}>
             <Image
               style={{ width: 60, height: 60 }}
               source={require("../../assets/icons/Approve.svg")}

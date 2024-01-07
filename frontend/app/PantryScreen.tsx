@@ -19,7 +19,7 @@ import { UserContext } from "../userContext";
 
 export default function pantry() {
   const { userData, setUserData } = useContext(UserContext);
-  if(!userData)return <Redirect href="/" />;
+  if (!userData) return <Redirect href="/" />;
   const data = userData[0];
   const ingredients = data.ingredients;
 
@@ -33,7 +33,7 @@ export default function pantry() {
         dateAdded: new Date(),
         type: "",
       },
-    })
+    });
   };
 
   return (
@@ -63,7 +63,11 @@ export default function pantry() {
 
             <View className="w-11/12 justify-center items-center">
               {/* Shelf */}
-              <Shelf category="Category Name" ingredients={ingredients} />
+              {ingredients[0] ? (
+                <Shelf category="Category Name" ingredients={ingredients} />
+              ) : (
+                <Text>Sadly, you have no nothing</Text>
+              )}
             </View>
           </View>
         </View>

@@ -6,6 +6,7 @@ import { ingredientProps } from "../firebase-type";
 import { useContext } from "react";
 import { UserContext } from "../userContext";
 import { Redirect } from "expo-router";
+
 const debounce = (cb: any, delay = 1000) => {
   let timeout: any;
 
@@ -46,43 +47,27 @@ export const Ingredient: React.FC<ingredientProps> = ({
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
   const data = userData[0];
-  const token = data.googleToken;
+  const userGooleToken = data.googleToken;
 
   const handleShowIngredient = async () => {
-    console.log(token);
-    console.log(typeof(token));
-    const newIngredient = await SheetManager.show("edit-ingredients-sheet", {
+    await SheetManager.show("edit-ingredients-sheet", {
       payload: {
-        name: name,
-        quantity: quantity,
-        unit: unit,
-        expiryDate: expiryDate,
-        dateAdded: dateAdded,
-        type: type,
-        id: id,
+        userGooleToken: userGooleToken,
+        ingredient: {
+          name: name,
+          quantity: quantity,
+          unit: unit,
+          expiryDate: expiryDate,
+          dateAdded: dateAdded,
+          type: type,
+          id: id,
+        },
       },
     });
-
-    const response = await fetch(
-      "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: token, ingredient: newIngredient }),
-      }
-    );
-
-    const result = await response.json();
-
-    console.log(response.status);
-    console.log(result);
-
-
   };
-  const showDate = dateAdded.toString().slice(0, 10);
+
+  const showDate = dateAdded?.toString().slice(0, 10) || "Undefined";
+
   return (
     <TouchableOpacity
       className="w-full"

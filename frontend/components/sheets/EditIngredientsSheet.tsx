@@ -2,8 +2,10 @@ import ActionSheet, { SheetProps } from "react-native-actions-sheet";
 import { View, Text, StyleSheet, Button, Modal } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { SheetManager } from "react-native-actions-sheet";
+import { Redirect } from "expo-router";
 import { Image } from "expo-image";
 
+import { useContext } from "react";
 import { UserContext } from "../../userContext";
 
 import { useState } from "react";
@@ -81,7 +83,6 @@ const unit_data = [
 
 export default function EditIngredientSheet(
   props: SheetProps<{
-    userGooleToken: string;
     ingredient: {
       name: string;
       quantity: number;
@@ -93,35 +94,42 @@ export default function EditIngredientSheet(
     };
   }>
 ) {
-  const userGoogleToken = props.payload?.userGooleToken;
-  const ingredient = props.payload?.ingredient;
+  // get user data from local
+  const { userData, setUserData } = useContext(UserContext);
+  if (!userData) return <Redirect href="/" />;
+  const data = userData[0];
+  const userGoogleToken = data.googleToken;
+  const ingredients = data.ingredients;
 
-  if (!ingredient) return null;
+  const choosenIngredient = props.payload?.ingredient;
+  if (!choosenIngredient) return null;
 
   // for type dropdown
-  const [typeValue, setTypeValue] = useState<ingredientTypes>(ingredient.type);
+  const [typeValue, setTypeValue] = useState<ingredientTypes>(
+    choosenIngredient.type
+  );
 
   // for expiry date
   const [dateValue, setDateValue] = useState<Date>(
-    new Date(ingredient.expiryDate)
+    new Date(choosenIngredient.expiryDate)
   );
   const [dateModal, setDateModal] = useState<boolean>(false);
 
   // for quantity and unit
-  const [unitValue, setUnitValue] = useState<string>(ingredient.unit);
+  const [unitValue, setUnitValue] = useState<string>(choosenIngredient.unit);
 
   // for name
-  const [nameSheet, setNameSheet] = useState<string>(ingredient.name);
+  const [nameValue, setNameValue] = useState<string>(choosenIngredient.name);
   const handleChangeName = (e: any) => {
-    setNameSheet(e);
+    setNameValue(e);
   };
 
   // for quantity
-  const [quantitySheet, setQuantitySheet] = useState<string>(
-    ingredient?.quantity?.toString() || "undefined"
+  const [quantityValue, setQuantityValue] = useState<string>(
+    choosenIngredient?.quantity?.toString() || "undefined"
   );
   const handleChangeQuantity = (e: any) => {
-    setQuantitySheet(e);
+    setQuantityValue(e);
   };
 
   // handling buttons
@@ -136,14 +144,23 @@ export default function EditIngredientSheet(
 
   const handleEdit = async () => {
     const newIngredient: ingredientProps = {
-      id: ingredient.id,
-      name: nameSheet,
-      quantity: parseInt(quantitySheet),
+      id: choosenIngredient.id,
+      name: nameValue,
+      quantity: parseInt(quantityValue),
       unit: unitValue,
       expiryDate: dateValue,
-      dateAdded: ingredient.dateAdded,
+      dateAdded: choosenIngredient.dateAdded,
       type: typeValue,
     };
+
+    const updatedIngredients = ingredients.map((eachIngredient) => {
+      if (eachIngredient.id === newIngredient.id) {
+        return newIngredient;
+      }
+      return eachIngredient;
+    });
+
+    console.log(updatedIngredients);
 
     const response = await fetch(
       "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
@@ -155,7 +172,7 @@ export default function EditIngredientSheet(
         },
         body: JSON.stringify({
           token: userGoogleToken,
-          ingredient: newIngredient,
+          ingredient: { updatedIngredients },
         }),
       }
     );
@@ -196,7 +213,7 @@ export default function EditIngredientSheet(
               className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[50px] pl-2"
               placeholder="Ingredient Name"
               onChangeText={handleChangeName}
-              value={nameSheet}
+              value={nameValue}
             />
             <Text className=" font-pps">Expiry Date:</Text>
 
@@ -260,7 +277,7 @@ export default function EditIngredientSheet(
                   className="flex  justify-center items-center font-ppr text-sm bg-[#F8F8F6] rounded-xl h-[50px] pl-2 w-[45%] "
                   placeholder="Number"
                   onChangeText={handleChangeQuantity}
-                  value={quantitySheet.toString()}
+                  value={quantityValue.toString()}
                   keyboardType="numeric"
                 />
                 <SelectCountry

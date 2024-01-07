@@ -172,7 +172,7 @@ export default function EditIngredientSheet(
         },
         body: JSON.stringify({
           token: userGoogleToken,
-          ingredient: { updatedIngredients },
+          ingredients: { updatedIngredients },
         }),
       }
     );

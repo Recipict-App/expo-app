@@ -19,6 +19,7 @@ export enum subscriptionTypes {
 }
 
 export interface ingredient {
+  id: String;
   name: String;
   quantity: number;
   unit: String;
@@ -42,6 +43,7 @@ export interface userDataProps {
 }
 
 export interface ingredientProps {
+  id: String;
   name: String;
   quantity: number;
   unit: String;

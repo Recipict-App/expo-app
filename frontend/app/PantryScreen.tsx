@@ -19,12 +19,23 @@ import { UserContext } from "../userContext";
 
 export default function pantry() {
   const { userData, setUserData } = useContext(UserContext);
-  if(!userData)return <Redirect href="/" />;
+  if (!userData) return <Redirect href="/" />;
   const data = userData[0];
   const ingredients = data.ingredients;
 
+  console.log(data);
+
   const handleShowIngredient = () => {
-    SheetManager.show("edit-ingredients-sheet");
+    SheetManager.show("edit-ingredients-sheet", {
+      payload: {
+        name: "",
+        quantity: 0,
+        unit: "",
+        expiryDate: new Date(),
+        dateAdded: new Date(),
+        type: "",
+      },
+    });
   };
 
   return (
@@ -54,7 +65,11 @@ export default function pantry() {
 
             <View className="w-11/12 justify-center items-center">
               {/* Shelf */}
-              <Shelf category="Category Name" ingredients={ingredients} />
+              {ingredients[0] ? (
+                <Shelf category="Category Name" ingredients={ingredients} />
+              ) : (
+                <Text>Sadly, you have no nothing</Text>
+              )}
             </View>
           </View>
         </View>

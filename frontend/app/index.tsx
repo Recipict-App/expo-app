@@ -36,6 +36,7 @@ const testing: ingredientProps = {
   expiryDate: new Date(),
   dateAdded: new Date(),
   type: ingredientTypes.HerbsAndSpices,
+  id: "1",
 };
 
 export default function App() {

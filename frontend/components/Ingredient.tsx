@@ -3,6 +3,9 @@ import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
 import { ingredientProps } from "../firebase-type";
+import { useContext } from "react";
+import { UserContext } from "../userContext";
+import { Redirect } from "expo-router";
 
 const debounce = (cb: any, delay = 1000) => {
   let timeout: any;
@@ -39,21 +42,32 @@ export const Ingredient: React.FC<ingredientProps> = ({
   expiryDate,
   dateAdded,
   type,
+  id,
 }) => {
-  const handleShowIngredient = () => {
-    SheetManager.show("edit-ingredients-sheet", {
+  const { userData, setUserData } = useContext(UserContext);
+  if (!userData) return <Redirect href="/" />;
+  const data = userData[0];
+  const userGooleToken = data.googleToken;
+
+  const handleShowIngredient = async () => {
+    await SheetManager.show("edit-ingredients-sheet", {
       payload: {
-        name: name,
-        quantity: quantity,
-        unit: unit,
-        expiryDate: expiryDate,
-        dateAdded: dateAdded,
-        type: type,
+        userGooleToken: userGooleToken,
+        ingredient: {
+          name: name,
+          quantity: quantity,
+          unit: unit,
+          expiryDate: expiryDate,
+          dateAdded: dateAdded,
+          type: type,
+          id: id,
+        },
       },
     });
   };
-  console.log(typeof dateAdded);
-  const showDate = dateAdded.toString().slice(0, 10);
+
+  const showDate = dateAdded?.toString().slice(0, 10) || "Undefined";
+
   return (
     <TouchableOpacity
       className="w-full"
@@ -62,7 +76,7 @@ export const Ingredient: React.FC<ingredientProps> = ({
       <View className="w-full h-[72px] rounded-3xl bg-[#F8F8F6] flex-row pl-[20px] items-center justify-between">
         <View className="flex flex-row">
           {/* Image placeholder */}
-          <View className="bg-[#9B9B9B] rounded-lg h-8 w-8 justify-center flex "></View>
+          <View className="bg-[#9B9B9B] rounded-lg h-8 w-8 justify-center flex " />
 
           {/* Text */}
           <View className="ml-4">

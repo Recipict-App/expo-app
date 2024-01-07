@@ -250,7 +250,7 @@ export default function EditIngredientSheet(
                         setDateModal(!dateModal);
                       }}
                     >
-                      <View className="w-[300] h-[50] items-center justify-center">
+                      <View className="w-[270] h-fit items-center justify-center ">
                         <Image
                           className="flex w-[12px] h-[20px] object-contain rotate-90 "
                           source={require("../../assets/icons/ArrowWhite.svg")}

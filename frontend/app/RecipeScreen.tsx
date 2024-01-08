@@ -63,7 +63,6 @@ export default function recipe() {
 
           <AlmostThere />
 
-          <Explore />
         </View>
       </ScrollView>
     </SafeAreaView>

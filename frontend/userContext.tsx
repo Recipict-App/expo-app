@@ -1,6 +1,5 @@
 import { createContext, Dispatch } from "react";
-import { userDataProps } from "./app/index";
-
+import { userDataProps } from "./firebase-type";
 
 interface UserContextType {
     userData: userDataProps[];

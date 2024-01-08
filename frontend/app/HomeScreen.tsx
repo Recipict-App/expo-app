@@ -7,18 +7,24 @@ import { Link, Redirect } from "expo-router";
 import { ingredientProps, userDataProps } from "../firebase-type";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
+import Explore from "../components/Explore";
 
 export default function Home() {
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
-
   const data = userData[0];
   const ingredients = data.ingredients;
   return (
     <SafeAreaView className="bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="flex w-full items-center p-[20px] pt-[40px] overflow-visible min-h-screen">
-          <View className=" flex w-full gap-[20px] items-center justify-center overflow-visible">
+        <View
+          className="flex w-full items-center p-[20px] py-[40px] overflow-visible min-h-screen"
+          style={{ gap: 75 }}
+        >
+          <View
+            className=" flex w-full items-center justify-center overflow-visible py-[32px]"
+            style={{ gap: 20 }}
+          >
             <View className="w-full">
               <Text className="font-ppr text-3xl">
                 What's
@@ -60,21 +66,27 @@ export default function Home() {
               }}
             >
               <Text className=" text-lg font-ppr">Things you bought</Text>
-              {ingredients.map((item: ingredientProps, index: number) => {
-                return (
-                  <Ingredient
-                    key={index}
-                    name={item.name}
-                    quantity={item.quantity}
-                    unit={item.unit}
-                    dateAdded={item.dateAdded}
-                    expiryDate={item.expiryDate}
-                    type={item.type}
-                  />
-                );
-              })}
+              {ingredients[0] ? (
+                ingredients.map((item: ingredientProps, index: number) => {
+                  return (
+                    <Ingredient
+                      key={index}
+                      id={item.id}
+                      name={item.name}
+                      quantity={item.quantity}
+                      unit={item.unit}
+                      dateAdded={item.dateAdded}
+                      expiryDate={item.expiryDate}
+                      type={item.type}
+                    />
+                  );
+                })
+              ) : (
+                <Text>Sadly, you have no nothing</Text>
+              )}
             </View>
           </View>
+          <Explore />
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -2,13 +2,20 @@ import ActionSheet, { SheetProps } from "react-native-actions-sheet";
 import { View, Text, StyleSheet, Button, Modal } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { SheetManager } from "react-native-actions-sheet";
+import { Redirect } from "expo-router";
 import { Image } from "expo-image";
+
+import { useContext } from "react";
+import { UserContext } from "../../userContext";
 
 import { useState } from "react";
 
 import { SelectCountry } from "react-native-element-dropdown";
 
 import DateTimePicker from "react-native-ui-datepicker";
+import { ingredientProps } from "../../firebase-type";
+
+import * as Crypto from "expo-crypto";
 
 export enum ingredientTypes {
   Vegetables = "Vegetables",
@@ -78,64 +85,147 @@ const unit_data = [
 
 export default function EditIngredientSheet(
   props: SheetProps<{
-    name: string;
-    quantity: number;
-    unit: string;
-    expiryDate: Date;
-    dateAdded: Date;
-    type: ingredientTypes;
+    ingredient: {
+      name: string;
+      quantity: number;
+      unit: string;
+      expiryDate: Date;
+      dateAdded: Date;
+      type: ingredientTypes;
+      id: string;
+    };
   }>
 ) {
-  const ingredient = props.payload;
-  if (!ingredient) return null;
+  // get user data from local
+  const { userData, setUserData } = useContext(UserContext);
+  if (!userData) return <Redirect href="/" />;
+  const data = userData[0];
+  const userGoogleToken = data.googleToken;
+  const ingredients = data.ingredients;
+
+  let choosenIngredient = props.payload?.ingredient;
+  if (!choosenIngredient) {
+    choosenIngredient = {
+      name: "something",
+      quantity: 1,
+      unit: "gr",
+      expiryDate: new Date(),
+      dateAdded: new Date(),
+      type: ingredientTypes.NotIngredients,
+      id: Crypto.randomUUID(),
+    };
+  }
 
   // for type dropdown
-  const [typeValue, setTypeValue] = useState<ingredientTypes>(ingredient.type);
+  const [typeValue, setTypeValue] = useState<ingredientTypes>(
+    choosenIngredient.type
+  );
 
   // for expiry date
-  const [dateValue, setDateValue] = useState<any>(Date());
+  const [dateValue, setDateValue] = useState<Date>(
+    new Date(choosenIngredient.expiryDate)
+  );
   const [dateModal, setDateModal] = useState<boolean>(false);
 
   // for quantity and unit
-  const [unitValue, setUnitValue] = useState<string>();
+  const [unitValue, setUnitValue] = useState<string>(choosenIngredient.unit);
 
-  //--------------------//
+  // for name
+  const [nameValue, setNameValue] = useState<string>(choosenIngredient.name);
 
-  const [nameSheet, setNameSheet] = useState<string>(ingredient.name);
-  const [quantitySheet, setQuantitySheet] = useState<string>(
-    ingredient.quantity.toString()
+  // for quantity
+  const [quantityValue, setQuantityValue] = useState<string>(
+    choosenIngredient.quantity.toString()
   );
-  const [expirySheet, setExpirySheet] = useState<string>(
-    ingredient.expiryDate.toString()
-  );
-  const [typeSheet, setTypeSheet] = useState<ingredientTypes>(ingredient.type);
 
-  const handleChangeName = (e: any) => {
-    setNameSheet(e);
-  };
-  const handleChangeQuantity = (e: any) => {
-    setQuantitySheet(e);
-  };
-  const handleChangeExpiry = (e: any) => {
-    setExpirySheet(e);
-  };
-  const handleChangeType = (e: any) => {
-    setTypeSheet(e);
-  };
+  // handling buttons
 
-  //--------------------//
-
-  const handleCloseEdit = () => {
+  const handleClose = () => {
     SheetManager.hide("edit-ingredients-sheet");
   };
 
-  const handleEditIngredient = () => {
-    const newExpiryDate = new Date(expirySheet);
-    if (!newExpiryDate) {
-      console.log("date is not valid");
-    }
+  const handleDelete = async () => {
+    const newIngredients = ingredients.filter(
+      (eachIngredient) => eachIngredient.id !== choosenIngredient.id
+    );
+    console.log(newIngredients);
+
+    const response = await fetch(
+      "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: userGoogleToken,
+          ingredients: newIngredients,
+        }),
+      }
+    );
+
+    const result = await response.json();
+
+    console.log(response.status);
+    console.log(result);
+    console.log(result.returnObject);
+
+    SheetManager.hide("edit-ingredients-sheet");
   };
 
+  const handleEdit = async () => {
+    const newIngredient: ingredientProps = {
+      id: choosenIngredient.id,
+      name: nameValue,
+      quantity: parseInt(quantityValue),
+      unit: unitValue,
+      expiryDate: dateValue,
+      dateAdded: choosenIngredient.dateAdded,
+      type: typeValue,
+    };
+
+    // if there is no ingredient in ingredients, add new ingredient
+    const ingredientExists = ingredients.some(
+      (ingredient) => ingredient.id === choosenIngredient.id
+    );
+    if (!ingredientExists) {
+      ingredients.push(newIngredient);
+    }
+
+    const newIngredients = ingredients.map((eachIngredient) => {
+      if (eachIngredient.id === newIngredient.id) {
+        return newIngredient;
+      }
+      return eachIngredient;
+    });
+
+    console.log(newIngredients);
+
+    const response = await fetch(
+      "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: userGoogleToken,
+          ingredients: newIngredients,
+        }),
+      }
+    );
+
+    const result = await response.json();
+
+    console.log(response.status);
+    console.log(result);
+    console.log(result.returnObject);
+    console.log("------");
+
+    SheetManager.hide("edit-ingredients-sheet");
+  };
   return (
     <ActionSheet id={props.sheetId}>
       <View
@@ -152,7 +242,7 @@ export default function EditIngredientSheet(
         >
           <TouchableOpacity
             className="min-h-full min-w-full"
-            onPress={handleCloseEdit}
+            onPress={handleClose}
           />
         </View>
 
@@ -164,12 +254,12 @@ export default function EditIngredientSheet(
             <TextInput
               className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[50px] pl-2"
               placeholder="Ingredient Name"
-              onChangeText={handleChangeName}
-              value={nameSheet}
+              onChangeText={setNameValue}
+              value={nameValue}
             />
             <Text className=" font-pps">Expiry Date:</Text>
 
-            <View className="h-[50px] rounded-xl bg-[#F8F8F6] px-2">
+            <View className="h-[50px] rounded-xl bg-[#F8F8F6]">
               {/* pop up */}
               <View className="">
                 <Modal
@@ -180,31 +270,48 @@ export default function EditIngredientSheet(
                   {/*All views of Modal*/}
                   <View style={modalStyles.modal}>
                     <DateTimePicker
+                      headerContainerStyle={{
+                        opacity: 1,
+                        backgroundColor: "#F8F8F6",
+                        borderTopLeftRadius: 24,
+                        borderTopRightRadius: 24,
+                      }}
+                      yearContainerStyle={{ backgroundColor: "red" }}
                       value={dateValue}
                       mode={"date"}
                       selectedItemColor="#1BD15D"
-                      onValueChange={(date) => {
+                      onValueChange={(date: any) => {
                         setDateValue(date);
-                        console.log(date);
                       }}
                     />
-                    <Button
-                      title="Done"
+
+                    <TouchableOpacity
                       onPress={() => {
                         setDateModal(!dateModal);
                       }}
-                    />
+                    >
+                      <View className="w-[270] h-fit items-center justify-center ">
+                        <Image
+                          className="flex w-[12px] h-[20px] object-contain rotate-90 "
+                          source={require("../../assets/icons/ArrowWhite.svg")}
+                        />
+                      </View>
+                    </TouchableOpacity>
                   </View>
                 </Modal>
               </View>
 
               {/*Button will change state to true and view will re-render*/}
-              <Button
-                title={dateValue.toString().substring(0, 10)}
+              <TouchableOpacity
+                className="h-full w-full"
                 onPress={() => {
                   setDateModal(true);
                 }}
-              />
+              >
+                <View className=" w-full h-full justify-center items-center">
+                  <Text>{dateValue.toString().substring(0, 10)}</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -217,8 +324,9 @@ export default function EditIngredientSheet(
                 <TextInput
                   className="flex  justify-center items-center font-ppr text-sm bg-[#F8F8F6] rounded-xl h-[50px] pl-2 w-[45%] "
                   placeholder="Number"
-                  onChangeText={handleChangeQuantity}
-                  value={quantitySheet.toString()}
+                  onChangeText={setQuantityValue}
+                  value={quantityValue.toString()}
+                  keyboardType="numeric"
                 />
                 <SelectCountry
                   style={unitDropdownStyles.dropdown}
@@ -267,13 +375,13 @@ export default function EditIngredientSheet(
           className="flex flex-row w-full justify-center items-end"
           style={{ gap: 50 }}
         >
-          <TouchableOpacity onPress={handleCloseEdit}>
+          <TouchableOpacity onPress={handleDelete}>
             <Image
               style={{ width: 60, height: 60 }}
               source={require("../../assets/icons/DeleteIngredient.svg")}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleEditIngredient}>
+          <TouchableOpacity onPress={handleEdit}>
             <Image
               style={{ width: 60, height: 60 }}
               source={require("../../assets/icons/Approve.svg")}
@@ -336,8 +444,8 @@ const modalStyles = StyleSheet.create({
     backgroundColor: "#F8F8F6",
     height: 300,
     width: "80%",
-    borderRadius: 10,
-    borderWidth: 1,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
     borderColor: "#fff",
     marginTop: 100,
     marginLeft: 40,

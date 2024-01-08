@@ -16,6 +16,23 @@ import { SheetManager } from "react-native-actions-sheet";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
 
+function throttle(cb: any, delay = 1000) {
+  let shouldWait = false;
+
+  return (...args: any) => {
+    if (shouldWait) {
+      return;
+    }
+
+    cb(...args);
+    shouldWait = true;
+
+    setTimeout(() => {
+      shouldWait = false;
+    }, delay);
+  };
+}
+
 const handleShowRecipe = () => {
   SheetManager.show("recipe-ingredient-sheet");
 };
@@ -24,6 +41,7 @@ export default function ReadyToBeMade() {
   const { userData, setUserData, recipes } = useContext(UserContext);
   const recipePreview = [1, 2, 3, 4];
   const actionSheetRef = useRef<ActionSheetRef>(null);
+
 
   const RecipeItem = (
     { name, imageURI }: { name: string, imageURI: string}

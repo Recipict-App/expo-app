@@ -6,13 +6,102 @@ import { Redirect } from "expo-router";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { useContext } from "react";
 import { UserContext } from "../userContext";
+import { useContext } from "react";
 
-export default function profile() {
-  const [shouldRedirect, setShouldRedirect] = useState<boolean>(false);
+// spoonacular testing ------
+import {
+  ingredient,
+  ingredientTypes,
+  preferences,
+  userDataProps,
+} from "../firebase-type";
+// beef shank, onion, garlic, tomato, sugar, cheese, egg
+const dummyIngredients: ingredient[] = [
+  {
+    name: "beef",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Fruits,
+  },
+  {
+    name: "onion",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Fruits,
+  },
+  {
+    name: "garlic",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Fruits,
+  },
+  {
+    name: "tomato",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Dairy,
+  },
+  {
+    name: "sugar",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Grains,
+  },
+  {
+    name: "egg",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Condiments,
+  },
+  {
+    name: "cheese",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Condiments,
+  },
+  {
+    name: "milk",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Condiments,
+  },
+];
+const dummyPreferences: preferences = {
+  diet: [],
+  cuisine: [],
+};
+const dummyUserData: userDataProps = {
+  name: "alhamdullilah pass phil220",
+  email: "aaaaa@aaa.com",
+  googleToken: "123",
+  ingredients: dummyIngredients,
+  preferences: dummyPreferences,
+  subscription: "Regular",
+};
+// spoonacular testing ------
+
+export default function Profile() {
   const { userData, setUserData } = useContext(UserContext);
-  if(!userData)return <Redirect href="/" />;
+  if(!userData)return <Redirect href={'/'} />;
+
+  // temporary function to test classifier api
   const handlePreference = async () => {
     const name = "apple";
     const CategoryResponse = await fetch(
@@ -27,7 +116,59 @@ export default function profile() {
     console.log(data.category);
   };
 
-  const handleAppereance = () => {};
+  // temporary function to test get recipe api
+  const handleAppereance = async () => {
+    // extract and append ingredients' name to string
+    let ingredientsString = "";
+    dummyUserData.ingredients.forEach((ingredient) => {
+      ingredientsString += ingredient.name + ",";
+    });
+    ingredientsString = ingredientsString.slice(0, -1);
+
+    // extract and append cuisines' name to string
+    let cuisinesString = "";
+    dummyUserData.preferences.cuisine.forEach((eachCuisine) => {
+      cuisinesString += eachCuisine + ",";
+    });
+    cuisinesString = cuisinesString.slice(0, -1);
+
+    // extract and append cuisines' name to string
+    let dietsString = "";
+    dummyUserData.preferences.diet.forEach((eachDiet) => {
+      dietsString += eachDiet + ",";
+    });
+    dietsString = dietsString.slice(0, -1);
+
+    console.log(ingredientsString);
+    console.log(cuisinesString);
+    console.log(dietsString);
+
+    const requestBody = {
+      ingredients: ingredientsString,
+      subscription: dummyUserData.subscription,
+      mode: "min-missing-ingredient",
+      cuisines: cuisinesString,
+      diets: dietsString,
+    };
+
+    const apiResponse = await fetch(
+      `https://us-central1-recipict-gcp.cloudfunctions.net/function-spoonacular-recipe-by-ingredient`,
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      }
+    );
+
+    const result = await apiResponse.json();
+    console.log(result);
+    const recipeInstructions = result.results[0].analyzedInstructions[0].steps[0];
+    console.log(recipeInstructions);
+  };
+
   const handleNotification = () => {};
   const handleLocation = () => {};
   const handleAboutUs = () => {};
@@ -37,10 +178,6 @@ export default function profile() {
     setUserData(null);
     console.log("Logging out");
   };
-
-  // if (shouldRedirect) {
-  //   return <Redirect href="/" />;
-  // }
 
   return (
     <SafeAreaView className="bg-white ">

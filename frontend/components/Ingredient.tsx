@@ -3,6 +3,7 @@ import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
 import { ingredientProps } from "../firebase-type";
+import { UserContext } from "../userContext";
 import { useContext } from "react";
 import { UserContext } from "../userContext";
 import { Redirect } from "expo-router";
@@ -65,7 +66,6 @@ export const Ingredient: React.FC<ingredientProps> = ({
       },
     });
   };
-
   const showDate = dateAdded?.toString().slice(0, 10) || "Undefined";
 
   return (

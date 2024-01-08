@@ -6,6 +6,7 @@ import { Redirect } from "expo-router";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 // spoonacular testing ------
 import {
   ingredient,
@@ -13,9 +14,10 @@ import {
   preferences,
   userDataProps,
 } from "../firebase-type";
+// beef shank, onion, garlic, tomato, sugar, cheese, egg
 const dummyIngredients: ingredient[] = [
   {
-    name: "apple",
+    name: "beef",
     quantity: 1,
     unit: "piece",
     expiryDate: new Date(),
@@ -23,7 +25,7 @@ const dummyIngredients: ingredient[] = [
     type: ingredientTypes.Fruits,
   },
   {
-    name: "banana",
+    name: "onion",
     quantity: 1,
     unit: "piece",
     expiryDate: new Date(),
@@ -31,7 +33,7 @@ const dummyIngredients: ingredient[] = [
     type: ingredientTypes.Fruits,
   },
   {
-    name: "orange",
+    name: "garlic",
     quantity: 1,
     unit: "piece",
     expiryDate: new Date(),
@@ -39,7 +41,7 @@ const dummyIngredients: ingredient[] = [
     type: ingredientTypes.Fruits,
   },
   {
-    name: "milk",
+    name: "tomato",
     quantity: 1,
     unit: "piece",
     expiryDate: new Date(),
@@ -47,7 +49,7 @@ const dummyIngredients: ingredient[] = [
     type: ingredientTypes.Dairy,
   },
   {
-    name: "flour",
+    name: "sugar",
     quantity: 1,
     unit: "piece",
     expiryDate: new Date(),
@@ -55,7 +57,23 @@ const dummyIngredients: ingredient[] = [
     type: ingredientTypes.Grains,
   },
   {
-    name: "chocolate",
+    name: "egg",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Condiments,
+  },
+  {
+    name: "cheese",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Condiments,
+  },
+  {
+    name: "milk",
     quantity: 1,
     unit: "piece",
     expiryDate: new Date(),
@@ -64,8 +82,8 @@ const dummyIngredients: ingredient[] = [
   },
 ];
 const dummyPreferences: preferences = {
-  diet: ["Primal,Whole30"],
-  cuisine: ["American,Chinese,Meditteranian,Italian,French"],
+  diet: [],
+  cuisine: [],
 };
 const dummyUserData: userDataProps = {
   name: "alhamdullilah pass phil220",
@@ -78,7 +96,6 @@ const dummyUserData: userDataProps = {
 // spoonacular testing ------
 
 export default function profile() {
-  const [shouldRedirect, setShouldRedirect] = useState<boolean>(false);
 
   // temporary function to test classifier api
   const handlePreference = async () => {
@@ -125,7 +142,7 @@ export default function profile() {
     const requestBody = {
       ingredients: ingredientsString,
       subscription: dummyUserData.subscription,
-      mode: "ready",
+      mode: "min-missing-ingredient",
       cuisines: cuisinesString,
       diets: dietsString,
     };
@@ -144,6 +161,8 @@ export default function profile() {
 
     const result = await apiResponse.json();
     console.log(result);
+    const recipeInstructions = result.results[0].analyzedInstructions[0].steps[0];
+    console.log(recipeInstructions);
   };
 
   const handleNotification = () => {};
@@ -153,13 +172,7 @@ export default function profile() {
   const handleLogOut = async () => {
     await AsyncStorage.removeItem("@user");
     console.log("Logging out");
-
-    setShouldRedirect(true);
   };
-
-  // if (shouldRedirect) {
-  //   return <Redirect href="/" />;
-  // }
 
   return (
     <SafeAreaView className="bg-white ">

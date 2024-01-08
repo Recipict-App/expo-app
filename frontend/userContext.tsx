@@ -5,6 +5,7 @@ import { userDataProps } from "./app/index";
 interface UserContextType {
     userData: userDataProps[];
     setUserData: Dispatch<React.SetStateAction<userDataProps>>;
+    recipes: any
   }
   
   export const UserContext = createContext<UserContextType>({
@@ -20,4 +21,5 @@ interface UserContextType {
       subscription: '',
     }],
     setUserData: () => {},
+    recipes: []
   });

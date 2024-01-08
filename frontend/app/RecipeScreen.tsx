@@ -9,6 +9,9 @@ import AlmostThere from "../components/AlmostThere";
 import Explore from "../components/Explore";
 import { SheetManager } from "react-native-actions-sheet";
 
+import { UserContext } from "../userContext";
+import { useContext } from "react";
+
 const dummyIngredients = [
   "Garlic",
   "Chili",
@@ -23,11 +26,10 @@ const dummyIngredients = [
 ];
 
 export default function recipe() {
-
+  const { userData, setUserData, recipes } = useContext(UserContext);
   const handleShowRecipe = () => {
     SheetManager.show("saved-recipes-sheet");
   };
-  
   return (
     <SafeAreaView className="bg-white" style={{paddingBottom: 0}} edges={['top', 'right', 'left']}>
       <ScrollView showsVerticalScrollIndicator={false}>

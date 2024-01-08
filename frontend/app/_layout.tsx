@@ -10,12 +10,210 @@ import { Image } from "expo-image";
 
 import { SheetProvider } from "react-native-actions-sheet";
 import "../sheets.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserContext } from "../userContext";
-import { ingredientProps, userDataProps } from "../firebase-type";
+import {
+  ingredient,
+  ingredientTypes,
+  preferences,
+  userDataProps,
+} from "../firebase-type";
+
+// beef shank, onion, garlic, tomato, sugar, cheese, egg
+const dummyIngredients: ingredient[] = [
+  {
+    name: "beef",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Fruits,
+  },
+  {
+    name: "onion",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Fruits,
+  },
+  {
+    name: "garlic",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Fruits,
+  },
+  {
+    name: "tomato",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Dairy,
+  },
+  {
+    name: "sugar",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Grains,
+  },
+  {
+    name: "egg",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Condiments,
+  },
+  {
+    name: "cheese",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Condiments,
+  },
+  {
+    name: "milk",
+    quantity: 1,
+    unit: "piece",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.Condiments,
+  },
+];
+
+const dummyPreferences: preferences = {
+  diet: [],
+  cuisine: [],
+};
+const dummyUserData: userDataProps = {
+  name: "alhamdullilah pass phil220",
+  email: "aaaaa@aaa.com",
+  googleToken: "123",
+  ingredients: dummyIngredients,
+  preferences: dummyPreferences,
+  subscription: "Regular",
+};
+
+// haven't been used
+interface recipeInfo {
+  title: String;
+  summary: String;
+  instructions: any[];
+  missedIngredientCount: number;
+  id: String;
+  readyInMinutes: number;
+  totalIngredients: {
+    name: String;
+    quantity: String;
+  };
+}
 
 export default function HomeLayout() {
   const [userData, setUserData] = useState<userDataProps[]>();
+  const [recipes, setRecipes] = useState<any>([]);
+  const handleGetIngredient = async () => {
+    // extract and append ingredients' name to string
+    let ingredientsString = "";
+    dummyUserData.ingredients.forEach((ingredient) => {
+      ingredientsString += ingredient.name + ",";
+    });
+    ingredientsString = ingredientsString.slice(0, -1);
+
+    // extract and append cuisines' name to string
+    let cuisinesString = "";
+    dummyUserData.preferences.cuisine.forEach((eachCuisine) => {
+      cuisinesString += eachCuisine + ",";
+    });
+    cuisinesString = cuisinesString.slice(0, -1);
+
+    // extract and append cuisines' name to string
+    let dietsString = "";
+    dummyUserData.preferences.diet.forEach((eachDiet) => {
+      dietsString += eachDiet + ",";
+    });
+    dietsString = dietsString.slice(0, -1);
+
+    const requestBody = {
+      ingredients: ingredientsString,
+      subscription: dummyUserData.subscription,
+      mode: "min-missing-ingredient",
+      cuisines: cuisinesString,
+      diets: dietsString,
+    };
+
+    const apiResponse = await fetch(
+      `https://us-central1-recipict-gcp.cloudfunctions.net/function-spoonacular-recipe-by-ingredient`,
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      }
+    );
+    let newRecipes: any[] = [];
+    const result = await apiResponse.json();
+    result.results.map((recipeInfo: any) => {
+      const {
+        title,
+        summary,
+        analyzedInstructions,
+        missedIngredientCount,
+        id,
+        readyInMinutes,
+        extendedIngredients,
+        image,
+      } = recipeInfo;
+      const instructions = analyzedInstructions[0].steps.map(
+        (stepInfo: any) => {
+          // console.log(stepInfo);
+          return {
+            equipment: stepInfo.equipment,
+            ingredients: stepInfo.ingredients,
+            step: stepInfo.step,
+          };
+        }
+      );
+      const totalIngredients = extendedIngredients.map((ingredient: any) => {
+        return {
+          name: ingredient.name,
+          amount: ingredient.amount,
+          unit: ingredient.unit == "" ? "ea" : ingredient.unit,
+        };
+      });
+      newRecipes = [
+        ...newRecipes,
+        {
+          title,
+          summary,
+          instructions,
+          missedIngredientCount,
+          id,
+          readyInMinutes,
+          totalIngredients,
+          image,
+        },
+      ];
+
+      // console.log("instructions: ", instructions);
+      // console.log("title: " + title);
+      // console.log("summary: " + summary);
+    });
+    setRecipes(newRecipes);
+    console.log("Recipes Loaded 🥰");
+  };
+
+  useEffect(() => {
+    handleGetIngredient();
+  }, []);
+
   let [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,
     Poppins_600SemiBold,
@@ -25,7 +223,7 @@ export default function HomeLayout() {
     return null;
   }
   return (
-    <UserContext.Provider value={{ userData, setUserData }}>
+    <UserContext.Provider value={{ userData, setUserData, recipes }}>
       <SheetProvider>
         <Tabs
           initialRouteName="HomeScreen"

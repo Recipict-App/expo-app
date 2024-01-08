@@ -46,7 +46,7 @@ export default function ReadyToBeMade() {
   const RecipeItem = (
     { name, imageURI }: { name: string, imageURI: string}
   ) => (
-    <TouchableOpacity onPress={handleShowRecipe}>
+    <TouchableOpacity onPress={throttle(handleShowRecipe)}>
       <View
         className=" rounded-2xl m-[5] flex justify-end items-center overflow-hidden"
         style={{ width: 127, height: 210 }}

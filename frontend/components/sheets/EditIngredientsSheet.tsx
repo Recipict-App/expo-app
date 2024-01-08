@@ -103,18 +103,15 @@ export default function EditIngredientSheet(
   const userGoogleToken = data.googleToken;
   const ingredients = data.ingredients;
 
-  let choosenIngredient = props.payload?.ingredient;
-  if (!choosenIngredient) {
-    choosenIngredient = {
-      name: "something",
-      quantity: 1,
-      unit: "gr",
-      expiryDate: new Date(),
-      dateAdded: new Date(),
-      type: ingredientTypes.NotIngredients,
-      id: Crypto.randomUUID(),
-    };
-  }
+  let choosenIngredient = props.payload?.ingredient || {
+    name: "something",
+    quantity: 1,
+    unit: "gr",
+    expiryDate: new Date(),
+    dateAdded: new Date(),
+    type: ingredientTypes.NotIngredients,
+    id: Crypto.randomUUID(),
+  };
 
   // for type dropdown
   const [typeValue, setTypeValue] = useState<ingredientTypes>(

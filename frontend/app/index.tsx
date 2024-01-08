@@ -119,14 +119,16 @@ export default function App() {
 
     if (checkUserResponse.status == 404) {
       console.log("User not found in Firebase, creating new user... 🤔");
-      const localUserData: userDataProps = {
-        name: user.name,
-        email: user.email,
-        googleToken: `${user.id}`,
-        ingredients: [],
-        preferences: { diet: [], cuisine: [] },
-        subscription: "Regular",
-      };
+      const localUserData: userDataProps[] = [
+        {
+          name: user.name,
+          email: user.email,
+          googleToken: `${user.id}`,
+          ingredients: [],
+          preferences: { diet: [], cuisine: [] },
+          subscription: "Regular",
+        },
+      ];
 
       setUserData(localUserData);
 

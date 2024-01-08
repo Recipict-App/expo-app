@@ -29,6 +29,7 @@ const dummyIngredients: ingredient[] = [
     expiryDate: new Date(),
     dateAdded: new Date(),
     type: ingredientTypes.Fruits,
+    id: "1",
   },
   {
     name: "onion",
@@ -37,6 +38,7 @@ const dummyIngredients: ingredient[] = [
     expiryDate: new Date(),
     dateAdded: new Date(),
     type: ingredientTypes.Fruits,
+    id: "2",
   },
   {
     name: "garlic",
@@ -45,6 +47,7 @@ const dummyIngredients: ingredient[] = [
     expiryDate: new Date(),
     dateAdded: new Date(),
     type: ingredientTypes.Fruits,
+    id: "3",
   },
   {
     name: "tomato",
@@ -53,6 +56,7 @@ const dummyIngredients: ingredient[] = [
     expiryDate: new Date(),
     dateAdded: new Date(),
     type: ingredientTypes.Dairy,
+    id: "4",
   },
   {
     name: "sugar",
@@ -61,6 +65,7 @@ const dummyIngredients: ingredient[] = [
     expiryDate: new Date(),
     dateAdded: new Date(),
     type: ingredientTypes.Grains,
+    id: "5",
   },
   {
     name: "egg",
@@ -69,6 +74,7 @@ const dummyIngredients: ingredient[] = [
     expiryDate: new Date(),
     dateAdded: new Date(),
     type: ingredientTypes.Condiments,
+    id: "6",
   },
   {
     name: "cheese",
@@ -77,6 +83,7 @@ const dummyIngredients: ingredient[] = [
     expiryDate: new Date(),
     dateAdded: new Date(),
     type: ingredientTypes.Condiments,
+    id: "7",
   },
   {
     name: "milk",
@@ -85,6 +92,7 @@ const dummyIngredients: ingredient[] = [
     expiryDate: new Date(),
     dateAdded: new Date(),
     type: ingredientTypes.Condiments,
+    id: "8",
   },
 ];
 

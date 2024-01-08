@@ -25,7 +25,7 @@ const dummyIngredients: ingredient[] = [
     expiryDate: new Date(),
     dateAdded: new Date(),
     type: ingredientTypes.Fruits,
-    id: '12'
+    id: "12",
   },
 ];
 const dummyPreferences: preferences = {
@@ -44,7 +44,7 @@ const dummyUserData: userDataProps = {
 
 export default function Profile() {
   const { userData, setUserData } = useContext(UserContext);
-  if(!userData)return <Redirect href={'/'} />;
+  if (!userData) return <Redirect href={"/"} />;
 
   // temporary function to test classifier api
   const handlePreference = async () => {
@@ -110,7 +110,8 @@ export default function Profile() {
 
     const result = await apiResponse.json();
     console.log(result);
-    const recipeInstructions = result.results[0].analyzedInstructions[0].steps[0];
+    const recipeInstructions =
+      result.results[0].analyzedInstructions[0].steps[0];
     console.log(recipeInstructions);
   };
 
@@ -120,7 +121,7 @@ export default function Profile() {
 
   const handleLogOut = async () => {
     await AsyncStorage.removeItem("@user");
-    setUserData(null);
+    setUserData(undefined);
     console.log("Logging out");
   };
 

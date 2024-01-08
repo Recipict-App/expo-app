@@ -6,6 +6,8 @@ import { Redirect } from "expo-router";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { UserContext } from "../userContext";
+import { useContext } from "react";
 
 // spoonacular testing ------
 import {
@@ -95,7 +97,9 @@ const dummyUserData: userDataProps = {
 };
 // spoonacular testing ------
 
-export default function profile() {
+export default function Profile() {
+  const { userData, setUserData } = useContext(UserContext);
+  if(!userData)return <Redirect href={'/'} />;
 
   // temporary function to test classifier api
   const handlePreference = async () => {
@@ -171,6 +175,7 @@ export default function profile() {
 
   const handleLogOut = async () => {
     await AsyncStorage.removeItem("@user");
+    setUserData(null);
     console.log("Logging out");
   };
 

@@ -26,16 +26,7 @@ export default function pantry() {
   console.log(data);
 
   const handleShowIngredient = () => {
-    SheetManager.show("edit-ingredients-sheet", {
-      payload: {
-        name: "",
-        quantity: 0,
-        unit: "",
-        expiryDate: new Date(),
-        dateAdded: new Date(),
-        type: "",
-      },
-    });
+    SheetManager.show("edit-ingredients-sheet");
   };
 
   return (

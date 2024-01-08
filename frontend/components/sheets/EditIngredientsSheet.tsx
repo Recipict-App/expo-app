@@ -15,6 +15,8 @@ import { SelectCountry } from "react-native-element-dropdown";
 import DateTimePicker from "react-native-ui-datepicker";
 import { ingredientProps } from "../../firebase-type";
 
+import * as Crypto from "expo-crypto";
+
 export enum ingredientTypes {
   Vegetables = "Vegetables",
   Fruits = "Fruits",
@@ -101,8 +103,18 @@ export default function EditIngredientSheet(
   const userGoogleToken = data.googleToken;
   const ingredients = data.ingredients;
 
-  const choosenIngredient = props.payload?.ingredient;
-  if (!choosenIngredient) return null;
+  let choosenIngredient = props.payload?.ingredient;
+  if (!choosenIngredient) {
+    choosenIngredient = {
+      name: "something",
+      quantity: 1,
+      unit: "gr",
+      expiryDate: new Date(),
+      dateAdded: new Date(),
+      type: ingredientTypes.NotIngredients,
+      id: Crypto.randomUUID(),
+    };
+  }
 
   // for type dropdown
   const [typeValue, setTypeValue] = useState<ingredientTypes>(
@@ -120,17 +132,11 @@ export default function EditIngredientSheet(
 
   // for name
   const [nameValue, setNameValue] = useState<string>(choosenIngredient.name);
-  const handleChangeName = (e: any) => {
-    setNameValue(e);
-  };
 
   // for quantity
   const [quantityValue, setQuantityValue] = useState<string>(
-    choosenIngredient?.quantity?.toString() || "undefined"
+    choosenIngredient.quantity.toString()
   );
-  const handleChangeQuantity = (e: any) => {
-    setQuantityValue(e);
-  };
 
   // handling buttons
 
@@ -178,6 +184,14 @@ export default function EditIngredientSheet(
       dateAdded: choosenIngredient.dateAdded,
       type: typeValue,
     };
+
+    // if there is no ingredient in ingredients, add new ingredient
+    const ingredientExists = ingredients.some(
+      (ingredient) => ingredient.id === choosenIngredient.id
+    );
+    if (!ingredientExists) {
+      ingredients.push(newIngredient);
+    }
 
     const newIngredients = ingredients.map((eachIngredient) => {
       if (eachIngredient.id === newIngredient.id) {
@@ -240,7 +254,7 @@ export default function EditIngredientSheet(
             <TextInput
               className=" flex justify-center items-center font-ppr text-sm w-full bg-[#F8F8F6] rounded-xl h-[50px] pl-2"
               placeholder="Ingredient Name"
-              onChangeText={handleChangeName}
+              onChangeText={setNameValue}
               value={nameValue}
             />
             <Text className=" font-pps">Expiry Date:</Text>
@@ -310,7 +324,7 @@ export default function EditIngredientSheet(
                 <TextInput
                   className="flex  justify-center items-center font-ppr text-sm bg-[#F8F8F6] rounded-xl h-[50px] pl-2 w-[45%] "
                   placeholder="Number"
-                  onChangeText={handleChangeQuantity}
+                  onChangeText={setQuantityValue}
                   value={quantityValue.toString()}
                   keyboardType="numeric"
                 />

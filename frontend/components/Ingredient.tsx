@@ -5,7 +5,6 @@ import { SheetManager } from "react-native-actions-sheet";
 import { ingredientProps } from "../firebase-type";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
-import { UserContext } from "../userContext";
 import { Redirect } from "expo-router";
 
 const debounce = (cb: any, delay = 1000) => {

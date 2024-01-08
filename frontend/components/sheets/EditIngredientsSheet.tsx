@@ -138,7 +138,33 @@ export default function EditIngredientSheet(
     SheetManager.hide("edit-ingredients-sheet");
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    const newIngredients = ingredients.filter(
+      (eachIngredient) => eachIngredient.id !== choosenIngredient.id
+    );
+    console.log(newIngredients);
+
+    const response = await fetch(
+      "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: userGoogleToken,
+          ingredients: newIngredients,
+        }),
+      }
+    );
+
+    const result = await response.json();
+
+    console.log(response.status);
+    console.log(result);
+    console.log(result.returnObject);
+
     SheetManager.hide("edit-ingredients-sheet");
   };
 

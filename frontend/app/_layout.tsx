@@ -20,94 +20,6 @@ import {
   userDataProps,
 } from "../firebase-type";
 
-// beef shank, onion, garlic, tomato, sugar, cheese, egg
-const dummyIngredients: ingredient[] = [
-  {
-    name: "beef",
-    quantity: 1,
-    unit: "piece",
-    expiryDate: new Date(),
-    dateAdded: new Date(),
-    type: ingredientTypes.Fruits,
-    id: "1",
-  },
-  {
-    name: "onion",
-    quantity: 1,
-    unit: "piece",
-    expiryDate: new Date(),
-    dateAdded: new Date(),
-    type: ingredientTypes.Fruits,
-    id: "2",
-  },
-  {
-    name: "garlic",
-    quantity: 1,
-    unit: "piece",
-    expiryDate: new Date(),
-    dateAdded: new Date(),
-    type: ingredientTypes.Fruits,
-    id: "3",
-  },
-  {
-    name: "tomato",
-    quantity: 1,
-    unit: "piece",
-    expiryDate: new Date(),
-    dateAdded: new Date(),
-    type: ingredientTypes.Dairy,
-    id: "4",
-  },
-  {
-    name: "sugar",
-    quantity: 1,
-    unit: "piece",
-    expiryDate: new Date(),
-    dateAdded: new Date(),
-    type: ingredientTypes.Grains,
-    id: "5",
-  },
-  {
-    name: "egg",
-    quantity: 1,
-    unit: "piece",
-    expiryDate: new Date(),
-    dateAdded: new Date(),
-    type: ingredientTypes.Condiments,
-    id: "6",
-  },
-  {
-    name: "cheese",
-    quantity: 1,
-    unit: "piece",
-    expiryDate: new Date(),
-    dateAdded: new Date(),
-    type: ingredientTypes.Condiments,
-    id: "7",
-  },
-  {
-    name: "milk",
-    quantity: 1,
-    unit: "piece",
-    expiryDate: new Date(),
-    dateAdded: new Date(),
-    type: ingredientTypes.Condiments,
-    id: "8",
-  },
-];
-
-const dummyPreferences: preferences = {
-  diet: [],
-  cuisine: [],
-};
-const dummyUserData: userDataProps = {
-  name: "alhamdullilah pass phil220",
-  email: "aaaaa@aaa.com",
-  googleToken: "123",
-  ingredients: dummyIngredients,
-  preferences: dummyPreferences,
-  subscription: "Regular",
-};
 
 // haven't been used
 interface recipeInfo {
@@ -125,6 +37,8 @@ interface recipeInfo {
 export default function HomeLayout() {
   const [userData, setUserData] = useState<userDataProps[]>();
   const [recipes, setRecipes] = useState<any>([]);
+  const [readyRecipes, setReadyRecipes] = useState<any>([]);
+  const [missingRecipes, setMissingRecipes] = useState<any>([]);
   const handleGetIngredient = async () => {
     if (!userData) return null;
     const data = userData[0];
@@ -168,7 +82,11 @@ export default function HomeLayout() {
         body: JSON.stringify(requestBody),
       }
     );
+
     let newRecipes: any[] = [];
+    let newReadyRecipes: any[] = [];
+    let newMissingRecipes: any[] = [];
+
     const result = await apiResponse.json();
     result.results.map((recipeInfo: any) => {
       const {
@@ -198,6 +116,35 @@ export default function HomeLayout() {
           unit: ingredient.unit == "" ? "ea" : ingredient.unit,
         };
       });
+      if (missedIngredientCount == 0) {
+        newReadyRecipes = [
+          ...newReadyRecipes,
+          {
+            title,
+            summary,
+            instructions,
+            missedIngredientCount,
+            id,
+            readyInMinutes,
+            totalIngredients,
+            image,
+          },
+        ];
+      } else {
+        newMissingRecipes = [
+          ...newMissingRecipes,
+          {
+            title,
+            summary,
+            instructions,
+            missedIngredientCount,
+            id,
+            readyInMinutes,
+            totalIngredients,
+            image,
+          },
+        ];
+      }
       newRecipes = [
         ...newRecipes,
         {
@@ -217,6 +164,8 @@ export default function HomeLayout() {
       // console.log("summary: " + summary);
     });
     setRecipes(newRecipes);
+    setReadyRecipes(newReadyRecipes);
+    setMissingRecipes(newMissingRecipes);
     console.log("Recipes Loaded 🥰");
   };
 
@@ -233,7 +182,7 @@ export default function HomeLayout() {
     return null;
   }
   return (
-    <UserContext.Provider value={{ userData, setUserData, recipes }}>
+    <UserContext.Provider value={{ userData, setUserData, recipes, readyRecipes, missingRecipes }}>
       <SheetProvider>
         <Tabs
           initialRouteName="HomeScreen"

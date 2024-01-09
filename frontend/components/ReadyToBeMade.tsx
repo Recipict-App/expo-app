@@ -38,7 +38,7 @@ const handleShowRecipe = () => {
 };
 
 export default function ReadyToBeMade() {
-  const { userData, setUserData, recipes } = useContext(UserContext);
+  const { userData, setUserData, readyRecipes } = useContext(UserContext);
   const recipePreview = [1, 2, 3, 4];
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
@@ -93,7 +93,7 @@ export default function ReadyToBeMade() {
       <View className="flex flex-row gap-[9px] overflow-hidden pb-[15px]">
         <FlatList
           horizontal
-          data={recipes}
+          data={readyRecipes}
           renderItem={({ item, index }) => (
             <RecipeItem
               key={item.id}

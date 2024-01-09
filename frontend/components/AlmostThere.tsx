@@ -76,7 +76,7 @@ const RecipeItem = ({ name, imageURI }: { name: string; imageURI: string }) => (
 
 export default function AlmostThere() {
   const recipePreview = [1, 2, 3, 4];
-  const { userData, setUserData, recipes } = useContext(UserContext);
+  const { userData, setUserData, missingRecipes } = useContext(UserContext);
   return (
     <View className=" bg-[#FEC1A6] w-full h-[284] rounded-2xl mt-9 pt-[12px] justify-between flex">
       <View
@@ -103,7 +103,7 @@ export default function AlmostThere() {
       <View className="flex flex-row gap-[9px] overflow-hidden pb-[15px]">
         <FlatList
           horizontal
-          data={recipes}
+          data={missingRecipes}
           renderItem={({ item }) => (
             <RecipeItem key={item.id} name={item.title} imageURI={item.image} />
           )}

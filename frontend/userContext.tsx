@@ -4,7 +4,9 @@ import { userDataProps } from "./firebase-type";
 interface UserContextType {
   userData: userDataProps[] | undefined;
   setUserData: Dispatch<React.SetStateAction<userDataProps[] | undefined>>;
-  recipes: any;
+  recipes: any; // remove later, recipes already has been split into readyRecipes and missingRecipes
+  readyRecipes: any;
+  missingRecipes: any;
 }
 
 export const UserContext = createContext<UserContextType>({
@@ -23,4 +25,6 @@ export const UserContext = createContext<UserContextType>({
   ],
   setUserData: () => {},
   recipes: [],
+  readyRecipes: [],
+  missingRecipes: [],
 });

@@ -126,30 +126,32 @@ export default function HomeLayout() {
   const [userData, setUserData] = useState<userDataProps[]>();
   const [recipes, setRecipes] = useState<any>([]);
   const handleGetIngredient = async () => {
+    if (!userData) return null;
+    const data = userData[0];
     // extract and append ingredients' name to string
     let ingredientsString = "";
-    dummyUserData.ingredients.forEach((ingredient) => {
+    data.ingredients.forEach((ingredient) => {
       ingredientsString += ingredient.name + ",";
     });
     ingredientsString = ingredientsString.slice(0, -1);
 
     // extract and append cuisines' name to string
     let cuisinesString = "";
-    dummyUserData.preferences.cuisine.forEach((eachCuisine) => {
+    data.preferences.cuisine.forEach((eachCuisine) => {
       cuisinesString += eachCuisine + ",";
     });
     cuisinesString = cuisinesString.slice(0, -1);
 
     // extract and append cuisines' name to string
     let dietsString = "";
-    dummyUserData.preferences.diet.forEach((eachDiet) => {
+    data.preferences.diet.forEach((eachDiet) => {
       dietsString += eachDiet + ",";
     });
     dietsString = dietsString.slice(0, -1);
 
     const requestBody = {
       ingredients: ingredientsString,
-      subscription: dummyUserData.subscription,
+      subscription: data.subscription,
       mode: "min-missing-ingredient",
       cuisines: cuisinesString,
       diets: dietsString,
@@ -220,7 +222,7 @@ export default function HomeLayout() {
 
   useEffect(() => {
     handleGetIngredient();
-  }, []);
+  }, [userData]);
 
   let [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,

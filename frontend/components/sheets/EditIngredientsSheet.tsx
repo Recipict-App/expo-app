@@ -17,6 +17,11 @@ import { ingredientProps } from "../../firebase-type";
 
 import * as Crypto from "expo-crypto";
 
+import { userDataProps } from "../../firebase-type";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+
 export enum ingredientTypes {
   Vegetables = "Vegetables",
   Fruits = "Fruits",
@@ -96,6 +101,13 @@ export default function EditIngredientSheet(
     };
   }>
 ) {
+  // get user from local
+  const getLocalUser = async () => {
+    const data: any = await AsyncStorage.getItem("@user");
+    if (!data) return null;
+    return JSON.parse(data);
+  };
+
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
@@ -168,6 +180,9 @@ export default function EditIngredientSheet(
     console.log(result);
     console.log(result.returnObject);
 
+    // refresh user data
+    await getUserData(await getLocalUser());
+
     SheetManager.hide("edit-ingredients-sheet");
   };
 
@@ -221,8 +236,71 @@ export default function EditIngredientSheet(
     console.log(result.returnObject);
     console.log("------");
 
+    // refresh user data
+    await getUserData(await getLocalUser());
+
     SheetManager.hide("edit-ingredients-sheet");
   };
+
+  const getUserData = async (user: any) => {
+    const checkUserResponse = await fetch(
+      "https://us-central1-recipict-gcp.cloudfunctions.net/function-retrieve-user",
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: user.id }),
+      }
+    );
+
+    if (checkUserResponse.status == 404) {
+      console.log("User not found in Firebase, creating new user... 🤔");
+      const localUserData: userDataProps[] = [
+        {
+          name: user.name,
+          email: user.email,
+          googleToken: `${user.id}`,
+          ingredients: [],
+          preferences: { diet: [], cuisine: [] },
+          subscription: "Regular",
+        },
+      ];
+
+      setUserData(localUserData);
+
+      const createUserResponse = await fetch(
+        "https://us-central1-recipict-gcp.cloudfunctions.net/function-create-user",
+        {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(localUserData),
+        }
+      );
+
+      if (createUserResponse.status == 200) {
+        console.log("User created in Firebase, retrieving user data... 🥰");
+        const user = await createUserResponse.json();
+        const userDatabase = user.userData;
+
+        await setUserData(userDatabase);
+      } else {
+        console.log("Error creating user in Firebase 😡");
+      }
+    } else {
+      console.log("User found in Firebase, retrieving user data... 🤩");
+
+      const user = await checkUserResponse.json();
+      const userDatabase = user.userData;
+
+      await setUserData(userDatabase);
+    }
+  };
+
   return (
     <ActionSheet id={props.sheetId}>
       <View

@@ -43,7 +43,8 @@ const dummyUserData: userDataProps = {
 // spoonacular testing ------
 
 export default function Profile() {
-  const { userData, setUserData } = useContext(UserContext);
+  const { userInfo, setUserInfo, userData, setUserData } =
+    useContext(UserContext);
   if (!userData) return <Redirect href={"/"} />;
 
   // temporary function to test classifier api
@@ -121,6 +122,7 @@ export default function Profile() {
 
   const handleLogOut = async () => {
     await AsyncStorage.removeItem("@user");
+    setUserInfo(undefined);
     setUserData(undefined);
     console.log("Logging out");
   };

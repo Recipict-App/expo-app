@@ -8,7 +8,9 @@ import ActionSheet, {
   SheetManager,
 } from "react-native-actions-sheet";
 
-import { IngredientProps, Ingredient } from "../Ingredient";
+import { ingredientProps } from "../../firebase-type";
+
+import { Ingredient } from "../Ingredient";
 
 export default function ScannedItemsSheet(props: SheetProps) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
@@ -34,14 +36,18 @@ export default function ScannedItemsSheet(props: SheetProps) {
 
         <ScrollView>
           <View className="flex items-center gap-4 pt-2">
-            {/* Scrollllll */}
+            {/* Scroll */}
             <View style={{ gap: 12 }} className="justify-center w-10/12 flex">
-              {props.payload?.items?.map((item: IngredientProps) => (
+              {props.payload?.items?.map((item: ingredientProps) => (
                 <Ingredient
                   key={Math.floor(Math.random() * 9999)}
+                  id={item.id || ""}
                   name={item.name || "Unknown"}
-                  quantity={item.quantity || "1 (default)"}
-                  duration={item.duration || "1 days (default)"}
+                  quantity={item.quantity || 1}
+                  unit={item.unit || "ea"}
+                  expiryDate={item.expiryDate || new Date()}
+                  dateAdded={item.dateAdded || new Date()}
+                  type={item.type || "Not Ingredient"}
                 />
               ))}
 

@@ -1,10 +1,10 @@
-import { Text, View, SafeAreaView, ScrollView } from "react-native";
+import { Text, View, ScrollView } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { Ingredient } from "../components/Ingredient";
 import { Link, Redirect } from "expo-router";
 
-import { ingredientProps, userDataProps } from "../firebase-type";
+import { ingredientProps } from "../firebase-type";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
 import Explore from "../components/Explore";

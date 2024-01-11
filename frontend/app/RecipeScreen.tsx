@@ -1,12 +1,10 @@
-import { View, Text, ScrollView, FlatList, TextInput } from "react-native";
+import { View, Text, ScrollView, TextInput } from "react-native";
 import { Image } from "expo-image";
-import ActionSheet, { ActionSheetRef, ActionSheetProps } from "react-native-actions-sheet";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ReadyToBeMade from "../components/ReadyToBeMade";
 import AlmostThere from "../components/AlmostThere";
-import Explore from "../components/Explore";
 import { SheetManager } from "react-native-actions-sheet";
 
 import { UserContext } from "../userContext";
@@ -31,15 +29,17 @@ export default function recipe() {
     SheetManager.show("saved-recipes-sheet");
   };
   return (
-    <SafeAreaView className="bg-white" style={{paddingBottom: 0}} edges={['top', 'right', 'left']}>
+    <SafeAreaView
+      className="bg-white"
+      style={{ paddingBottom: 0 }}
+      edges={["top", "right", "left"]}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className=" flex w-full px-[24px] py-[32px] overflow-visible items-center">
           {/* Recipe Header */}
           <View className="flex w-full justify-between flex-row items-center">
             <Text className="font-pps text-3xl">Recipe</Text>
-            <TouchableOpacity
-              onPress={handleShowRecipe}
-            >
+            <TouchableOpacity onPress={handleShowRecipe}>
               <Image
                 style={{ width: 12, height: 16 }}
                 source={require("../assets/icons/Save.svg")}
@@ -62,7 +62,6 @@ export default function recipe() {
           <ReadyToBeMade />
 
           <AlmostThere />
-
         </View>
       </ScrollView>
     </SafeAreaView>

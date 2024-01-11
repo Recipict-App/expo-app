@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, SafeAreaView, ScrollView, Alert } from "react-native";
+import React from "react";
+import { View, Text, ScrollView } from "react-native";
 import { Image } from "expo-image";
 import OptionCard from "../components/OptionCard";
 import { Redirect } from "expo-router";

@@ -28,8 +28,16 @@ const dummyIngredients = [
   "Satay",
 ];
 
-const handleShowRecipe = () => {
-  SheetManager.show("recipe-ingredient-sheet");
+const handleShowRecipe = (name: String, imageURI: string) => {
+  // console.log(name);
+  SheetManager.show("recipe-ingredient-sheet", {
+    payload: {
+      recipe: {
+        name: name,
+        imageURI: imageURI
+      },
+    },
+  });
 };
 
 function throttle(cb: any, delay = 1000) {
@@ -50,7 +58,7 @@ function throttle(cb: any, delay = 1000) {
 }
 
 const RecipeItem = ({ name, imageURI }: { name: string; imageURI: string }) => (
-  <TouchableOpacity onPress={throttle(handleShowRecipe)}>
+  <TouchableOpacity onPress={() => throttle(handleShowRecipe(name, imageURI))}>
     <View
       className=" rounded-2xl m-[5] flex justify-end items-center overflow-hidden"
       style={{ width: 127, height: 210 }}
@@ -76,7 +84,7 @@ const RecipeItem = ({ name, imageURI }: { name: string; imageURI: string }) => (
 
 export default function AlmostThere() {
   const recipePreview = [1, 2, 3, 4];
-  const { userData, setUserData, recipes } = useContext(UserContext);
+  const { userData, setUserData, missingRecipes } = useContext(UserContext);
   return (
     <View className=" bg-[#FEC1A6] w-full h-[284] rounded-2xl mt-9 pt-[12px] justify-between flex">
       <View
@@ -103,7 +111,7 @@ export default function AlmostThere() {
       <View className="flex flex-row gap-[9px] overflow-hidden pb-[15px]">
         <FlatList
           horizontal
-          data={recipes}
+          data={missingRecipes}
           renderItem={({ item }) => (
             <RecipeItem key={item.id} name={item.title} imageURI={item.image} />
           )}

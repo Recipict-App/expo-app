@@ -14,7 +14,6 @@ import {
 import { Image } from "expo-image";
 
 import { Redirect } from "expo-router";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 import { useContext } from "react";
 import { UserContext } from "../userContext";
@@ -54,8 +53,6 @@ export default function App() {
   useEffect(() => {
     handleEffect();
   }, [response]);
-
-  console.log("User Info: ", userInfo);
 
   async function handleEffect() {
     const user = await getLocalUser();

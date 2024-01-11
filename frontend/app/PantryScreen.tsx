@@ -30,7 +30,7 @@ export default function pantry() {
   };
 
   return (
-    <SafeAreaView className="bg-white ">
+    <View className="bg-white ">
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Screen */}
         <View className="min-h-screen py-[32px]">
@@ -73,6 +73,6 @@ export default function pantry() {
           source={require("../assets/icons/AddIngredient.svg")}
         />
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 }

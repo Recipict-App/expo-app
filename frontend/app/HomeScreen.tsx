@@ -15,7 +15,7 @@ export default function Home() {
   const data = userData[0];
   const ingredients = data.ingredients;
   return (
-    <SafeAreaView className="bg-white">
+    <View className="bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
           className="flex w-full items-center p-[20px] py-[40px] overflow-visible min-h-screen"
@@ -89,6 +89,6 @@ export default function Home() {
           <Explore />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }

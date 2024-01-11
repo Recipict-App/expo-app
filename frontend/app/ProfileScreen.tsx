@@ -128,10 +128,10 @@ export default function Profile() {
   };
 
   return (
-    <SafeAreaView className="bg-white ">
+    <View className="bg-white ">
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Screen */}
-        <View className="min-h-screen items-center mt-8">
+        <View className="min-h-screen items-center mt-20">
           {/* Header */}
           <View className="w-11/12 rounded-2xl bg-green  justify-center shadow-lg">
             <Image
@@ -163,6 +163,6 @@ export default function Profile() {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }

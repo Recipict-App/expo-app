@@ -126,6 +126,7 @@ interface recipeInfo {
 export default function HomeLayout() {
   const [userInfo, setUserInfo] = useState<userInfoType>();
   const [userData, setUserData] = useState<userDataProps[]>();
+
   const [recipes, setRecipes] = useState<any>([]);
   const handleGetIngredient = async () => {
     if (!userData) return null;

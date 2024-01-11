@@ -17,6 +17,7 @@ import {
   ingredient,
   ingredientTypes,
   preferences,
+  userInfoType,
   userDataProps,
 } from "../firebase-type";
 
@@ -123,6 +124,7 @@ interface recipeInfo {
   };
 }
 export default function HomeLayout() {
+  const [userInfo, setUserInfo] = useState<userInfoType>();
   const [userData, setUserData] = useState<userDataProps[]>();
   const [recipes, setRecipes] = useState<any>([]);
   const handleGetIngredient = async () => {
@@ -231,7 +233,9 @@ export default function HomeLayout() {
     return null;
   }
   return (
-    <UserContext.Provider value={{ userData, setUserData, recipes }}>
+    <UserContext.Provider
+      value={{ userInfo, setUserInfo, userData, setUserData, recipes }}
+    >
       <SheetProvider>
         <Tabs
           initialRouteName="HomeScreen"

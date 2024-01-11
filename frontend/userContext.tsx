@@ -1,13 +1,27 @@
 import { createContext, Dispatch } from "react";
-import { userDataProps } from "./firebase-type";
+import { userInfoType, userDataProps } from "./firebase-type";
 
 interface UserContextType {
+  userInfo: userInfoType | undefined;
+  setUserInfo: Dispatch<React.SetStateAction<userInfoType | undefined>>;
   userData: userDataProps[] | undefined;
   setUserData: Dispatch<React.SetStateAction<userDataProps[] | undefined>>;
   recipes: any;
 }
 
 export const UserContext = createContext<UserContextType>({
+  userInfo: {
+    email: "",
+    family_name: "",
+    given_name: "",
+    id: "",
+    locale: "",
+    name: "",
+    picture: "",
+    verified_email: false,
+  },
+  setUserInfo: () => {},
+
   userData: [
     {
       name: "",
@@ -22,5 +36,6 @@ export const UserContext = createContext<UserContextType>({
     },
   ],
   setUserData: () => {},
+
   recipes: [],
 });

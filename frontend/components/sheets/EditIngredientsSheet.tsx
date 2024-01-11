@@ -115,7 +115,7 @@ export default function EditIngredientSheet(
   const userGoogleToken = data.googleToken;
   const ingredients = data.ingredients;
 
-  let choosenIngredient = props.payload?.ingredient || {
+  let chosenIngredient = props.payload?.ingredient || {
     name: "something",
     quantity: 1,
     unit: "gr",
@@ -127,24 +127,24 @@ export default function EditIngredientSheet(
 
   // for type dropdown
   const [typeValue, setTypeValue] = useState<ingredientTypes>(
-    choosenIngredient.type
+    chosenIngredient.type
   );
 
   // for expiry date
   const [dateValue, setDateValue] = useState<Date>(
-    new Date(choosenIngredient.expiryDate)
+    new Date(chosenIngredient.expiryDate)
   );
   const [dateModal, setDateModal] = useState<boolean>(false);
 
   // for quantity and unit
-  const [unitValue, setUnitValue] = useState<string>(choosenIngredient.unit);
+  const [unitValue, setUnitValue] = useState<string>(chosenIngredient.unit);
 
   // for name
-  const [nameValue, setNameValue] = useState<string>(choosenIngredient.name);
+  const [nameValue, setNameValue] = useState<string>(chosenIngredient.name);
 
   // for quantity
   const [quantityValue, setQuantityValue] = useState<string>(
-    choosenIngredient.quantity.toString()
+    chosenIngredient.quantity.toString()
   );
 
   // handling buttons
@@ -155,7 +155,7 @@ export default function EditIngredientSheet(
 
   const handleDelete = async () => {
     const newIngredients = ingredients.filter(
-      (eachIngredient) => eachIngredient.id !== choosenIngredient.id
+      (eachIngredient) => eachIngredient.id !== chosenIngredient.id
     );
     console.log(newIngredients);
 
@@ -188,18 +188,18 @@ export default function EditIngredientSheet(
 
   const handleEdit = async () => {
     const newIngredient: ingredientProps = {
-      id: choosenIngredient.id,
+      id: chosenIngredient.id,
       name: nameValue,
       quantity: parseInt(quantityValue),
       unit: unitValue,
       expiryDate: dateValue,
-      dateAdded: choosenIngredient.dateAdded,
+      dateAdded: chosenIngredient.dateAdded,
       type: typeValue,
     };
 
     // if there is no ingredient in ingredients, add new ingredient
     const ingredientExists = ingredients.some(
-      (ingredient) => ingredient.id === choosenIngredient.id
+      (ingredient) => ingredient.id === chosenIngredient.id
     );
     if (!ingredientExists) {
       ingredients.push(newIngredient);

@@ -28,8 +28,16 @@ const dummyIngredients = [
   "Satay",
 ];
 
-const handleShowRecipe = () => {
-  SheetManager.show("recipe-ingredient-sheet");
+const handleShowRecipe = (name: String, imageURI: string) => {
+  // console.log(name);
+  SheetManager.show("recipe-ingredient-sheet", {
+    payload: {
+      recipe: {
+        name: name,
+        imageURI: imageURI
+      },
+    },
+  });
 };
 
 function throttle(cb: any, delay = 1000) {
@@ -50,7 +58,7 @@ function throttle(cb: any, delay = 1000) {
 }
 
 const RecipeItem = ({ name, imageURI }: { name: string; imageURI: string }) => (
-  <TouchableOpacity onPress={throttle(handleShowRecipe)}>
+  <TouchableOpacity onPress={() => throttle(handleShowRecipe(name, imageURI))}>
     <View
       className=" rounded-2xl m-[5] flex justify-end items-center overflow-hidden"
       style={{ width: 127, height: 210 }}

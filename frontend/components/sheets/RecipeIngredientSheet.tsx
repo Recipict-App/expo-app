@@ -1,8 +1,17 @@
 import ActionSheet, { SheetProps } from "react-native-actions-sheet";
-import { View, Text, ScrollView, FlatList, Button, Alert } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  FlatList,
+  Button,
+  Alert,
+  ImageBackground,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SheetManager } from "react-native-actions-sheet";
 import { Image } from "expo-image";
+import recipe from "../../app/RecipeScreen";
 
 const dummyIngredients = [
   "Garlic",
@@ -37,7 +46,14 @@ function throttle(cb: any, delay = 1000) {
 const handleCloseRecipe = () => {
   SheetManager.hide("recipe-ingredient-sheet");
 };
-export default function RecipeIngredientSheet(props: SheetProps) {
+export default function RecipeIngredientSheet(
+  props: SheetProps<{
+    recipe: {
+      name: String;
+      imageURI: string;
+    };
+  }>
+) {
   return (
     <ActionSheet id={props.sheetId}>
       <View className=" max-h-[80%] h-fit flex items-center gap-4 px-5 py-2 ">
@@ -56,9 +72,15 @@ export default function RecipeIngredientSheet(props: SheetProps) {
             />
           </View>
         </View>
-        <Text className="font-pps text-2xl">Eggs with Tomato</Text>
+        <Text className="font-pps text-2xl">{props.payload?.recipe.name}</Text>
         {/* Image */}
-        <View className=" bg-grey w-4/5 h-1/3 rounded-2xl"></View>
+        <View className=" w-4/5 h-1/3 rounded-2xl overflow-hidden">
+          <Image
+            className="w-full h-full"
+            source={{ uri: props.payload?.recipe.imageURI }}
+            contentFit="contain"
+          />
+        </View>
         {/* Summary */}
         <View className="w-full flex flex-row ">
           {/* Ingredients */}
@@ -85,9 +107,15 @@ export default function RecipeIngredientSheet(props: SheetProps) {
             <Text className="font-ppr text-base">Pan, Wok</Text>
           </View>
         </View>
-        <View className="flex h-[40] w-full flex-row justify-center items-center" style={{gap: 20}}>
+        <View
+          className="flex h-[40] w-full flex-row justify-center items-center"
+          style={{ gap: 20 }}
+        >
           {/* close button */}
-          <View className="flex w-[10%] h-full justify-center items-center rounded-xl" style={{backgroundColor: "#FFCCC5"}}>
+          <View
+            className="flex w-[10%] h-full justify-center items-center rounded-xl"
+            style={{ backgroundColor: "#FFCCC5" }}
+          >
             <TouchableOpacity
               className="min-w-full min-h-full justify-center flex items-center"
               onPress={handleCloseRecipe}
@@ -96,7 +124,7 @@ export default function RecipeIngredientSheet(props: SheetProps) {
                 style={{
                   width: 20,
                   height: 20,
-                  position: "absolute"
+                  position: "absolute",
                 }}
                 source={require("../../assets/icons/Exit.svg")}
               />

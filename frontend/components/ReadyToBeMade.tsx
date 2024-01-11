@@ -33,20 +33,28 @@ function throttle(cb: any, delay = 1000) {
   };
 }
 
-const handleShowRecipe = () => {
-  SheetManager.show("recipe-ingredient-sheet");
+const handleShowRecipe = (name: String) => {
+  console.log(name);
+  SheetManager.show("recipe-ingredient-sheet", {
+    payload: {
+      recipe: {
+        name: name,
+      },
+    },
+  });
 };
 
 export default function ReadyToBeMade() {
-  const { userData, setUserData, readyRecipes } = useContext(UserContext);
-  const recipePreview = [1, 2, 3, 4];
-  const actionSheetRef = useRef<ActionSheetRef>(null);
+  const { readyRecipes } = useContext(UserContext);
 
-
-  const RecipeItem = (
-    { name, imageURI }: { name: string, imageURI: string}
-  ) => (
-    <TouchableOpacity onPress={throttle(handleShowRecipe)}>
+  const RecipeItem = ({
+    name,
+    imageURI,
+  }: {
+    name: string;
+    imageURI: string;
+  }) => (
+    <TouchableOpacity onPress={() => throttle(handleShowRecipe(name))}>
       <View
         className=" rounded-2xl m-[5] flex justify-end items-center overflow-hidden"
         style={{ width: 127, height: 210 }}
@@ -95,11 +103,7 @@ export default function ReadyToBeMade() {
           horizontal
           data={readyRecipes}
           renderItem={({ item, index }) => (
-            <RecipeItem
-              key={item.id}
-              name={item.title}
-              imageURI= {item.image}
-            />
+            <RecipeItem key={item.id} name={item.title} imageURI={item.image} />
           )}
           keyExtractor={(item) => item.toString()}
           showsHorizontalScrollIndicator={false}

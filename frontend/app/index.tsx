@@ -40,8 +40,8 @@ const testing: ingredientProps = {
 };
 
 export default function App() {
-  const [userInfo, setUserInfo] = useState<any>(null);
-  const { userData, setUserData } = useContext(UserContext);
+  const { userInfo, setUserInfo, userData, setUserData } =
+    useContext(UserContext);
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId:
       "746895610022-8vssk9oqlglohdvj4m6hgc4oljpa69ck.apps.googleusercontent.com",
@@ -54,6 +54,8 @@ export default function App() {
   useEffect(() => {
     handleEffect();
   }, [response]);
+
+  console.log("User Info: ", userInfo);
 
   async function handleEffect() {
     const user = await getLocalUser();
@@ -91,6 +93,7 @@ export default function App() {
       const user = await response.json();
       await AsyncStorage.setItem("@user", JSON.stringify(user));
       setUserInfo(user);
+      console.log("User Info: ", userInfo);
 
       // Get user data from Firebase
       console.log("Authenticating user... 🚜");

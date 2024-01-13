@@ -65,6 +65,8 @@ export const Ingredient: React.FC<ingredientProps> = ({
       },
     });
   };
+
+  
   const showDate = dateAdded?.toString().slice(0, 10) || "Undefined";
 
   return (

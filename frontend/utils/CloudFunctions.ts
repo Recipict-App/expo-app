@@ -46,8 +46,8 @@ export async function getRecommendedRecipes(
       return {
         name: ingredient.name,
         amount: ingredient.amount,
-        unit: ingredient.unit == "" ? "ea" : ingredient.unit,
-        original: ingredient.original
+        unit: ingredient.unit == "" ? "pc" : ingredient.unit,
+        original: ingredient.originalName
       };
     });
     if (missedIngredientCount == 0) {

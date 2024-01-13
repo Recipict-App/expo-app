@@ -78,7 +78,7 @@ export default function RecipeIngredientSheet(
         {/* Image */}
         <View className=" w-4/5 h-1/3 rounded-2xl overflow-hidden">
           <Image
-            className="w-full h-full"
+            className="w-[110%] h-[110%]"
             source={{ uri: props.payload?.recipe.imageURI }}
             contentFit="contain"
           />
@@ -93,7 +93,9 @@ export default function RecipeIngredientSheet(
               renderItem={({ item }) => (
                 <View className="flex w-4/5 flex-row mx-2">
                   <Text className="font-ppr text-base">- </Text>
-                  <Text className="font-ppr text-base">{item.original}</Text>
+                  <Text className="font-ppr text-base">
+                     {item.amount} {item.unit} {item.name}
+                  </Text>
                 </View>
               )}
               showsVerticalScrollIndicator={false}

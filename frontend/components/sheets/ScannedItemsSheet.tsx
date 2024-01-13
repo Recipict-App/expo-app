@@ -8,9 +8,8 @@ import ActionSheet, {
   SheetManager,
 } from "react-native-actions-sheet";
 
-import { ingredientProps } from "../../firebase-type";
-
-import { Ingredient } from "../Ingredient";
+import { ingredientProps, ingredientTypes } from "../../firebase-type";
+import { Shelf } from "../Shelf";
 
 export default function ScannedItemsSheet(props: SheetProps) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
@@ -21,12 +20,27 @@ export default function ScannedItemsSheet(props: SheetProps) {
   const handleAdd = () => {};
 
   console.log("------- Log from ScannedItemSheet -------");
-  console.log(props.payload);
+  console.log(props.payload.items);
   console.log("------------------");
+
+  function groupByType(objectArray: Array<ingredientProps>) {
+    return objectArray.reduce(function (acc: any, obj: ingredientProps) {
+      var key = obj["type"];
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(obj);
+      return acc;
+    }, {});
+  }
+
+  const groupedItems = groupByType(props.payload.items);
+  console.log("🚀 ~ ScannedItemsSheet ~ groupedItems:", groupedItems);
 
   return (
     <ActionSheet id={props.sheetId}>
       <View className="max-h-[92%]">
+        {/* Header */}
         <View className="flex items-center gap-2 pt-2 pb-4">
           {/* Blackbar */}
           <View className="w-32 h-1 bg-[#9F9F9F] rounded-xl" />
@@ -37,19 +51,20 @@ export default function ScannedItemsSheet(props: SheetProps) {
         <ScrollView>
           <View className="flex items-center gap-4 pt-2">
             {/* Scroll */}
-            <View style={{ gap: 12 }} className="justify-center w-10/12 flex">
-              {props.payload?.items?.map((item: ingredientProps) => (
-                <Ingredient
-                  key={Math.floor(Math.random() * 9999)}
-                  id={item.id || ""}
-                  name={item.name || "Unknown"}
-                  quantity={item.quantity || 1}
-                  unit={item.unit || "ea"}
-                  expiryDate={item.expiryDate || new Date()}
-                  dateAdded={item.dateAdded || new Date()}
-                  type={item.type || "Not Ingredient"}
-                />
-              ))}
+            <View
+              style={{ gap: 12 }}
+              className="justify-center items-center w-10/12 flex"
+            >
+              {/* Dispay items */}
+              {Object.keys(groupedItems).map(function (key) {
+                return (
+                  <Shelf
+                    key={key}
+                    category={key}
+                    ingredients={groupedItems[key]}
+                  />
+                );
+              })}
 
               {/* Buttons */}
               <View className=" h-fit flex flex-row space-x-7 pb-1 pt-4 justify-center">

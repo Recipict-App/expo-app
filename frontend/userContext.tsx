@@ -9,6 +9,7 @@ interface UserContextType {
   recipes: any; // remove later, recipes already has been split into readyRecipes and missingRecipes
   readyRecipes: any;
   missingRecipes: any;
+  randomRecipes: any;
 }
 
 export const UserContext = createContext<UserContextType>({
@@ -42,4 +43,5 @@ export const UserContext = createContext<UserContextType>({
   recipes: [],
   readyRecipes: [],
   missingRecipes: [],
+  randomRecipes: [],
 });

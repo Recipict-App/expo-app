@@ -21,6 +21,10 @@ import {
   userDataProps,
 } from "../firebase-type";
 
+import {
+  getRecommendedRecipes,
+  getRandomRecipes,
+} from "../utils/CloudFunctions.ts";
 
 // haven't been used
 interface recipeInfo {
@@ -42,7 +46,9 @@ export default function HomeLayout() {
   const [recipes, setRecipes] = useState<any>([]);
   const [readyRecipes, setReadyRecipes] = useState<any>([]);
   const [missingRecipes, setMissingRecipes] = useState<any>([]);
-  const handleGetIngredient = async () => {
+  const [randomRecipes, setRandomRecipes] = useState<any>([]);
+
+  const handleGetRecipes = async () => {
     if (!userData) return null;
     const data = userData[0];
     // extract and append ingredients' name to string
@@ -74,106 +80,18 @@ export default function HomeLayout() {
       diets: dietsString,
     };
 
-    const apiResponse = await fetch(
-      `https://us-central1-recipict-gcp.cloudfunctions.net/function-spoonacular-recipe-by-ingredient`,
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      }
+    getRecommendedRecipes(
+      requestBody,
+      setRecipes,
+      setReadyRecipes,
+      setMissingRecipes
     );
 
-    let newRecipes: any[] = [];
-    let newReadyRecipes: any[] = [];
-    let newMissingRecipes: any[] = [];
-
-    const result = await apiResponse.json();
-    result.results.map((recipeInfo: any) => {
-      const {
-        title,
-        summary,
-        analyzedInstructions,
-        missedIngredientCount,
-        id,
-        readyInMinutes,
-        extendedIngredients,
-        image,
-      } = recipeInfo;
-      const instructions = analyzedInstructions[0].steps.map(
-        (stepInfo: any) => {
-          // console.log(stepInfo);
-          return {
-            equipment: stepInfo.equipment,
-            ingredients: stepInfo.ingredients,
-            step: stepInfo.step,
-          };
-        }
-      );
-      const totalIngredients = extendedIngredients.map((ingredient: any) => {
-        return {
-          name: ingredient.name,
-          amount: ingredient.amount,
-          unit: ingredient.unit == "" ? "ea" : ingredient.unit,
-        };
-      });
-      if (missedIngredientCount == 0) {
-        newReadyRecipes = [
-          ...newReadyRecipes,
-          {
-            title,
-            summary,
-            instructions,
-            missedIngredientCount,
-            id,
-            readyInMinutes,
-            totalIngredients,
-            image,
-          },
-        ];
-      } else {
-        newMissingRecipes = [
-          ...newMissingRecipes,
-          {
-            title,
-            summary,
-            instructions,
-            missedIngredientCount,
-            id,
-            readyInMinutes,
-            totalIngredients,
-            image,
-          },
-        ];
-      }
-      newRecipes = [
-        ...newRecipes,
-        {
-          title,
-          summary,
-          instructions,
-          missedIngredientCount,
-          id,
-          readyInMinutes,
-          totalIngredients,
-          image,
-        },
-      ];
-
-      // console.log("instructions: ", instructions);
-      // console.log("title: " + title);
-      // console.log("summary: " + summary);
-    });
-    setRecipes(newRecipes);
-    setReadyRecipes(newReadyRecipes);
-    setMissingRecipes(newMissingRecipes);
-    console.log("Recipes Loaded 🥰");
+    getRandomRecipes(requestBody, setRandomRecipes);
   };
 
   useEffect(() => {
-    handleGetIngredient();
+    handleGetRecipes();
   }, [userData]);
 
   let [fontsLoaded, fontError] = useFonts({
@@ -185,7 +103,18 @@ export default function HomeLayout() {
     return null;
   }
   return (
-    <UserContext.Provider value={{ userInfo, setUserInfo, userData, setUserData, recipes, readyRecipes, missingRecipes }}>
+    <UserContext.Provider
+      value={{
+        userInfo,
+        setUserInfo,
+        userData,
+        setUserData,
+        recipes,
+        readyRecipes,
+        missingRecipes,
+        randomRecipes,
+      }}
+    >
       <SheetProvider>
         <Tabs
           initialRouteName="HomeScreen"

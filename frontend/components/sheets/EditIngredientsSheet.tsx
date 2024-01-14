@@ -115,6 +115,7 @@ export default function EditIngredientSheet(
   const userGoogleToken = data.googleToken;
   const ingredients = data.ingredients;
 
+  //default value for ingredient
   let chosenIngredient = props.payload?.ingredient || {
     name: "something",
     quantity: 1,

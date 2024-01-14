@@ -14,15 +14,19 @@ import { Shelf } from "../Shelf";
 export default function ScannedItemsSheet(props: SheetProps) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
+  // Button handlers
   const handleDelete = () => {
     SheetManager.hide("scanned-items-sheet");
   };
-  const handleAdd = () => {};
+  const handleAdd = async () => {
+    
+  };
 
   console.log("------- Log from ScannedItemSheet -------");
   console.log(props.payload.items);
   console.log("------------------");
 
+  // Group items by type for display
   function groupByType(objectArray: Array<ingredientProps>) {
     return objectArray.reduce(function (acc: any, obj: ingredientProps) {
       var key = obj["type"];
@@ -33,7 +37,6 @@ export default function ScannedItemsSheet(props: SheetProps) {
       return acc;
     }, {});
   }
-
   const groupedItems = groupByType(props.payload.items);
   console.log("🚀 ~ ScannedItemsSheet ~ groupedItems:", groupedItems);
 

@@ -21,7 +21,6 @@ import {
   userDataProps,
 } from "../firebase-type";
 
-
 // haven't been used
 interface recipeInfo {
   title: String;
@@ -172,9 +171,9 @@ export default function HomeLayout() {
     console.log("Recipes Loaded 🥰");
   };
 
-  useEffect(() => {
-    handleGetIngredient();
-  }, [userData]);
+  // useEffect(() => {
+  //   handleGetIngredient();
+  // }, [userData]);
 
   let [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,
@@ -185,7 +184,17 @@ export default function HomeLayout() {
     return null;
   }
   return (
-    <UserContext.Provider value={{ userInfo, setUserInfo, userData, setUserData, recipes, readyRecipes, missingRecipes }}>
+    <UserContext.Provider
+      value={{
+        userInfo,
+        setUserInfo,
+        userData,
+        setUserData,
+        recipes,
+        readyRecipes,
+        missingRecipes,
+      }}
+    >
       <SheetProvider>
         <Tabs
           initialRouteName="HomeScreen"

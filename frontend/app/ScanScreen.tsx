@@ -70,6 +70,7 @@ export default function App() {
     );
   }
 
+  /** Button handlers */
   const handleCapture = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
@@ -83,14 +84,16 @@ export default function App() {
 
       console.log("Image saved to gallery ✅");
 
-      // pass image to backend
-      // const items = await retrieveItems(photo.uri);
-
       // show gallery
       await handleGallery();
 
+      /* todo: fix passing uri in base64 format to backend error
+      // pass image to backend
+      // const items = await retrieveItems(photo.uri);
+
       // show popup [SHOULD BE IN THE BOTTOM OF THIS METHOD]
       // SheetManager.show("scanned-items-sheet"); // will pass items to the sheet
+      */
     }
   };
 
@@ -120,7 +123,7 @@ export default function App() {
     setTorch(torch === FlashMode.off ? FlashMode.torch : FlashMode.off);
   };
 
-  // helpers
+  /** Helpers */
   const retrieveItems = async (imageURI: string) => {
     // convert image to base64
     const base64ImageData = await FileSystem.readAsStringAsync(imageURI, {
@@ -151,7 +154,7 @@ export default function App() {
         if (item.type == "date") {
           date = item.mentionText;
         } else if (item.type == "item_name") {
-          // call helper to get category
+          // call helper to get category for each item
           const category = await getCategory(item.mentionText);
 
           // create json object based on date
@@ -169,8 +172,8 @@ export default function App() {
               name: item.mentionText,
               quantity: 1,
               unit: "gr",
-              expiryDate: "Now (no date found)",
-              dateAdded: "Now (no date found)",
+              expiryDate: "Now",
+              dateAdded: "Now",
               type: category,
             };
           }
@@ -183,13 +186,13 @@ export default function App() {
     // create a new object
     const newObject = { items: filteredItems };
 
-    console.log("------- Log from ScanScreen -------");
-    console.log(
-      data.document.entities.map((item: any) => {
-        console.log(item.mentionText);
-      })
-    );
-    console.log("------------------");
+    // console.log("------- Log from ScanScreen -------");
+    // console.log(
+    //   data.document.entities.map((item: any) => {
+    //     console.log(item.mentionText);
+    //   })
+    // );
+    // console.log("------------------");
 
     return newObject;
   };
@@ -205,7 +208,7 @@ export default function App() {
     );
 
     const categoryResponseJSON = await CategoryResponse.json();
-    console.log(categoryResponseJSON.category);
+    // console.log(categoryResponseJSON.category);
     return categoryResponseJSON.category;
   };
 

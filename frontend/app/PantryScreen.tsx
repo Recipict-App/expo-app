@@ -9,13 +9,14 @@ import { Image } from "expo-image";
 import { SheetManager } from "react-native-actions-sheet";
 import { Redirect } from "expo-router";
 
-import { ShelfProps, Shelf } from "../components/Shelf";
+import { Shelf } from "../components/Shelf";
 import { ingredientProps } from "../firebase-type";
 
 import { useContext } from "react";
 import { UserContext } from "../userContext";
 
 export default function pantry() {
+  // get user data from local
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
   const data = userData[0];

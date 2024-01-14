@@ -87,10 +87,11 @@ export default function App() {
         }
       );
 
+      // Set user info to local storage
       const user = await response.json();
       await AsyncStorage.setItem("@user", JSON.stringify(user));
       setUserInfo(user);
-      console.log("User Info: ", userInfo);
+      console.log("User Info: ", user);
 
       // Get user data from Firebase
       console.log("Authenticating user... 🚜");

@@ -20,7 +20,6 @@ import * as Crypto from "expo-crypto";
 import { userDataProps } from "../../firebase-type";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 export enum ingredientTypes {
   Vegetables = "Vegetables",
@@ -213,7 +212,7 @@ export default function EditIngredientSheet(
       return eachIngredient;
     });
 
-    console.log(newIngredients);
+    // console.log(newIngredients);
 
     const response = await fetch(
       "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",

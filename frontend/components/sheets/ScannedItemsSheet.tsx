@@ -8,23 +8,70 @@ import ActionSheet, {
   SheetManager,
 } from "react-native-actions-sheet";
 
-import { ingredientProps, ingredientTypes } from "../../firebase-type";
+import { ingredientProps, userDataProps } from "../../firebase-type";
 import { Shelf } from "../Shelf";
+
+import { useContext } from "react";
+import { UserContext } from "../../userContext";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ScannedItemsSheet(props: SheetProps) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
+
+  // get user from local
+  const getLocalUser = async () => {
+    const data: any = await AsyncStorage.getItem("@user");
+    if (!data) return null;
+    return JSON.parse(data);
+  };
+
+  // get user data from local
+  const { userData, setUserData } = useContext(UserContext);
+  if (!userData) return null;
+  const data = userData[0];
+  const userGoogleToken = data.googleToken;
+  const ingredients = data.ingredients;
 
   // Button handlers
   const handleDelete = () => {
     SheetManager.hide("scanned-items-sheet");
   };
+
   const handleAdd = async () => {
-    
+    const newIngredients = [...ingredients, ...props.payload.items];
+
+    const response = await fetch(
+      "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: userGoogleToken,
+          ingredients: newIngredients,
+        }),
+      }
+    );
+
+    const result = await response.json();
+
+    // console.log(response.status);
+    // console.log(result);
+    // console.log(result.returnObject);
+
+    // refresh user data
+    await getUserData(await getLocalUser());
+
+    SheetManager.hide("scanned-items-sheet");
   };
 
-  console.log("------- Log from ScannedItemSheet -------");
-  console.log(props.payload.items);
-  console.log("-----------------------------------------");
+  console.log(
+    "🚀 ~ ScannedItemsSheet ~ props.payload.items:\n",
+    props.payload.items
+  );
 
   // Group items by type for display
   function groupByType(objectArray: Array<ingredientProps>) {
@@ -38,7 +85,67 @@ export default function ScannedItemsSheet(props: SheetProps) {
     }, {});
   }
   const groupedItems = groupByType(props.payload.items);
-  console.log("🚀 ~ ScannedItemsSheet ~ groupedItems:", groupedItems);
+  // console.log("🚀 ~ ScannedItemsSheet ~ groupedItems: \n", groupedItems);
+
+  /** Helpers */
+  const getUserData = async (user: any) => {
+    const checkUserResponse = await fetch(
+      "https://us-central1-recipict-gcp.cloudfunctions.net/function-retrieve-user",
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: user.id }),
+      }
+    );
+
+    if (checkUserResponse.status == 404) {
+      console.log("User not found in Firebase, creating new user... 🤔");
+      const localUserData: userDataProps[] = [
+        {
+          name: user.name,
+          email: user.email,
+          googleToken: `${user.id}`,
+          ingredients: [],
+          preferences: { diet: [], cuisine: [] },
+          subscription: "Regular",
+        },
+      ];
+
+      setUserData(localUserData);
+
+      const createUserResponse = await fetch(
+        "https://us-central1-recipict-gcp.cloudfunctions.net/function-create-user",
+        {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(localUserData),
+        }
+      );
+
+      if (createUserResponse.status == 200) {
+        console.log("User created in Firebase, retrieving user data... 🥰");
+        const user = await createUserResponse.json();
+        const userDatabase = user.userData;
+
+        await setUserData(userDatabase);
+      } else {
+        console.log("Error creating user in Firebase 😡");
+      }
+    } else {
+      console.log("User found in Firebase, retrieving user data... 🤩");
+
+      const user = await checkUserResponse.json();
+      const userDatabase = user.userData;
+
+      await setUserData(userDatabase);
+    }
+  };
 
   return (
     <ActionSheet id={props.sheetId}>

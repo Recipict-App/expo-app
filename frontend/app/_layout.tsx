@@ -90,9 +90,9 @@ export default function HomeLayout() {
     getRandomRecipes(requestBody, setRandomRecipes);
   };
 
-  useEffect(() => {
-    handleGetRecipes();
-  }, [userData]);
+  // useEffect(() => {
+  //   handleGetRecipes();
+  // }, [userData]);
 
   let [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,

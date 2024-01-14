@@ -13,10 +13,13 @@ import { SheetManager } from "react-native-actions-sheet";
 
 import { ingredientTypes, ingredient } from "../firebase-type";
 
+import { useIsFocused } from "@react-navigation/native";
+
 const CloudFunctionURL: string =
   process.env.CLOUD_FUNCTION_DOCUMENT_AI_URL || "";
 
 export default function App() {
+  const isFocused = useIsFocused();
   const [CameraPermission, requestCameraPermission] =
     Camera.useCameraPermissions();
   const [galleryPermission, requestgalleryPermission] =
@@ -25,10 +28,8 @@ export default function App() {
     ImagePicker.useCameraPermissions();
 
   const cameraRef = React.useRef<Camera>(null);
-
   const [pickedImage, setPickedImage] = useState<String | null>(null);
   const [torch, setTorch] = useState<FlashMode>(FlashMode.off);
-
   if (!CameraPermission || !galleryPermission || !imagePickerPermission) {
     // Camera permissions are still loading
     return <View />;
@@ -211,43 +212,45 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Camera
-        style={styles.camera}
-        type={CameraType.back}
-        ref={cameraRef}
-        flashMode={torch}
-      >
-        {/* Inside camera */}
-        <View style={styles.buttonContainer}>
-          {/* Control bar */}
-          <View className="bg-[#F4F4F4] rounded-xl w-fit px-4 h-[38] flex items-center justify-center flex-row space-x-8">
-            {/* Gallery */}
-            <TouchableOpacity onPress={handleGallery}>
-              <Image
-                className="w-[20px] h-[20px]"
-                contentFit="contain"
-                source={require("../assets/icons/Gallery.svg")}
-              />
-            </TouchableOpacity>
+      {isFocused && (
+        <Camera
+          style={styles.camera}
+          type={CameraType.back}
+          ref={cameraRef}
+          flashMode={torch}
+        >
+          {/* Inside camera */}
+          <View style={styles.buttonContainer}>
+            {/* Control bar */}
+            <View className="bg-[#F4F4F4] rounded-xl w-fit px-4 h-[38] flex items-center justify-center flex-row space-x-8">
+              {/* Gallery */}
+              <TouchableOpacity onPress={handleGallery}>
+                <Image
+                  className="w-[20px] h-[20px]"
+                  contentFit="contain"
+                  source={require("../assets/icons/Gallery.svg")}
+                />
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={handleCapture}>
-              <Image
-                className="w-[36px] h-[30px]"
-                contentFit="contain"
-                source={require("../assets/icons/Camera.svg")}
-              />
-            </TouchableOpacity>
+              <TouchableOpacity onPress={handleCapture}>
+                <Image
+                  className="w-[36px] h-[30px]"
+                  contentFit="contain"
+                  source={require("../assets/icons/Camera.svg")}
+                />
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={handleTorch}>
-              <Image
-                className="w-[20px] h-[20px]"
-                contentFit="contain"
-                source={require("../assets/icons/Flash.svg")}
-              />
-            </TouchableOpacity>
+              <TouchableOpacity onPress={handleTorch}>
+                <Image
+                  className="w-[20px] h-[20px]"
+                  contentFit="contain"
+                  source={require("../assets/icons/Flash.svg")}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </Camera>
+        </Camera>
+      )}
     </View>
   );
 }

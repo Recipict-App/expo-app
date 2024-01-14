@@ -24,7 +24,7 @@ export default function ScannedItemsSheet(props: SheetProps) {
 
   console.log("------- Log from ScannedItemSheet -------");
   console.log(props.payload.items);
-  console.log("------------------");
+  console.log("-----------------------------------------");
 
   // Group items by type for display
   function groupByType(objectArray: Array<ingredientProps>) {

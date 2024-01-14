@@ -7,6 +7,10 @@ import { RecipeBoxProps, RecipeBox } from "./RecipeBox";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
 
+import { LinearGradient } from 'expo-linear-gradient';
+import PagerView from 'react-native-pager-view';
+
+
 export default function Explore() {
   const { randomRecipes } = useContext(UserContext);
   return (
@@ -28,6 +32,7 @@ export default function Explore() {
         }}
       >
         <Text className=" font-pps text-2xl text-white">Explore</Text>
+        <LinearGradient colors={["#00000000", "#ffffffff"]} />
         <Image
           style={{
             position: "absolute",

@@ -1,9 +1,8 @@
-import { useRef } from "react";
+import { useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 
 import ActionSheet, {
-  ActionSheetRef,
   SheetProps,
   SheetManager,
 } from "react-native-actions-sheet";
@@ -11,13 +10,20 @@ import ActionSheet, {
 import { ingredientProps, userDataProps } from "../../firebase-type";
 import { Shelf } from "../Shelf";
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../../userContext";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ScannedItemsSheet(props: SheetProps) {
-  const actionSheetRef = useRef<ActionSheetRef>(null);
+  const [tempScannedIngredients, setTempScannedIngredients] = useState<
+    ingredientProps[]
+  >([]);
+
+  // set tempScannedIngredients to payload.items
+  useEffect(() => {
+    setTempScannedIngredients(props.payload.items);
+  }, [])
 
   // get user from local
   const getLocalUser = async () => {

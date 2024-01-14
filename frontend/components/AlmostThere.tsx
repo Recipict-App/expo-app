@@ -28,7 +28,12 @@ const dummyIngredients = [
   "Satay",
 ];
 
-const handleShowRecipe = (name: String, imageURI: string, ingredients: any) => {
+const handleShowRecipe = (
+  name: String,
+  imageURI: string,
+  ingredients: any,
+  readyInMinutes: any
+) => {
   // console.log(name);
   SheetManager.show("recipe-ingredient-sheet", {
     payload: {
@@ -36,6 +41,7 @@ const handleShowRecipe = (name: String, imageURI: string, ingredients: any) => {
         name: name,
         imageURI: imageURI,
         ingredients: ingredients,
+        readyInMinutes: readyInMinutes,
       },
     },
   });
@@ -62,12 +68,18 @@ const RecipeItem = ({
   name,
   imageURI,
   ingredients,
+  readyInMinutes,
 }: {
   name: string;
   imageURI: string;
   ingredients: any;
+  readyInMinutes: any;
 }) => (
-  <TouchableOpacity onPress={() => throttle(handleShowRecipe(name, imageURI, ingredients))}>
+  <TouchableOpacity
+    onPress={() =>
+      throttle(handleShowRecipe(name, imageURI, ingredients, readyInMinutes))
+    }
+  >
     <View
       className=" rounded-2xl m-[5] flex justify-end items-center overflow-hidden"
       style={{ width: 127, height: 210 }}
@@ -122,12 +134,16 @@ export default function AlmostThere() {
           horizontal
           data={missingRecipes}
           renderItem={({ item }) => (
-            <RecipeItem
-              key={item.id}
-              name={item.title}
-              imageURI={item.image}
-              ingredients={item.totalIngredients}
-            />
+            <>
+              {console.log(item.readyInMinutes)}
+              <RecipeItem
+                key={item.id}
+                name={item.title}
+                imageURI={item.image}
+                ingredients={item.totalIngredients}
+                readyInMinutes={item.readyInMinutes}
+              />
+            </>
           )}
           keyExtractor={(item) => item.toString()}
           showsHorizontalScrollIndicator={false}

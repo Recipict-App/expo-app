@@ -61,6 +61,7 @@ export default function Explore() {
             );
           })
         ) : (
+          // Skeletons
           <>
             {Array.from({ length: 5 }).map((_, i) => (
               <RecipeBoxSkeleton key={i} />

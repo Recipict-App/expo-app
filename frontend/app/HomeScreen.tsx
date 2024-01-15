@@ -14,6 +14,9 @@ export default function Home() {
   if (!userData) return <Redirect href="/" />;
   const data = userData[0];
   const ingredients = data.ingredients;
+
+  const maxDisplayedIngredients =
+    ingredients.length > 3 ? ingredients.slice(0, 3) : ingredients;
   return (
     <View className="bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -67,26 +70,28 @@ export default function Home() {
             >
               <Text className=" text-lg font-ppr">Things you bought</Text>
               {ingredients[0] ? (
-                ingredients.map((item: ingredientProps, index: number) => {
-                  return (
-                    <Ingredient
-                      key={index}
-                      id={item.id}
-                      name={item.name}
-                      quantity={item.quantity}
-                      unit={item.unit}
-                      dateAdded={item.dateAdded}
-                      expiryDate={item.expiryDate}
-                      type={item.type}
-                    />
-                  );
-                })
+                maxDisplayedIngredients.map(
+                  (item: ingredientProps, index: number) => {
+                    return (
+                      <Ingredient
+                        key={index}
+                        id={item.id}
+                        name={item.name}
+                        quantity={item.quantity}
+                        unit={item.unit}
+                        dateAdded={item.dateAdded}
+                        expiryDate={item.expiryDate}
+                        type={item.type}
+                      />
+                    );
+                  }
+                )
               ) : (
                 <Text>Sadly, you have no nothing</Text>
               )}
             </View>
+            <Explore />
           </View>
-          <Explore />
         </View>
       </ScrollView>
     </View>

@@ -7,9 +7,10 @@ import { RecipeBoxProps, RecipeBox } from "./RecipeBox";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
 
-import { LinearGradient } from 'expo-linear-gradient';
-import PagerView from 'react-native-pager-view';
+import { LinearGradient } from "expo-linear-gradient";
+import PagerView from "react-native-pager-view";
 
+import RecipeBoxSkeleton from "./skeletons/RecipeBoxSkeleton";
 
 export default function Explore() {
   const { randomRecipes } = useContext(UserContext);
@@ -32,7 +33,6 @@ export default function Explore() {
         }}
       >
         <Text className=" font-pps text-2xl text-white">Explore</Text>
-        <LinearGradient colors={["#00000000", "#ffffffff"]} />
         <Image
           style={{
             position: "absolute",
@@ -46,18 +46,30 @@ export default function Explore() {
           source={require("../assets/images/Satay.png")}
         />
       </View>
+
       <View className="w-full flex" style={{ gap: 10 }}>
-        {randomRecipes.map((item:any, index:any) => {
-          return (
-            <RecipeBox
-              key={index}
-              name={item.title}
-              duration={item.readyInMinutes}
-              ingredients={item.totalIngredients.length}
-              imageURI={item.image}
-            />
-          );
-        })}
+        {randomRecipes ? (
+          randomRecipes.map((item: any, index: any) => {
+            return (
+              <RecipeBox
+                key={index}
+                name={item.title}
+                duration={item.readyInMinutes}
+                ingredients={item.totalIngredients.length}
+                imageURI={item.image}
+              />
+            );
+          })
+        ) : (
+          <>
+            <RecipeBoxSkeleton />
+            <RecipeBoxSkeleton />
+            <RecipeBoxSkeleton />
+            <RecipeBoxSkeleton />
+            <RecipeBoxSkeleton />
+          </>
+        )}
+        
       </View>
     </View>
   );

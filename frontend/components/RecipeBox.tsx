@@ -62,7 +62,7 @@ export const RecipeBox: React.FC<RecipeBoxProps> = ({
             <View className="flex px-[24px] ml-[10px]">
               <Text
                 numberOfLines={1}
-                className=" text-base font-pps text-clip max-w-[175px]"
+                className=" text-base font-pps text-clip max-w-[150px]"
               >
                 {name}
               </Text>

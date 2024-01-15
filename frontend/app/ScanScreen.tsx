@@ -11,9 +11,11 @@ import { Image } from "expo-image";
 
 import { SheetManager } from "react-native-actions-sheet";
 
-import { ingredientTypes, ingredient } from "../firebase-type";
-
 import * as Crypto from "expo-crypto";
+
+import { useContext } from "react";
+import { ScannedIngredientsContext } from "../ScannedItemProvider";
+import { ingredientProps } from "../firebase-type";
 
 const CloudFunctionURL: string =
   process.env.CLOUD_FUNCTION_DOCUMENT_AI_URL || "";
@@ -25,6 +27,8 @@ export default function App() {
     MediaLibrary.usePermissions();
   const [imagePickerPermission, requestimagePickerPermission] =
     ImagePicker.useCameraPermissions();
+
+  const { setScannedIngredients } = useContext(ScannedIngredientsContext);
 
   const cameraRef = React.useRef<Camera>(null);
 
@@ -114,10 +118,8 @@ export default function App() {
 
       // pass image to backend
       const items = await retrieveItems(result.assets[0].uri);
-
-      SheetManager.show("scanned-items-sheet", {
-        payload: items,
-      });
+      setScannedIngredients(items.items);
+      SheetManager.show("scanned-items-sheet");
     }
   };
 
@@ -168,7 +170,7 @@ export default function App() {
               expiryDate: date,
               dateAdded: date,
               type: category,
-              id: Crypto.randomUUID()
+              id: Crypto.randomUUID(),
             };
           } else {
             return {
@@ -178,7 +180,7 @@ export default function App() {
               expiryDate: "Now",
               dateAdded: "Now",
               type: category,
-              id: Crypto.randomUUID()
+              id: Crypto.randomUUID(),
             };
           }
         }

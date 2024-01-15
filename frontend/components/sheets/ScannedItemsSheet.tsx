@@ -12,18 +12,14 @@ import { Shelf } from "../Shelf";
 
 import { useContext, useEffect } from "react";
 import { UserContext } from "../../userContext";
+import { ScannedIngredientsContext } from "../../ScannedItemProvider";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ScannedItemsSheet(props: SheetProps) {
-  const [tempScannedIngredients, setTempScannedIngredients] = useState<
-    ingredientProps[]
-  >([]);
+  const { scannedIngredients, setScannedIngredients } = useContext(ScannedIngredientsContext);
 
-  // set tempScannedIngredients to payload.items
-  useEffect(() => {
-    setTempScannedIngredients(props.payload.items);
-  }, [])
+  console.log("scanned Items: " + scannedIngredients);
 
   // get user from local
   const getLocalUser = async () => {
@@ -45,7 +41,7 @@ export default function ScannedItemsSheet(props: SheetProps) {
   };
 
   const handleAdd = async () => {
-    const newIngredients = [...ingredients, ...props.payload.items];
+    const newIngredients = [...ingredients, scannedIngredients];
 
     const response = await fetch(
       "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
@@ -74,11 +70,6 @@ export default function ScannedItemsSheet(props: SheetProps) {
     SheetManager.hide("scanned-items-sheet");
   };
 
-  console.log(
-    "🚀 ~ ScannedItemsSheet ~ props.payload.items:\n",
-    props.payload.items
-  );
-
   // Group items by type for display
   function groupByType(objectArray: Array<ingredientProps>) {
     return objectArray.reduce(function (acc: any, obj: ingredientProps) {
@@ -90,7 +81,7 @@ export default function ScannedItemsSheet(props: SheetProps) {
       return acc;
     }, {});
   }
-  const groupedItems = groupByType(props.payload.items);
+  const groupedItems = groupByType(scannedIngredients);
   // console.log("🚀 ~ ScannedItemsSheet ~ groupedItems: \n", groupedItems);
 
   /** Helpers */

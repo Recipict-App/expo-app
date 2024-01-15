@@ -62,14 +62,11 @@ export default function Explore() {
           })
         ) : (
           <>
-            <RecipeBoxSkeleton />
-            <RecipeBoxSkeleton />
-            <RecipeBoxSkeleton />
-            <RecipeBoxSkeleton />
-            <RecipeBoxSkeleton />
+            {Array.from({ length: 5 }).map((_, i) => (
+              <RecipeBoxSkeleton key={i} />
+            ))}
           </>
         )}
-        
       </View>
     </View>
   );

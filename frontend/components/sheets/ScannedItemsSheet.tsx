@@ -17,7 +17,9 @@ import { ScannedIngredientsContext } from "../../ScannedItemProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ScannedItemsSheet(props: SheetProps) {
-  const { scannedIngredients, setScannedIngredients } = useContext(ScannedIngredientsContext);
+  const { scannedIngredients, setScannedIngredients } = useContext(
+    ScannedIngredientsContext
+  );
 
   console.log("scanned Items: " + scannedIngredients);
 
@@ -38,13 +40,13 @@ export default function ScannedItemsSheet(props: SheetProps) {
   // Button handlers
   const handleDelete = () => {
     SheetManager.hide("scanned-items-sheet");
+    setScannedIngredients([]);
   };
 
   const handleAdd = async () => {
-    const newIngredients = [...ingredients, scannedIngredients];
-
+    const newIngredients = [...ingredients, ...scannedIngredients];
     console.log(newIngredients);
-    console.log({newIngredients});
+    console.log({ newIngredients });
     const response = await fetch(
       "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
       {
@@ -62,9 +64,9 @@ export default function ScannedItemsSheet(props: SheetProps) {
 
     const result = await response.json();
 
-    console.log(response.status);
-    console.log(result);
-    console.log(result.returnObject);
+    // console.log("status: " + response.status);
+    // console.log(result);
+    // console.log(result.returnObject);
 
     // refresh user data
     await getUserData(await getLocalUser());
@@ -74,6 +76,7 @@ export default function ScannedItemsSheet(props: SheetProps) {
 
   // Group items by type for display
   function groupByType(objectArray: Array<ingredientProps>) {
+    if (!objectArray) return;
     return objectArray.reduce(function (acc: any, obj: ingredientProps) {
       var key = obj["type"];
       if (!acc[key]) {
@@ -147,12 +150,10 @@ export default function ScannedItemsSheet(props: SheetProps) {
   };
 
   return (
-    <ActionSheet id={props.sheetId}>
-      <View className="max-h-[92%]">
+    <ActionSheet id={props.sheetId} closeOnTouchBackdrop={false}>
+      <View className="min-h-[50%] max-h-[92%] p-[2]">
         {/* Header */}
         <View className="flex items-center gap-2 pt-2 pb-4">
-          {/* Blackbar */}
-          <View className="w-32 h-1 bg-[#9F9F9F] rounded-xl" />
           {/* Title */}
           <Text className="font-ppr text-xl">Scanned Items</Text>
         </View>
@@ -167,15 +168,17 @@ export default function ScannedItemsSheet(props: SheetProps) {
               {/* Dispay items */}
               {Object.keys(groupedItems).map(function (key) {
                 return (
-                  <Shelf
-                    key={key}
-                    category={key}
-                    ingredients={groupedItems[key]}
-                    mode="temporary"
-                  />
+                  <>
+                    {console.log("Scanned Items is Empty...")}
+                    <Shelf
+                      key={key}
+                      category={key}
+                      ingredients={groupedItems[key]}
+                      mode="temporary"
+                    />
+                  </>
                 );
               })}
-
               {/* Buttons */}
               <View className=" h-fit flex flex-row space-x-7 pb-1 pt-4 justify-center">
                 <TouchableOpacity onPress={handleDelete}>

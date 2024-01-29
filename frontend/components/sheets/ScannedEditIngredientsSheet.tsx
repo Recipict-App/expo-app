@@ -20,7 +20,6 @@ import * as Crypto from "expo-crypto";
 import { userDataProps } from "../../firebase-type";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ScannedIngredientsContext } from "../../ScannedItemProvider";
 
 export enum ingredientTypes {
   Vegetables = "Vegetables",
@@ -88,7 +87,7 @@ const unit_data = [
   },
 ];
 
-export default function EditIngredientSheet(
+export default function ScannedEditIngredientsSheet(
   props: SheetProps<{
     ingredient: {
       name: string;
@@ -99,12 +98,8 @@ export default function EditIngredientSheet(
       type: ingredientTypes;
       id: string;
     };
-    mode: string;
   }>
 ) {
-
-  const { scannedIngredients, setScannedIngredients} = useContext(ScannedIngredientsContext);
-
   // get user from local
   const getLocalUser = async () => {
     const data: any = await AsyncStorage.getItem("@user");
@@ -191,46 +186,7 @@ export default function EditIngredientSheet(
     SheetManager.hide("edit-ingredients-sheet");
   };
 
-  const handleEditLocal = async () => {
-    console.log("edit local...");
-    const newIngredient: ingredientProps = {
-      id: chosenIngredient.id,
-      name: nameValue,
-      quantity: parseInt(quantityValue),
-      unit: unitValue,
-      expiryDate: dateValue,
-      dateAdded: chosenIngredient.dateAdded,
-      type: typeValue,
-    };
-
-    // if there is no ingredient in ingredients, add new ingredient
-    const ingredientExists = scannedIngredients.some(
-      (ingredient: any) => ingredient.id === chosenIngredient.id
-    );
-    if (!ingredientExists) {
-      scannedIngredients.push(newIngredient);
-    }
-
-    const newIngredients = scannedIngredients.map((eachIngredient: any) => {
-      if (eachIngredient.id === newIngredient.id) {
-        return newIngredient;
-      }
-      return eachIngredient;
-    });
-    setScannedIngredients(newIngredients);
-    console.log(newIngredients);
-  }
-
-  const handleChange = () => {
-    if(props.payload?.mode === "temporary"){
-      handleEditLocal();
-    }
-    else handleEdit();
-    SheetManager.hide("edit-ingredients-sheet");
-  }
-
   const handleEdit = async () => {
-    console.log("edit global...");
     const newIngredient: ingredientProps = {
       id: chosenIngredient.id,
       name: nameValue,
@@ -283,6 +239,7 @@ export default function EditIngredientSheet(
     // refresh user data
     await getUserData(await getLocalUser());
 
+    SheetManager.hide("edit-ingredients-sheet");
   };
 
   const getUserData = async (user: any) => {
@@ -499,7 +456,7 @@ export default function EditIngredientSheet(
               source={require("../../assets/icons/DeleteIngredient.svg")}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleChange}>
+          <TouchableOpacity onPress={handleEdit}>
             <Image
               style={{ width: 60, height: 60 }}
               source={require("../../assets/icons/Approve.svg")}

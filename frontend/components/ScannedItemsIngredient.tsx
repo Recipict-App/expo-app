@@ -7,17 +7,6 @@ import { UserContext } from "../userContext";
 import { useContext } from "react";
 import { Redirect } from "expo-router";
 
-const debounce = (cb: any, delay = 1000) => {
-  let timeout: any;
-
-  return (...args: any) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      cb(...args);
-    }, delay);
-  };
-};
-
 function throttle(cb: any, delay = 1000) {
   let shouldWait = false;
 
@@ -35,7 +24,7 @@ function throttle(cb: any, delay = 1000) {
   };
 }
 
-export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
+export const ScannedItemsIngredient: React.FC<ingredientProps> = ({
   name,
   quantity,
   unit,
@@ -43,7 +32,6 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
   dateAdded,
   type,
   id,
-  mode,
 }) => {
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
@@ -63,11 +51,11 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
           type: type,
           id: id,
         },
-        mode: mode,
       },
     });
   };
 
+  
   const showDate = dateAdded?.toString().slice(0, 10) || "Undefined";
 
   return (

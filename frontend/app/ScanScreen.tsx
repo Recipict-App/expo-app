@@ -11,7 +11,11 @@ import { Image } from "expo-image";
 
 import { SheetManager } from "react-native-actions-sheet";
 
-import { ingredientTypes, ingredient } from "../firebase-type";
+import * as Crypto from "expo-crypto";
+
+import { useContext } from "react";
+import { ScannedIngredientsContext } from "../ScannedItemProvider";
+import { ingredientProps } from "../firebase-type";
 
 import { useIsFocused } from "@react-navigation/native";
 
@@ -26,6 +30,8 @@ export default function App() {
     MediaLibrary.usePermissions();
   const [imagePickerPermission, requestimagePickerPermission] =
     ImagePicker.useCameraPermissions();
+
+  const { setScannedIngredients } = useContext(ScannedIngredientsContext);
 
   const cameraRef = React.useRef<Camera>(null);
   const [pickedImage, setPickedImage] = useState<String | null>(null);
@@ -71,6 +77,7 @@ export default function App() {
     );
   }
 
+  /** Button handlers */
   const handleCapture = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
@@ -84,14 +91,16 @@ export default function App() {
 
       console.log("Image saved to gallery ✅");
 
-      // pass image to backend
-      // const items = await retrieveItems(photo.uri);
-
       // show gallery
       await handleGallery();
 
+      /* todo: fix passing uri in base64 format to backend error
+      // pass image to backend
+      // const items = await retrieveItems(photo.uri);
+
       // show popup [SHOULD BE IN THE BOTTOM OF THIS METHOD]
       // SheetManager.show("scanned-items-sheet"); // will pass items to the sheet
+      */
     }
   };
 
@@ -110,10 +119,8 @@ export default function App() {
 
       // pass image to backend
       const items = await retrieveItems(result.assets[0].uri);
-
-      SheetManager.show("scanned-items-sheet", {
-        payload: items,
-      });
+      setScannedIngredients(items.items);
+      SheetManager.show("scanned-items-sheet");
     }
   };
 
@@ -121,7 +128,7 @@ export default function App() {
     setTorch(torch === FlashMode.off ? FlashMode.torch : FlashMode.off);
   };
 
-  // helpers
+  /** Helpers */
   const retrieveItems = async (imageURI: string) => {
     // convert image to base64
     const base64ImageData = await FileSystem.readAsStringAsync(imageURI, {
@@ -152,7 +159,7 @@ export default function App() {
         if (item.type == "date") {
           date = item.mentionText;
         } else if (item.type == "item_name") {
-          // call helper to get category
+          // call helper to get category for each item
           const category = await getCategory(item.mentionText);
 
           // create json object based on date
@@ -164,15 +171,17 @@ export default function App() {
               expiryDate: date,
               dateAdded: date,
               type: category,
+              id: Crypto.randomUUID(),
             };
           } else {
             return {
               name: item.mentionText,
               quantity: 1,
               unit: "gr",
-              expiryDate: "Now (no date found)",
-              dateAdded: "Now (no date found)",
+              expiryDate: "Not Added",
+              dateAdded: new Date(),
               type: category,
+              id: Crypto.randomUUID(),
             };
           }
         }
@@ -184,13 +193,13 @@ export default function App() {
     // create a new object
     const newObject = { items: filteredItems };
 
-    console.log("------- Log from ScanScreen -------");
-    console.log(
-      data.document.entities.map((item: any) => {
-        console.log(item.mentionText);
-      })
-    );
-    console.log("------------------");
+    // console.log("------- Log from ScanScreen -------");
+    // console.log(
+    //   data.document.entities.map((item: any) => {
+    //     console.log(item.mentionText);
+    //   })
+    // );
+    // console.log("------------------");
 
     return newObject;
   };
@@ -206,7 +215,7 @@ export default function App() {
     );
 
     const categoryResponseJSON = await CategoryResponse.json();
-    console.log(categoryResponseJSON.category);
+    // console.log(categoryResponseJSON.category);
     return categoryResponseJSON.category;
   };
 

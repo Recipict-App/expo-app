@@ -13,12 +13,15 @@ import "../sheets.tsx";
 import { useEffect, useState } from "react";
 import { UserContext } from "../userContext";
 
+import { ScannedIngredientsContext } from "../ScannedItemProvider";
+
 import {
   ingredient,
   ingredientTypes,
   preferences,
   userInfoType,
   userDataProps,
+  ingredientProps,
 } from "../firebase-type";
 
 import {
@@ -115,91 +118,95 @@ export default function HomeLayout() {
         randomRecipes,
       }}
     >
-      <SheetProvider>
-        <Tabs
-          initialRouteName="HomeScreen"
-          screenOptions={{
-            headerShown: false,
-            tabBarShowLabel: false,
-            tabBarActiveTintColor: "#1BD15D",
-            tabBarActiveBackgroundColor: "#E8FBED",
-            tabBarInactiveTintColor: "#C4C4C4",
-            // tabBarStyle: { borderTopWidth: 0},
-          }}
-        >
-          <Tabs.Screen
-            name="HomeScreen"
-            options={{
-              tabBarIcon: () => (
-                <Image
-                  className="w-[20px] h-[20px]"
-                  source={require("../assets/icons/Home.svg")}
-                />
-              ),
+      <ScannedIngredientsContext.Provider
+        value={{ scannedIngredients, setScannedIngredients }}
+      >
+        <SheetProvider>
+          <Tabs
+            initialRouteName="HomeScreen"
+            screenOptions={{
+              headerShown: false,
+              tabBarShowLabel: false,
+              tabBarActiveTintColor: "#1BD15D",
+              tabBarActiveBackgroundColor: "#E8FBED",
+              tabBarInactiveTintColor: "#C4C4C4",
+              // tabBarStyle: { borderTopWidth: 0},
             }}
-          />
-          <Tabs.Screen
-            name="PantryScreen"
-            options={{
-              tabBarIcon: () => (
-                <Image
-                  className="w-[20px] h-[20px]"
-                  source={require("../assets/icons/Pantry.svg")}
-                />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="ScanScreen"
-            options={{
-              tabBarIcon: () => (
-                <Image
-                  className="w-[100px] h-[100px]"
-                  source={require("../assets/icons/Add.svg")}
-                />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="RecipeScreen"
-            options={{
-              tabBarIcon: () => (
-                <Image
-                  className="w-[20px] h-[20px]"
-                  source={require("../assets/icons/Recipe.svg")}
-                />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="ProfileScreen"
-            options={{
-              tabBarIcon: () => (
-                <Image
-                  className="w-[20px] h-[20px]"
-                  contentFit="contain"
-                  source={require("../assets/icons/Profile.svg")}
-                />
-              ),
-            }}
-          />
+          >
+            <Tabs.Screen
+              name="HomeScreen"
+              options={{
+                tabBarIcon: () => (
+                  <Image
+                    className="w-[20px] h-[20px]"
+                    source={require("../assets/icons/Home.svg")}
+                  />
+                ),
+              }}
+            />
+            <Tabs.Screen
+              name="PantryScreen"
+              options={{
+                tabBarIcon: () => (
+                  <Image
+                    className="w-[20px] h-[20px]"
+                    source={require("../assets/icons/Pantry.svg")}
+                  />
+                ),
+              }}
+            />
+            <Tabs.Screen
+              name="ScanScreen"
+              options={{
+                tabBarIcon: () => (
+                  <Image
+                    className="w-[100px] h-[100px]"
+                    source={require("../assets/icons/Add.svg")}
+                  />
+                ),
+              }}
+            />
+            <Tabs.Screen
+              name="RecipeScreen"
+              options={{
+                tabBarIcon: () => (
+                  <Image
+                    className="w-[20px] h-[20px]"
+                    source={require("../assets/icons/Recipe.svg")}
+                  />
+                ),
+              }}
+            />
+            <Tabs.Screen
+              name="ProfileScreen"
+              options={{
+                tabBarIcon: () => (
+                  <Image
+                    className="w-[20px] h-[20px]"
+                    contentFit="contain"
+                    source={require("../assets/icons/Profile.svg")}
+                  />
+                ),
+              }}
+            />
 
-          <Tabs.Screen
-            name="index"
-            options={{
-              href: null,
-              // tabBarStyle: { display: "none" }, // comment for development
-            }}
-          />
+            <Tabs.Screen
+              name="index"
+              options={{
+                href: null,
+                // tabBarStyle: { display: "none" }, // comment for development
+              }}
+            />
 
-          <Tabs.Screen
-            name="oauthredirect"
-            options={{
-              href: null,
-            }}
-          />
-        </Tabs>
-      </SheetProvider>
+            <Tabs.Screen
+              name="oauthredirect"
+              options={{
+                href: null,
+              }}
+            />
+          </Tabs>
+        </SheetProvider>
+      </ScannedIngredientsContext.Provider>
     </UserContext.Provider>
   );
 }

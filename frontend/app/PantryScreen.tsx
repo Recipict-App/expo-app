@@ -9,21 +9,33 @@ import { Image } from "expo-image";
 import { SheetManager } from "react-native-actions-sheet";
 import { Redirect } from "expo-router";
 
-import { Ingredient } from "../components/Ingredient";
-import { ShelfProps, Shelf } from "../components/Shelf";
+import { Shelf } from "../components/Shelf";
 import { ingredientProps } from "../firebase-type";
 
 import { useContext } from "react";
 import { UserContext } from "../userContext";
 
 export default function pantry() {
+  // get user data from local
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
   const data = userData[0];
   const ingredients = data.ingredients;
 
-  console.log(data);
+  // Group items by type for display
+  function groupByType(objectArray: ingredientProps[]) {
+    return objectArray.reduce(function (acc: any, obj: ingredientProps) {
+      var key = obj["type"];
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(obj);
+      return acc;
+    }, {});
+  }
+  const groupedItems = groupByType(ingredients);
 
+  // Button handlers
   const handleShowIngredient = () => {
     SheetManager.show("edit-ingredients-sheet");
   };
@@ -56,7 +68,16 @@ export default function pantry() {
             <View className="w-11/12 justify-center items-center">
               {/* Shelf */}
               {ingredients[0] ? (
-                <Shelf category="Category Name" ingredients={ingredients} />
+                /* Dispay items */
+                Object.keys(groupedItems).map(function (key) {
+                  return (
+                    <Shelf
+                      key={key}
+                      category={key}
+                      ingredients={groupedItems[key]}
+                    />
+                  );
+                })
               ) : (
                 <Text>Sadly, you have no nothing</Text>
               )}

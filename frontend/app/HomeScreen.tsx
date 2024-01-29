@@ -78,6 +78,7 @@ export default function Home() {
                       dateAdded={item.dateAdded}
                       expiryDate={item.expiryDate}
                       type={item.type}
+                      mode="normal"
                     />
                   );
                 })

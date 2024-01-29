@@ -51,6 +51,9 @@ export default function HomeLayout() {
   const [missingRecipes, setMissingRecipes] = useState<any>([]);
   const [randomRecipes, setRandomRecipes] = useState<any>([]);
 
+  const [scannedIngredients, setScannedIngredients] =
+    useState<ingredientProps[]>();
+
   const handleGetRecipes = async () => {
     if (!userData) return null;
     const data = userData[0];
@@ -93,9 +96,9 @@ export default function HomeLayout() {
     getRandomRecipes(requestBody, setRandomRecipes);
   };
 
-  // useEffect(() => {
-  //   handleGetRecipes();
-  // }, [userData]);
+  useEffect(() => {
+    handleGetRecipes();
+  }, [userData]);
 
   let [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,

@@ -51,9 +51,11 @@ export default function RecipeIngredientSheet(
     recipe: {
       name: String;
       imageURI: string;
+      ingredients: any;
     };
   }>
 ) {
+  console.log(props.payload?.recipe.ingredients);
   return (
     <ActionSheet id={props.sheetId}>
       <View className=" max-h-[80%] h-fit flex items-center gap-4 px-5 py-2 ">
@@ -76,7 +78,7 @@ export default function RecipeIngredientSheet(
         {/* Image */}
         <View className=" w-4/5 h-1/3 rounded-2xl overflow-hidden">
           <Image
-            className="w-full h-full"
+            className="w-[110%] h-[110%]"
             source={{ uri: props.payload?.recipe.imageURI }}
             contentFit="contain"
           />
@@ -87,11 +89,13 @@ export default function RecipeIngredientSheet(
           <View className=" flex h-[275px] w-[200px] items-center p-3">
             <Text className="font-pps text-lg">Ingredients:</Text>
             <FlatList
-              data={dummyIngredients}
+              data={props.payload?.recipe.ingredients}
               renderItem={({ item }) => (
                 <View className="flex w-4/5 flex-row mx-2">
                   <Text className="font-ppr text-base">- </Text>
-                  <Text className="font-ppr text-base">{item}</Text>
+                  <Text className="font-ppr text-base">
+                     {item.amount} {item.unit} {item.name}
+                  </Text>
                 </View>
               )}
               showsVerticalScrollIndicator={false}

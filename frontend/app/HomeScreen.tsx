@@ -10,7 +10,7 @@ import { useContext } from "react";
 import Explore from "../components/Explore";
 
 export default function Home() {
-  const { userData, setUserData } = useContext(UserContext);
+  const { userData, setUserData, readyRecipes } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
   const data = userData[0];
   const ingredients = data.ingredients;
@@ -37,7 +37,7 @@ export default function Home() {
                   Get that wok moving with these recipes
                 </Text>
                 <Text className="text-xs font-ppr opacity-40 w-[183px]">
-                  Found 3 dishes ready to be made
+                  Found {readyRecipes.length} dishes ready to be made
                 </Text>
                 <TouchableOpacity>
                   <Link href={"/RecipeScreen"}>

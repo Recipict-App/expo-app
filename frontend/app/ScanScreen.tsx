@@ -177,8 +177,8 @@ export default function App() {
               name: item.mentionText,
               quantity: 1,
               unit: "gr",
-              expiryDate: "Now",
-              dateAdded: "Now",
+              expiryDate: "Not Added",
+              dateAdded: new Date(),
               type: category,
               id: Crypto.randomUUID(),
             };

@@ -43,6 +43,8 @@ export default function ScannedItemsSheet(props: SheetProps) {
   const handleAdd = async () => {
     const newIngredients = [...ingredients, scannedIngredients];
 
+    console.log(newIngredients);
+    console.log({newIngredients});
     const response = await fetch(
       "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
       {
@@ -60,9 +62,9 @@ export default function ScannedItemsSheet(props: SheetProps) {
 
     const result = await response.json();
 
-    // console.log(response.status);
-    // console.log(result);
-    // console.log(result.returnObject);
+    console.log(response.status);
+    console.log(result);
+    console.log(result.returnObject);
 
     // refresh user data
     await getUserData(await getLocalUser());
@@ -169,6 +171,7 @@ export default function ScannedItemsSheet(props: SheetProps) {
                     key={key}
                     category={key}
                     ingredients={groupedItems[key]}
+                    mode="temporary"
                   />
                 );
               })}

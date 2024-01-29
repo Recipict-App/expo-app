@@ -6,10 +6,10 @@ import { ingredientProps } from "../firebase-type";
 export interface ShelfProps {
   category: string;
   ingredients: ingredientProps[];
-  scanned?: boolean
+  mode?: string
 }
 
-export const Shelf: React.FC<ShelfProps> = ({ category, ingredients, scanned }) => {
+export const Shelf: React.FC<ShelfProps> = ({ category, ingredients, mode }) => {
   return (
     <View className="w-11/12 mt-3">
       <Text
@@ -38,6 +38,7 @@ export const Shelf: React.FC<ShelfProps> = ({ category, ingredients, scanned }) 
               expiryDate={item.expiryDate}
               dateAdded={item.dateAdded}
               type={item.type}
+              mode={mode ? mode : "normal"}
             />
           );
         })}

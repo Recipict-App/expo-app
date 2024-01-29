@@ -35,7 +35,7 @@ function throttle(cb: any, delay = 1000) {
   };
 }
 
-export const Ingredient: React.FC<ingredientProps> = ({
+export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
   name,
   quantity,
   unit,
@@ -43,6 +43,7 @@ export const Ingredient: React.FC<ingredientProps> = ({
   dateAdded,
   type,
   id,
+  mode,
 }) => {
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
@@ -62,11 +63,11 @@ export const Ingredient: React.FC<ingredientProps> = ({
           type: type,
           id: id,
         },
+        mode: mode,
       },
     });
   };
 
-  
   const showDate = dateAdded?.toString().slice(0, 10) || "Undefined";
 
   return (

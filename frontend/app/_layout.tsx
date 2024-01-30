@@ -86,14 +86,14 @@ export default function HomeLayout() {
       diets: dietsString,
     };
 
-    getRecommendedRecipes(
+    await getRecommendedRecipes(
       requestBody,
       setRecipes,
       setReadyRecipes,
       setMissingRecipes
     );
 
-    getRandomRecipes(requestBody, setRandomRecipes);
+    await getRandomRecipes(requestBody, setRandomRecipes);
   };
 
   useEffect(() => {

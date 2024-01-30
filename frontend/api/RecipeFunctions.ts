@@ -3,9 +3,9 @@ import { userInfoType } from "../firebase-type";
 // TODO: refactor fetch
 export async function getRecommendedRecipes(
   requestBody: any,
-  setRecipes: any,
-  setReadyRecipes: any,
-  setMissingRecipes: any
+  setRecipes: React.Dispatch<any>,
+  setReadyRecipes: React.Dispatch<any>,
+  setMissingRecipes: React.Dispatch<any>
 ) {
   const apiResponse = await fetch(
     `https://us-central1-recipict-gcp.cloudfunctions.net/function-spoonacular-recipe-by-ingredient`,
@@ -105,7 +105,7 @@ export async function getRecommendedRecipes(
 
 export async function getRandomRecipes(
   requestBody: any,
-  setRandomRecipes: any
+  setRandomRecipes: React.Dispatch<any>
 ) {
   const apiResponse = await fetch(
     `https://us-central1-recipict-gcp.cloudfunctions.net/function-random-recipe`,

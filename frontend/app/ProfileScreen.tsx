@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
 
-import { ClassifyCategory } from "../api/CloudFunctions";
+import { ClassifyCategory } from "../api/IngredientsFunctions";
 
 // spoonacular testing ------
 import {

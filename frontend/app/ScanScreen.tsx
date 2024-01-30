@@ -19,7 +19,7 @@ import { ingredientProps } from "../firebase-type";
 
 import { useIsFocused } from "@react-navigation/native";
 
-import { ClassifyCategory } from "../api/CloudFunctions";
+import { ClassifyCategory, ImageToItems } from "../api/IngredientsFunctions";
 
 const CloudFunctionURL: string =
   process.env.CLOUD_FUNCTION_DOCUMENT_AI_URL || "";
@@ -110,11 +110,16 @@ export default function App() {
     });
 
     if (!result.canceled) {
-      setPickedImage(result.assets[0].uri);
+      const imageURI = result.assets[0].uri;
+
+      setPickedImage(imageURI);
+      const base64ImageData = await FileSystem.readAsStringAsync(imageURI, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
       console.log("Picked an image from gallery ✅");
 
-      // pass image to backend
-      const items = await retrieveItems(result.assets[0].uri);
+      // get items from image
+      const items = await ImageToItems(base64ImageData);
       setScannedIngredients(items.items);
       SheetManager.show("scanned-items-sheet");
     }
@@ -124,81 +129,6 @@ export default function App() {
     setTorch(torch === FlashMode.off ? FlashMode.torch : FlashMode.off);
   };
 
-  /** Helpers */
-  const retrieveItems = async (imageURI: string) => {
-    // convert image to base64
-    const base64ImageData = await FileSystem.readAsStringAsync(imageURI, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-
-    const requestBody = {
-      base64ImageData: base64ImageData, // goes to the cloud function
-    };
-
-    const response = await fetch(CloudFunctionURL, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    const data = await response.json();
-
-    // access items from response data
-    const items = await Promise.all(
-      data.document.entities.map(async (item: any) => {
-        let date = "";
-
-        // Assign category for each item
-        if (item.type == "date") {
-          date = item.mentionText;
-        } else if (item.type == "item_name") {
-          // call helper to get category for each item
-          const category = await ClassifyCategory(item.mentionText);
-
-          // create json object based on date
-          if (date) {
-            return {
-              name: item.mentionText,
-              quantity: 1,
-              unit: "gr",
-              expiryDate: date,
-              dateAdded: date,
-              type: category,
-              id: Crypto.randomUUID(),
-            };
-          } else {
-            return {
-              name: item.mentionText,
-              quantity: 1,
-              unit: "gr",
-              expiryDate: "Not Added",
-              dateAdded: new Date(),
-              type: category,
-              id: Crypto.randomUUID(),
-            };
-          }
-        }
-      })
-    );
-
-    const filteredItems = items.filter((item: any) => item !== undefined);
-
-    // create a new object
-    const newObject = { items: filteredItems };
-
-    // console.log("------- Log from ScanScreen -------");
-    // console.log(
-    //   data.document.entities.map((item: any) => {
-    //     console.log(item.mentionText);
-    //   })
-    // );
-    // console.log("------------------");
-
-    return newObject;
-  };
 
   return (
     <View style={styles.container}>

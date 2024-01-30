@@ -11,18 +11,12 @@ import { Image } from "expo-image";
 
 import { SheetManager } from "react-native-actions-sheet";
 
-import * as Crypto from "expo-crypto";
-
 import { useContext } from "react";
 import { ScannedIngredientsContext } from "../ScannedItemProvider";
-import { ingredientProps } from "../firebase-type";
 
 import { useIsFocused } from "@react-navigation/native";
 
-import { ClassifyCategory, ImageToItems } from "../api/IngredientsFunctions";
-
-const CloudFunctionURL: string =
-  process.env.CLOUD_FUNCTION_DOCUMENT_AI_URL || "";
+import {  ImageToItems } from "../api/IngredientsFunctions";
 
 export default function App() {
   const isFocused = useIsFocused();
@@ -110,13 +104,14 @@ export default function App() {
     });
 
     if (!result.canceled) {
-      const imageURI = result.assets[0].uri;
+      console.log("Picked an image from gallery ✅");
 
+      // convert image into base64
+      const imageURI = result.assets[0].uri;
       setPickedImage(imageURI);
       const base64ImageData = await FileSystem.readAsStringAsync(imageURI, {
         encoding: FileSystem.EncodingType.Base64,
       });
-      console.log("Picked an image from gallery ✅");
 
       // get items from image
       const items = await ImageToItems(base64ImageData);

@@ -27,7 +27,7 @@ import {
 import {
   getRecommendedRecipes,
   getRandomRecipes,
-} from "../utils/CloudFunctions";
+} from "../api/RecipeFunctions";
 
 // haven't been used
 interface recipeInfo {

@@ -37,6 +37,8 @@ export async function ClassifyCategory(ingredientName: string) {
   return data.category;
 }
 
+
+
 /* Helpers */
 
 async function AssignProperiesToIngredient (rawData: any) {

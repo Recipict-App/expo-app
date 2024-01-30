@@ -10,19 +10,6 @@ import { SheetManager } from "react-native-actions-sheet";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
 
-const dummyIngredients = [
-  "Garlic",
-  "Chili",
-  "Rice",
-  "Dany",
-  "Other spices idk what but a long one",
-  "Recipict",
-  "Purply",
-  "Orangy",
-  "Bowly",
-  "Satay",
-];
-
 export default function recipe() {
   const { userData, setUserData, recipes } = useContext(UserContext);
   const handleShowRecipe = () => {

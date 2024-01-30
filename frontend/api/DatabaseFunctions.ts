@@ -8,7 +8,7 @@ const getLocalUser = async () => {
   return JSON.parse(data);
 };
 
-export async function getUserDataFromFirebase(
+export async function getUserDataFromFirebaseAndSetContext(
   setUserData: React.Dispatch<React.SetStateAction<userDataProps[] | undefined>>
 ) {
   const user = await getLocalUser();

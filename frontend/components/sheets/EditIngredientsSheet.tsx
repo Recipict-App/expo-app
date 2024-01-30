@@ -17,10 +17,9 @@ import { ingredientProps } from "../../firebase-type";
 
 import * as Crypto from "expo-crypto";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ScannedIngredientsContext } from "../../ScannedItemProvider";
 
-import { getUserDataFromFirebase, editIngredientToFirebase } from "../../api/DatabaseFunctions";
+import { getUserDataFromFirebaseAndSetContext, editIngredientToFirebase } from "../../api/DatabaseFunctions";
 
 export enum ingredientTypes {
   Vegetables = "Vegetables",
@@ -105,13 +104,7 @@ export default function EditIngredientSheet(
   const { scannedIngredients, setScannedIngredients } = useContext(
     ScannedIngredientsContext
   );
-
-  // get user from local
-  const getLocalUser = async () => {
-    const data: any = await AsyncStorage.getItem("@user");
-    if (!data) return null;
-    return JSON.parse(data);
-  };
+ 
 
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
@@ -166,7 +159,7 @@ export default function EditIngredientSheet(
 
     // push to firebase, and refresh context
     await editIngredientToFirebase(userGoogleToken, newIngredients);
-    await getUserDataFromFirebase(setUserData);
+    await getUserDataFromFirebaseAndSetContext(setUserData);
 
     SheetManager.hide("edit-ingredients-sheet");
   };
@@ -237,7 +230,7 @@ export default function EditIngredientSheet(
     
     // push to firebase, and refresh context
     await editIngredientToFirebase(userGoogleToken, newIngredients);
-    await getUserDataFromFirebase(setUserData);
+    await getUserDataFromFirebaseAndSetContext(setUserData);
   };
 
   return (

@@ -9,6 +9,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
 
+import { ClassifyCategory } from "../api/CloudFunctions";
+
 // spoonacular testing ------
 import {
   ingredient,
@@ -49,17 +51,8 @@ export default function Profile() {
 
   // temporary function to test classifier api
   const handlePreference = async () => {
-    const name = "apple";
-    const CategoryResponse = await fetch(
-      `https://us-central1-recipict-gcp.cloudfunctions.net/function-ingredient-classifier-py?name=${name}`,
-      {
-        method: "GET",
-        mode: "cors",
-      }
-    );
-
-    const data = await CategoryResponse.json();
-    console.log(data.category);
+    const category = await ClassifyCategory("apple");
+    console.log(category);
   };
 
   // temporary function to test get recipe api

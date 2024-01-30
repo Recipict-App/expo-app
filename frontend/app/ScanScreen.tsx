@@ -19,6 +19,8 @@ import { ingredientProps } from "../firebase-type";
 
 import { useIsFocused } from "@react-navigation/native";
 
+import { ClassifyCategory } from "../api/CloudFunctions";
+
 const CloudFunctionURL: string =
   process.env.CLOUD_FUNCTION_DOCUMENT_AI_URL || "";
 
@@ -94,13 +96,7 @@ export default function App() {
       // show gallery
       await handleGallery();
 
-      /* todo: fix passing uri in base64 format to backend error
-      // pass image to backend
-      // const items = await retrieveItems(photo.uri);
-
-      // show popup [SHOULD BE IN THE BOTTOM OF THIS METHOD]
-      // SheetManager.show("scanned-items-sheet"); // will pass items to the sheet
-      */
+      // Todo: fix error when passing photo.uri in base64 format
     }
   };
 
@@ -160,7 +156,7 @@ export default function App() {
           date = item.mentionText;
         } else if (item.type == "item_name") {
           // call helper to get category for each item
-          const category = await getCategory(item.mentionText);
+          const category = await ClassifyCategory(item.mentionText);
 
           // create json object based on date
           if (date) {
@@ -202,21 +198,6 @@ export default function App() {
     // console.log("------------------");
 
     return newObject;
-  };
-
-  const getCategory = async (name: string) => {
-    // pass item name to vertex for classification
-    const CategoryResponse = await fetch(
-      `https://us-central1-recipict-gcp.cloudfunctions.net/function-ingredient-classifier-py?name=${name}`,
-      {
-        method: "GET",
-        mode: "cors",
-      }
-    );
-
-    const categoryResponseJSON = await CategoryResponse.json();
-    // console.log(categoryResponseJSON.category);
-    return categoryResponseJSON.category;
   };
 
   return (

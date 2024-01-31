@@ -5,6 +5,11 @@ import * as Google from "expo-auth-session/providers/google";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
+  getOrCreateUserDataInFirebase,
+  getLocalUser,
+} from "../api/DatabaseFunctions";
+
+import {
   View,
   Text,
   TouchableOpacity,
@@ -20,23 +25,12 @@ import { UserContext } from "../userContext";
 
 import {
   ingredientTypes,
-  subscriptionTypes,
   ingredientProps,
-  preferences,
   userDataProps,
 } from "../firebase-type";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const testing: ingredientProps = {
-  name: "Bawang Goreng",
-  quantity: 2,
-  unit: "gram",
-  expiryDate: new Date(),
-  dateAdded: new Date(),
-  type: ingredientTypes.HerbsAndSpices,
-  id: "1",
-};
 
 export default function App() {
   const { userInfo, setUserInfo, userData, setUserData } =
@@ -49,7 +43,7 @@ export default function App() {
     webClientId:
       "746895610022-tfkvvdm4ps5t8r1b1cs7pdmvv3rprn35.apps.googleusercontent.com",
   });
-
+  ``;
   useEffect(() => {
     handleEffect();
   }, [response]);
@@ -66,16 +60,10 @@ export default function App() {
     } else {
       console.log("Previous user detected in local storage ✅");
 
-      getUserData(user);
+      await getOrCreateUserDataInFirebase(user, setUserData);
       // <Redirect href="/ " />;
     }
   }
-
-  const getLocalUser = async () => {
-    const data: any = await AsyncStorage.getItem("@user");
-    if (!data) return null;
-    return JSON.parse(data);
-  };
 
   const getUserInfo = async (token: string | undefined) => {
     if (!token) return;
@@ -95,7 +83,7 @@ export default function App() {
 
       // Get user data from Firebase
       console.log("Authenticating user... 🚜");
-      await getUserData(user);
+      await getOrCreateUserDataInFirebase(user, setUserData);
     } catch (error) {
       console.log(error);
     }
@@ -104,65 +92,6 @@ export default function App() {
   if (userData) {
     return <Redirect href="/HomeScreen" />;
   }
-
-  const getUserData = async (user: any) => {
-    const checkUserResponse = await fetch(
-      "https://us-central1-recipict-gcp.cloudfunctions.net/function-retrieve-user",
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: user.id }),
-      }
-    );
-
-    if (checkUserResponse.status == 404) {
-      console.log("User not found in Firebase, creating new user... 🤔");
-      const localUserData: userDataProps[] = [
-        {
-          name: user.name,
-          email: user.email,
-          googleToken: `${user.id}`,
-          ingredients: [],
-          preferences: { diet: [], cuisine: [] },
-          subscription: "Regular",
-        },
-      ];
-
-      setUserData(localUserData);
-
-      const createUserResponse = await fetch(
-        "https://us-central1-recipict-gcp.cloudfunctions.net/function-create-user",
-        {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(localUserData),
-        }
-      );
-
-      if (createUserResponse.status == 200) {
-        console.log("User created in Firebase, retrieving user data... 🥰");
-        const user = await createUserResponse.json();
-        const userDatabase = user.userData;
-
-        await setUserData(userDatabase);
-      } else {
-        console.log("Error creating user in Firebase 😡");
-      }
-    } else {
-      console.log("User found in Firebase, retrieving user data... 🤩");
-
-      const user = await checkUserResponse.json();
-      const userDatabase = user.userData;
-
-      await setUserData(userDatabase);
-    }
-  };
 
   return (
     <View style={styles.container}>

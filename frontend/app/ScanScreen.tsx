@@ -3,10 +3,16 @@ import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Image } from "expo-image";
 
 import { SheetManager } from "react-native-actions-sheet";
@@ -32,6 +38,8 @@ export default function App() {
     ImagePicker.useCameraPermissions();
 
   const { setScannedIngredients } = useContext(ScannedIngredientsContext);
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const cameraRef = React.useRef<Camera>(null);
   const [pickedImage, setPickedImage] = useState<String | null>(null);
@@ -79,6 +87,7 @@ export default function App() {
 
   /** Button handlers */
   const handleCapture = async () => {
+    setLoading(true);
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
 
@@ -92,6 +101,7 @@ export default function App() {
       console.log("Image saved to gallery ✅");
 
       // show gallery
+      setLoading(false);
       await handleGallery();
 
       /* todo: fix passing uri in base64 format to backend error
@@ -221,6 +231,14 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      {loading && (
+        <View
+          className="w-full h-screen bg-black z-10 flex justify-center items-center opacity-60"
+          style={{ position: "absolute" }}
+        >
+          <ActivityIndicator size={"large"} />
+        </View>
+      )}
       {isFocused && (
         <Camera
           style={styles.camera}

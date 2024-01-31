@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
   getOrCreateUserDataInFirebase,
   getLocalUser,
+  setLocalUser,
+  getGoogleAccountDetails,
 } from "../api/DatabaseFunctions";
 
 import {
@@ -23,14 +24,7 @@ import { Redirect } from "expo-router";
 import { useContext } from "react";
 import { UserContext } from "../userContext";
 
-import {
-  ingredientTypes,
-  ingredientProps,
-  userDataProps,
-} from "../firebase-type";
-
 WebBrowser.maybeCompleteAuthSession();
-
 
 export default function App() {
   const { userInfo, setUserInfo, userData, setUserData } =
@@ -65,20 +59,13 @@ export default function App() {
     }
   }
 
-  const getUserInfo = async (token: string | undefined) => {
-    if (!token) return;
-    try {
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+  const getUserInfo = async (accessTokenGoogle: string | undefined) => {
+    if (!accessTokenGoogle) return;
 
+    try {
       // Set user info to local storage
-      const user = await response.json();
-      await AsyncStorage.setItem("@user", JSON.stringify(user));
-      setUserInfo(user);
+      const user = await getGoogleAccountDetails(accessTokenGoogle);
+      await setLocalUser(user, setUserInfo);
       console.log("User Info: ", user);
 
       // Get user data from Firebase
@@ -89,9 +76,8 @@ export default function App() {
     }
   };
 
-  if (userData) {
-    return <Redirect href="/HomeScreen" />;
-  }
+  // If user is already logged in, redirect to HomeScreen
+  if (userData) return <Redirect href="/HomeScreen" />;
 
   return (
     <View style={styles.container}>

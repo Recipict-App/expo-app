@@ -15,14 +15,7 @@ import { UserContext } from "../userContext";
 
 import { ScannedIngredientsContext } from "../ScannedItemProvider";
 
-import {
-  ingredient,
-  ingredientTypes,
-  preferences,
-  userInfoType,
-  userDataProps,
-  ingredientProps,
-} from "../firebase-type";
+import { userInfoType, userDataProps, ingredientProps } from "../firebase-type";
 
 import {
   getRecommendedRecipes,

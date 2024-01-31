@@ -109,7 +109,20 @@ export default function Profile() {
     console.log(recipeInstructions);
   };
 
-  const handleNotification = () => {};
+  // temporary function to test create user api
+  const handleNotification = async () => {
+    // const createUserResponse = await fetch(
+    //   "https://us-central1-recipict-gcp.cloudfunctions.net/function-create-user",
+    //   {
+    //     method: "POST",
+    //     mode: "cors",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(localUserData),
+    //   }
+    // );
+  };
   const handleLocation = () => {};
   const handleAboutUs = () => {};
 

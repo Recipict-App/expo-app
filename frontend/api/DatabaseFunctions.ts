@@ -46,7 +46,7 @@ export async function getOrCreateUserDataInFirebase(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(localUserData),
+        body: JSON.stringify(localUserData[0]),
       }
     );
 

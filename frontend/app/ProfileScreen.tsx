@@ -4,132 +4,24 @@ import { Image } from "expo-image";
 import OptionCard from "../components/OptionCard";
 import { Redirect } from "expo-router";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { UserContext } from "../userContext";
 import { useContext } from "react";
 
-import { ClassifyCategory } from "../api/IngredientsFunctions";
-
-// spoonacular testing ------
-import {
-  ingredient,
-  ingredientTypes,
-  preferences,
-  userDataProps,
-} from "../firebase-type";
-// beef shank, onion, garlic, tomato, sugar, cheese, egg
-const dummyIngredients: ingredient[] = [
-  {
-    name: "beef",
-    quantity: 1,
-    unit: "piece",
-    expiryDate: new Date(),
-    dateAdded: new Date(),
-    type: ingredientTypes.Fruits,
-    id: "12",
-  },
-];
-const dummyPreferences: preferences = {
-  diet: [],
-  cuisine: [],
-};
-const dummyUserData: userDataProps = {
-  name: "alhamdullilah pass phil220",
-  email: "aaaaa@aaa.com",
-  googleToken: "123",
-  ingredients: dummyIngredients,
-  preferences: dummyPreferences,
-  subscription: "Regular",
-};
-// spoonacular testing ------
+import { deleteCurrentLocalUser } from "../api/DatabaseFunctions";
 
 export default function Profile() {
   const { userInfo, setUserInfo, userData, setUserData } =
     useContext(UserContext);
   if (!userData) return <Redirect href={"/"} />;
 
-  // temporary function to test classifier api
-  const handlePreference = async () => {
-    const category = await ClassifyCategory("apple");
-    console.log(category);
-  };
-
-  // temporary function to test get recipe api
-  const handleAppereance = async () => {
-    // extract and append ingredients' name to string
-    let ingredientsString = "";
-    dummyUserData.ingredients.forEach((ingredient) => {
-      ingredientsString += ingredient.name + ",";
-    });
-    ingredientsString = ingredientsString.slice(0, -1);
-
-    // extract and append cuisines' name to string
-    let cuisinesString = "";
-    dummyUserData.preferences.cuisine.forEach((eachCuisine) => {
-      cuisinesString += eachCuisine + ",";
-    });
-    cuisinesString = cuisinesString.slice(0, -1);
-
-    // extract and append cuisines' name to string
-    let dietsString = "";
-    dummyUserData.preferences.diet.forEach((eachDiet) => {
-      dietsString += eachDiet + ",";
-    });
-    dietsString = dietsString.slice(0, -1);
-
-    console.log(ingredientsString);
-    console.log(cuisinesString);
-    console.log(dietsString);
-
-    const requestBody = {
-      ingredients: ingredientsString,
-      subscription: dummyUserData.subscription,
-      mode: "min-missing-ingredient",
-      cuisines: cuisinesString,
-      diets: dietsString,
-    };
-
-    const apiResponse = await fetch(
-      `https://us-central1-recipict-gcp.cloudfunctions.net/function-spoonacular-recipe-by-ingredient`,
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      }
-    );
-
-    const result = await apiResponse.json();
-    console.log(result);
-    const recipeInstructions =
-      result.results[0].analyzedInstructions[0].steps[0];
-    console.log(recipeInstructions);
-  };
-
-  // temporary function to test create user api
-  const handleNotification = async () => {
-    // const createUserResponse = await fetch(
-    //   "https://us-central1-recipict-gcp.cloudfunctions.net/function-create-user",
-    //   {
-    //     method: "POST",
-    //     mode: "cors",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(localUserData),
-    //   }
-    // );
-  };
+  const handlePreference = async () => {};
+  const handleAppereance = async () => {};
+  const handleNotification = async () => {};
   const handleLocation = () => {};
   const handleAboutUs = () => {};
 
   const handleLogOut = async () => {
-    await AsyncStorage.removeItem("@user");
-    setUserInfo(undefined);
-    setUserData(undefined);
+    await deleteCurrentLocalUser(setUserInfo, setUserData);
     console.log("Logging out");
   };
 

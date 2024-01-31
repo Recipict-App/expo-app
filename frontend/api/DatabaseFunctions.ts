@@ -7,6 +7,34 @@ export async function getLocalUser() {
   return JSON.parse(data);
 }
 
+export async function setLocalUser(
+  user: any,
+  setUserInfo: React.Dispatch<any>
+) {
+  await AsyncStorage.setItem("@user", JSON.stringify(user));
+  setUserInfo(user);
+}
+
+export async function deleteCurrentLocalUser(
+  setUserInfo: React.Dispatch<any>,
+  setUserData: React.Dispatch<any>
+) {
+  await AsyncStorage.removeItem("@user");
+  setUserInfo(undefined);
+  setUserData(undefined);
+}
+
+export async function getGoogleAccountDetails(AccessTokenGoogle: string) {
+  const response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+    headers: { Authorization: `Bearer ${AccessTokenGoogle}` },
+  });
+
+  // Set user info to local storage
+  const user = await response.json();
+
+  return user;
+}
+
 export async function getOrCreateUserDataInFirebase(
   user: any,
   setUserData: React.Dispatch<React.SetStateAction<userDataProps[] | undefined>>

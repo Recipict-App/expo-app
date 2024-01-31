@@ -20,7 +20,7 @@ export async function ImageToItems(base64ImageData: string) {
 
   const rawData = await response.json();
   const items = await AssignProperiesToIngredient(rawData);
-  
+
   return items;
 }
 
@@ -37,11 +37,9 @@ export async function ClassifyCategory(ingredientName: string) {
   return data.category;
 }
 
-
-
 /* Helpers */
 
-async function AssignProperiesToIngredient (rawData: any) {
+async function AssignProperiesToIngredient(rawData: any) {
   const items = await Promise.all(
     rawData.document.entities.map(async (item: any) => {
       let date = "";

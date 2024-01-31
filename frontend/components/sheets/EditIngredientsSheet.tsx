@@ -17,10 +17,9 @@ import { ingredientProps } from "../../firebase-type";
 
 import * as Crypto from "expo-crypto";
 
-import { userDataProps } from "../../firebase-type";
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ScannedIngredientsContext } from "../../ScannedItemProvider";
+
+import { getUserDataFromFirebaseAndSetContext, editIngredientToFirebase } from "../../api/DatabaseFunctions";
 
 export enum ingredientTypes {
   Vegetables = "Vegetables",
@@ -102,15 +101,10 @@ export default function EditIngredientSheet(
     mode: string;
   }>
 ) {
-
-  const { scannedIngredients, setScannedIngredients} = useContext(ScannedIngredientsContext);
-
-  // get user from local
-  const getLocalUser = async () => {
-    const data: any = await AsyncStorage.getItem("@user");
-    if (!data) return null;
-    return JSON.parse(data);
-  };
+  const { scannedIngredients, setScannedIngredients } = useContext(
+    ScannedIngredientsContext
+  );
+ 
 
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
@@ -162,31 +156,10 @@ export default function EditIngredientSheet(
     const newIngredients = ingredients.filter(
       (eachIngredient) => eachIngredient.id !== chosenIngredient.id
     );
-    console.log(newIngredients);
 
-    const response = await fetch(
-      "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token: userGoogleToken,
-          ingredients: newIngredients,
-        }),
-      }
-    );
-
-    const result = await response.json();
-
-    console.log(response.status);
-    console.log(result);
-    console.log(result.returnObject);
-
-    // refresh user data
-    await getUserData(await getLocalUser());
+    // push to firebase, and refresh context
+    await editIngredientToFirebase(userGoogleToken, newIngredients);
+    await getUserDataFromFirebaseAndSetContext(setUserData);
 
     SheetManager.hide("edit-ingredients-sheet");
   };
@@ -219,15 +192,14 @@ export default function EditIngredientSheet(
     });
     setScannedIngredients(newIngredients);
     console.log(newIngredients);
-  }
+  };
 
   const handleChange = () => {
-    if(props.payload?.mode === "temporary"){
+    if (props.payload?.mode === "temporary") {
       handleEditLocal();
-    }
-    else handleEdit();
+    } else handleEdit();
     SheetManager.hide("edit-ingredients-sheet");
-  }
+  };
 
   const handleEdit = async () => {
     console.log("edit global...");
@@ -255,93 +227,10 @@ export default function EditIngredientSheet(
       }
       return eachIngredient;
     });
-
-    // console.log(newIngredients);
-
-    const response = await fetch(
-      "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token: userGoogleToken,
-          ingredients: newIngredients,
-        }),
-      }
-    );
-
-    const result = await response.json();
-
-    console.log(response.status);
-    console.log(result);
-    console.log(result.returnObject);
-    console.log("------");
-
-    // refresh user data
-    await getUserData(await getLocalUser());
-
-  };
-
-  const getUserData = async (user: any) => {
-    const checkUserResponse = await fetch(
-      "https://us-central1-recipict-gcp.cloudfunctions.net/function-retrieve-user",
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: user.id }),
-      }
-    );
-
-    if (checkUserResponse.status == 404) {
-      console.log("User not found in Firebase, creating new user... 🤔");
-      const localUserData: userDataProps[] = [
-        {
-          name: user.name,
-          email: user.email,
-          googleToken: `${user.id}`,
-          ingredients: [],
-          preferences: { diet: [], cuisine: [] },
-          subscription: "Regular",
-        },
-      ];
-
-      setUserData(localUserData);
-
-      const createUserResponse = await fetch(
-        "https://us-central1-recipict-gcp.cloudfunctions.net/function-create-user",
-        {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(localUserData),
-        }
-      );
-
-      if (createUserResponse.status == 200) {
-        console.log("User created in Firebase, retrieving user data... 🥰");
-        const user = await createUserResponse.json();
-        const userDatabase = user.userData;
-
-        await setUserData(userDatabase);
-      } else {
-        console.log("Error creating user in Firebase 😡");
-      }
-    } else {
-      console.log("User found in Firebase, retrieving user data... 🤩");
-
-      const user = await checkUserResponse.json();
-      const userDatabase = user.userData;
-
-      await setUserData(userDatabase);
-    }
+    
+    // push to firebase, and refresh context
+    await editIngredientToFirebase(userGoogleToken, newIngredients);
+    await getUserDataFromFirebaseAndSetContext(setUserData);
   };
 
   return (

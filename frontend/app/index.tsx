@@ -2,7 +2,13 @@ import React, { useEffect } from "react";
 
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import {
+  getOrCreateUserDataInFirebase,
+  getLocalUser,
+  setLocalUser,
+  getGoogleAccountDetails,
+} from "../api/DatabaseFunctions";
 
 import {
   View,
@@ -18,25 +24,7 @@ import { Redirect } from "expo-router";
 import { useContext } from "react";
 import { UserContext } from "../userContext";
 
-import {
-  ingredientTypes,
-  subscriptionTypes,
-  ingredientProps,
-  preferences,
-  userDataProps,
-} from "../firebase-type";
-
 WebBrowser.maybeCompleteAuthSession();
-
-const testing: ingredientProps = {
-  name: "Bawang Goreng",
-  quantity: 2,
-  unit: "gram",
-  expiryDate: new Date(),
-  dateAdded: new Date(),
-  type: ingredientTypes.HerbsAndSpices,
-  id: "1",
-};
 
 export default function App() {
   const { userInfo, setUserInfo, userData, setUserData } =
@@ -49,7 +37,7 @@ export default function App() {
     webClientId:
       "746895610022-tfkvvdm4ps5t8r1b1cs7pdmvv3rprn35.apps.googleusercontent.com",
   });
-
+  ``;
   useEffect(() => {
     handleEffect();
   }, [response]);
@@ -66,103 +54,30 @@ export default function App() {
     } else {
       console.log("Previous user detected in local storage ✅");
 
-      getUserData(user);
+      await getOrCreateUserDataInFirebase(user, setUserData);
       // <Redirect href="/ " />;
     }
   }
 
-  const getLocalUser = async () => {
-    const data: any = await AsyncStorage.getItem("@user");
-    if (!data) return null;
-    return JSON.parse(data);
-  };
+  const getUserInfo = async (accessTokenGoogle: string | undefined) => {
+    if (!accessTokenGoogle) return;
 
-  const getUserInfo = async (token: string | undefined) => {
-    if (!token) return;
     try {
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
       // Set user info to local storage
-      const user = await response.json();
-      await AsyncStorage.setItem("@user", JSON.stringify(user));
-      setUserInfo(user);
+      const user = await getGoogleAccountDetails(accessTokenGoogle);
+      await setLocalUser(user, setUserInfo);
       console.log("User Info: ", user);
 
       // Get user data from Firebase
       console.log("Authenticating user... 🚜");
-      await getUserData(user);
+      await getOrCreateUserDataInFirebase(user, setUserData);
     } catch (error) {
       console.log(error);
     }
   };
 
-  if (userData) {
-    return <Redirect href="/HomeScreen" />;
-  }
-
-  const getUserData = async (user: any) => {
-    const checkUserResponse = await fetch(
-      "https://us-central1-recipict-gcp.cloudfunctions.net/function-retrieve-user",
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: user.id }),
-      }
-    );
-
-    if (checkUserResponse.status == 404) {
-      console.log("User not found in Firebase, creating new user... 🤔");
-      const localUserData: userDataProps[] = [
-        {
-          name: user.name,
-          email: user.email,
-          googleToken: `${user.id}`,
-          ingredients: [],
-          preferences: { diet: [], cuisine: [] },
-          subscription: "Regular",
-        },
-      ];
-
-      setUserData(localUserData);
-
-      const createUserResponse = await fetch(
-        "https://us-central1-recipict-gcp.cloudfunctions.net/function-create-user",
-        {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(localUserData),
-        }
-      );
-
-      if (createUserResponse.status == 200) {
-        console.log("User created in Firebase, retrieving user data... 🥰");
-        const user = await createUserResponse.json();
-        const userDatabase = user.userData;
-
-        await setUserData(userDatabase);
-      } else {
-        console.log("Error creating user in Firebase 😡");
-      }
-    } else {
-      console.log("User found in Firebase, retrieving user data... 🤩");
-
-      const user = await checkUserResponse.json();
-      const userDatabase = user.userData;
-
-      await setUserData(userDatabase);
-    }
-  };
+  // If user is already logged in, redirect to HomeScreen
+  if (userData) return <Redirect href="/HomeScreen" />;
 
   return (
     <View style={styles.container}>

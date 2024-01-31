@@ -11,16 +11,12 @@ import { Image } from "expo-image";
 
 import { SheetManager } from "react-native-actions-sheet";
 
-import * as Crypto from "expo-crypto";
-
 import { useContext } from "react";
 import { ScannedIngredientsContext } from "../ScannedItemProvider";
-import { ingredientProps } from "../firebase-type";
 
 import { useIsFocused } from "@react-navigation/native";
 
-const CloudFunctionURL: string =
-  process.env.CLOUD_FUNCTION_DOCUMENT_AI_URL || "";
+import {  ImageToItems } from "../api/IngredientsFunctions";
 
 export default function App() {
   const isFocused = useIsFocused();
@@ -94,13 +90,7 @@ export default function App() {
       // show gallery
       await handleGallery();
 
-      /* todo: fix passing uri in base64 format to backend error
-      // pass image to backend
-      // const items = await retrieveItems(photo.uri);
-
-      // show popup [SHOULD BE IN THE BOTTOM OF THIS METHOD]
-      // SheetManager.show("scanned-items-sheet"); // will pass items to the sheet
-      */
+      // Todo: fix error when passing photo.uri in base64 format
     }
   };
 
@@ -114,11 +104,17 @@ export default function App() {
     });
 
     if (!result.canceled) {
-      setPickedImage(result.assets[0].uri);
       console.log("Picked an image from gallery ✅");
 
-      // pass image to backend
-      const items = await retrieveItems(result.assets[0].uri);
+      // convert image into base64
+      const imageURI = result.assets[0].uri;
+      setPickedImage(imageURI);
+      const base64ImageData = await FileSystem.readAsStringAsync(imageURI, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      // get items from image
+      const items = await ImageToItems(base64ImageData);
       setScannedIngredients(items.items);
       SheetManager.show("scanned-items-sheet");
     }
@@ -128,96 +124,6 @@ export default function App() {
     setTorch(torch === FlashMode.off ? FlashMode.torch : FlashMode.off);
   };
 
-  /** Helpers */
-  const retrieveItems = async (imageURI: string) => {
-    // convert image to base64
-    const base64ImageData = await FileSystem.readAsStringAsync(imageURI, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-
-    const requestBody = {
-      base64ImageData: base64ImageData, // goes to the cloud function
-    };
-
-    const response = await fetch(CloudFunctionURL, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    const data = await response.json();
-
-    // access items from response data
-    const items = await Promise.all(
-      data.document.entities.map(async (item: any) => {
-        let date = "";
-
-        // Assign category for each item
-        if (item.type == "date") {
-          date = item.mentionText;
-        } else if (item.type == "item_name") {
-          // call helper to get category for each item
-          const category = await getCategory(item.mentionText);
-
-          // create json object based on date
-          if (date) {
-            return {
-              name: item.mentionText,
-              quantity: 1,
-              unit: "gr",
-              expiryDate: date,
-              dateAdded: date,
-              type: category,
-              id: Crypto.randomUUID(),
-            };
-          } else {
-            return {
-              name: item.mentionText,
-              quantity: 1,
-              unit: "gr",
-              expiryDate: "Not Added",
-              dateAdded: new Date(),
-              type: category,
-              id: Crypto.randomUUID(),
-            };
-          }
-        }
-      })
-    );
-
-    const filteredItems = items.filter((item: any) => item !== undefined);
-
-    // create a new object
-    const newObject = { items: filteredItems };
-
-    // console.log("------- Log from ScanScreen -------");
-    // console.log(
-    //   data.document.entities.map((item: any) => {
-    //     console.log(item.mentionText);
-    //   })
-    // );
-    // console.log("------------------");
-
-    return newObject;
-  };
-
-  const getCategory = async (name: string) => {
-    // pass item name to vertex for classification
-    const CategoryResponse = await fetch(
-      `https://us-central1-recipict-gcp.cloudfunctions.net/function-ingredient-classifier-py?name=${name}`,
-      {
-        method: "GET",
-        mode: "cors",
-      }
-    );
-
-    const categoryResponseJSON = await CategoryResponse.json();
-    // console.log(categoryResponseJSON.category);
-    return categoryResponseJSON.category;
-  };
 
   return (
     <View style={styles.container}>

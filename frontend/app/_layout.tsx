@@ -15,19 +15,12 @@ import { UserContext } from "../userContext";
 
 import { ScannedIngredientsContext } from "../ScannedItemProvider";
 
-import {
-  ingredient,
-  ingredientTypes,
-  preferences,
-  userInfoType,
-  userDataProps,
-  ingredientProps,
-} from "../firebase-type";
+import { userInfoType, userDataProps, ingredientProps } from "../firebase-type";
 
 import {
   getRecommendedRecipes,
   getRandomRecipes,
-} from "../utils/CloudFunctions.ts";
+} from "../api/RecipeFunctions";
 
 // haven't been used
 interface recipeInfo {
@@ -86,14 +79,14 @@ export default function HomeLayout() {
       diets: dietsString,
     };
 
-    getRecommendedRecipes(
+    await getRecommendedRecipes(
       requestBody,
       setRecipes,
       setReadyRecipes,
       setMissingRecipes
     );
 
-    getRandomRecipes(requestBody, setRandomRecipes);
+    await getRandomRecipes(requestBody, setRandomRecipes);
   };
 
   useEffect(() => {

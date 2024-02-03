@@ -48,7 +48,7 @@ export default function Explore() {
               key={index}
               name={item.title}
               duration={item.readyInMinutes}
-              ingredients={item.totalIngredients.length}
+              ingredients={item.totalIngredients}
               imageURI={item.image}
             />
           );

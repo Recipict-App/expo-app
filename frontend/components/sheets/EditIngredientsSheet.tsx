@@ -19,7 +19,8 @@ import * as Crypto from "expo-crypto";
 
 import { ScannedIngredientsContext } from "../../ScannedItemProvider";
 
-import { getUserDataFromFirebaseAndSetContext, editIngredientToFirebase } from "../../api/DatabaseFunctions";
+import { getUserDataFromFirebaseAndSetContext } from "../../api/DatabaseFunctions";
+import { editIngredientToFirebaseMutation } from "../../api/mutations";
 
 export enum ingredientTypes {
   Vegetables = "Vegetables",
@@ -104,7 +105,9 @@ export default function EditIngredientSheet(
   const { scannedIngredients, setScannedIngredients } = useContext(
     ScannedIngredientsContext
   );
- 
+
+  // initiate mutatation
+  const changeUserIngredient = editIngredientToFirebaseMutation();
 
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
@@ -157,9 +160,17 @@ export default function EditIngredientSheet(
       (eachIngredient) => eachIngredient.id !== chosenIngredient.id
     );
 
-    // push to firebase, and refresh context
-    await editIngredientToFirebase(userGoogleToken, newIngredients);
+    // push to firebase
+    // await editIngredientToFirebase(userGoogleToken, newIngredients);
+    await changeUserIngredient.mutateAsync({
+      userGoogleToken: userGoogleToken,
+      newIngredients: newIngredients,
+    });
+
+    // refresh data to get fresh data from firebase
+    console.log("new data from firebase is about to be fetched");
     await getUserDataFromFirebaseAndSetContext(setUserData);
+    console.log("new data from firebase is fetched");
 
     SheetManager.hide("edit-ingredients-sheet");
   };
@@ -227,9 +238,15 @@ export default function EditIngredientSheet(
       }
       return eachIngredient;
     });
-    
+
     // push to firebase, and refresh context
-    await editIngredientToFirebase(userGoogleToken, newIngredients);
+    // await editIngredientToFirebase(userGoogleToken, newIngredients);
+    await changeUserIngredient.mutateAsync({
+      userGoogleToken: userGoogleToken,
+      newIngredients: newIngredients,
+    });
+
+    // refresh data to get fresh data from firebase
     await getUserDataFromFirebaseAndSetContext(setUserData);
   };
 

@@ -15,28 +15,12 @@ import { ingredientProps } from "../firebase-type";
 import { useContext } from "react";
 import { UserContext } from "../userContext";
 
-/* testing apis */
-import { useQuery } from "@tanstack/react-query";
-import { ClassifyCategory } from "../api/IngredientsFunctions";
-/* testing apis */
-
 export default function pantry() {
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
   const data2 = userData[0];
   const ingredients = data2.ingredients;
-
-  /* test */
-  // const { isLoading, error, data, refetch } = useQuery({
-  //   queryKey: ["test_query"],
-  //   queryFn: async () => ClassifyCategory("cheese"),
-  // });
-  // console.log(" -- isLoading: ", isLoading);
-  // console.log("error: ", error);
-  // console.log("data: ", data);
-  /* test */
-
 
   // Group items by type for display
   function groupByType(objectArray: ingredientProps[]) {

@@ -9,12 +9,30 @@ import { useContext } from "react";
 
 import { deleteCurrentLocalUser } from "../api/DatabaseFunctions";
 
+/* testing apis */
+import { useQuery } from "@tanstack/react-query";
+import { ClassifyCategory } from "../api/IngredientsFunctions";
+/* testing apis */
+
+
 export default function Profile() {
   const { userInfo, setUserInfo, userData, setUserData } =
     useContext(UserContext);
   if (!userData) return <Redirect href={"/"} />;
 
-  const handlePreference = async () => {};
+  /* test */
+  const { isLoading, error, data, refetch } = useQuery({
+    queryKey: ["test_query"],
+    queryFn: async () => ClassifyCategory("cheese"),
+  });
+  console.log(" -- isLoading: ", isLoading);
+  console.log("error: ", error);
+  console.log("data: ", data);
+  /* test */
+
+  const handlePreference =  () => {
+    console.log(data);
+  };
   const handleAppereance = async () => {};
   const handleNotification = async () => {};
   const handleLocation = () => {};

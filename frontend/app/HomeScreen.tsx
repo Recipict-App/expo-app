@@ -9,6 +9,8 @@ import { UserContext } from "../userContext";
 import { useContext } from "react";
 import Explore from "../components/Explore";
 
+
+
 export default function Home() {
   const { userData, setUserData, readyRecipes } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;

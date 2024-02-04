@@ -13,11 +13,6 @@ export enum ingredientTypes {
   NotIngredients = "Not ingredients",
 }
 
-export enum subscriptionTypes {
-  Regular = "Regular",
-  Pro = "Pro",
-}
-
 export interface ingredient {
   id: String;
   name: String;
@@ -26,6 +21,11 @@ export interface ingredient {
   expiryDate: Date;
   dateAdded: Date;
   type: ingredientTypes;
+}
+
+export enum subscriptionTypes {
+  Regular = "Regular",
+  Pro = "Pro",
 }
 
 export interface preferences {
@@ -61,4 +61,17 @@ export interface ingredientProps {
   expiryDate: Date;
   dateAdded: Date;
   type: ingredientTypes;
+}
+
+interface recipeInfo {
+  title: String;
+  summary: String;
+  instructions: any[];
+  missedIngredientCount: number;
+  id: String;
+  readyInMinutes: number;
+  totalIngredients: {
+    name: String;
+    quantity: String;
+  };
 }

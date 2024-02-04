@@ -24,7 +24,13 @@ export async function ImageToItems(base64ImageData: string) {
   return items;
 }
 
-export async function ClassifyCategory(ingredientName: string) {
+export async function ClassifyCategory(
+  ingredientName: string
+): Promise<string> {
+  // input validation
+  if (!ingredientName) throw new Error("Invalid ingredient name");
+
+  // call the api
   const response = await fetch(
     `https://us-central1-recipict-gcp.cloudfunctions.net/function-ingredient-classifier-py?name=${ingredientName}`,
     {
@@ -33,6 +39,13 @@ export async function ClassifyCategory(ingredientName: string) {
     }
   );
 
+  // check for errors
+  if (!response.ok)
+    throw new Error(
+      `HTTP error when classifying ingredient! status: ${response.status}`
+    );
+
+  // return the category
   const data = await response.json();
   return data.category;
 }

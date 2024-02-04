@@ -115,7 +115,7 @@ export default function App() {
 
       // get items from image
       const items = await ImageToItems(base64ImageData);
-      setScannedIngredients(items.items);
+      setScannedIngredients(items);
       SheetManager.show("scanned-items-sheet");
     }
   };

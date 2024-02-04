@@ -28,13 +28,13 @@ export default function pantry() {
   const ingredients = data2.ingredients;
 
   /* test */
-  const { isLoading, error, data, refetch } = useQuery({
-    queryKey: ["test_query"],
-    queryFn: async () => ClassifyCategory("cheese"),
-  });
-  console.log(" -- isLoading: ", isLoading);
-  console.log("error: ", error);
-  console.log("data: ", data);
+  // const { isLoading, error, data, refetch } = useQuery({
+  //   queryKey: ["test_query"],
+  //   queryFn: async () => ClassifyCategory("cheese"),
+  // });
+  // console.log(" -- isLoading: ", isLoading);
+  // console.log("error: ", error);
+  // console.log("data: ", data);
   /* test */
 
 

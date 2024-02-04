@@ -1,6 +1,9 @@
+import { ingredientProps } from "../firebase-type";
 import * as Crypto from "expo-crypto";
 
-export async function ImageToItems(base64ImageData: string) {
+export async function ImageToItems(
+  base64ImageData: string
+): Promise<ingredientProps[]> {
   // create the request body
   const requestBody = {
     base64ImageData: base64ImageData,
@@ -18,8 +21,16 @@ export async function ImageToItems(base64ImageData: string) {
     }
   );
 
+  // check for errors
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error when parsing image! status: ${response.status}`
+    );
+  }
+
   const rawData = await response.json();
-  const items = await AssignProperiesToIngredient(rawData);
+  const data = await AssignProperiesToIngredient(rawData);
+  const items = data.items;
 
   return items;
 }
@@ -47,13 +58,16 @@ export async function ClassifyCategory(
 
   // return the category
   const data = await response.json();
+
   return data.category;
 }
 
 /* Helpers */
 
-async function AssignProperiesToIngredient(rawData: any) {
-  const items = await Promise.all(
+async function AssignProperiesToIngredient(rawData: any): Promise<{
+  items: ingredientProps[];
+}> {
+  const items: ingredientProps[] = await Promise.all(
     rawData.document.entities.map(async (item: any) => {
       let date = "";
 
@@ -90,7 +104,7 @@ async function AssignProperiesToIngredient(rawData: any) {
     })
   );
 
-  const filteredItems = items.filter((item: any) => item !== undefined);
+  const filteredItems: ingredientProps[] = items.filter((item: any) => item !== undefined);
 
   // create a new object
   const itemsJSON = { items: filteredItems };

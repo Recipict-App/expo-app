@@ -21,17 +21,17 @@ export default function Profile() {
   if (!userData) return <Redirect href={"/"} />;
 
   /* test */
-  const { isLoading, error, data, refetch } = useQuery({
-    queryKey: ["test_query"],
-    queryFn: async () => ClassifyCategory("cheese"),
-  });
-  console.log(" -- isLoading: ", isLoading);
-  console.log("error: ", error);
-  console.log("data: ", data);
+  // const { isLoading, error, data, refetch } = useQuery({
+  //   queryKey: ["test_query"],
+  //   queryFn: async () => ClassifyCategory("cheese"),
+  // });
+  // console.log(" -- isLoading: ", isLoading);
+  // console.log("error: ", error);
+  // console.log("data: ", data);
   /* test */
 
   const handlePreference =  () => {
-    console.log(data);
+    // console.log(data);
   };
   const handleAppereance = async () => {};
   const handleNotification = async () => {};

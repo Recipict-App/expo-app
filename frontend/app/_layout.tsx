@@ -17,7 +17,7 @@ import {
   QueryClientProvider,
   focusManager,
 } from "@tanstack/react-query";
-// import { useOnlineManager } from "../hooks/useOnlineManager";
+import { useOnlineManager } from "../hooks/useOnlineManager";
 import { useAppState } from "../hooks/useAppState";
 
 // todo: refactor these to a better place
@@ -42,7 +42,7 @@ function onAppStateChange(status: AppStateStatus) {
 }
 
 export default function RootLayout() {
-  // useOnlineManager();
+  useOnlineManager();
   useAppState(onAppStateChange);
 
   const [userInfo, setUserInfo] = useState<userInfoType>();

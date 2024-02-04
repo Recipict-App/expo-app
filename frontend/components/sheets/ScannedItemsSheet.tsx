@@ -83,7 +83,6 @@ export default function ScannedItemsSheet(props: SheetProps) {
               {Object.keys(groupedItems).map(function (key) {
                 return (
                   <>
-                    {console.log("Scanned Items is Empty...")}
                     <Shelf
                       key={key}
                       category={key}

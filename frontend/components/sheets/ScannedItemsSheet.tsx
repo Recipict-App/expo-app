@@ -39,7 +39,7 @@ export default function ScannedItemsSheet(props: SheetProps) {
   };
 
   const handleAdd = async () => {
-    const newIngredients = [...ingredients, ...scannedIngredients];
+    const newIngredients: ingredientProps[] = [...ingredients, ...scannedIngredients];
 
     // push to firebase, and refresh context
     await editIngredientToFirebase(userGoogleToken, newIngredients);

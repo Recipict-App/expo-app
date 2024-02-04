@@ -28,6 +28,7 @@ export async function ImageToItems(
     );
   }
 
+  // parse the response
   const rawData = await response.json();
   const data = await AssignProperiesToIngredient(rawData);
   const items = data.items;
@@ -104,7 +105,9 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
     })
   );
 
-  const filteredItems: ingredientProps[] = items.filter((item: any) => item !== undefined);
+  const filteredItems: ingredientProps[] = items.filter(
+    (item: any) => item !== undefined
+  );
 
   // create a new object
   const itemsJSON = { items: filteredItems };

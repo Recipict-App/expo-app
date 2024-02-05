@@ -1,9 +1,10 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { editIngredientToFirebase } from "./DatabaseFunctions";
+import { queryKeysEnum } from "./_queryKeys";
+
 import { ingredientProps } from "../firebase-type";
 
 export function editIngredientToFirebaseMutation() {
-  const QUERY_KEY = "ingredients";
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -20,7 +21,7 @@ export function editIngredientToFirebaseMutation() {
         console.log(error);
       } else {
         console.log("Successfully edited ingredient! 🤩");
-        await queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+        await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.ingredients] });
       }
     },
   });

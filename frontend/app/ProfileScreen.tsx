@@ -12,8 +12,9 @@ import { deleteCurrentLocalUser } from "../api/DatabaseFunctions";
 /* testing apis */
 import { useQuery } from "@tanstack/react-query";
 import { ClassifyCategory } from "../api/IngredientsFunctions";
-/* testing apis */
 
+import { PredictExpirationDate } from "../api/IngredientsFunctions";
+/* testing apis */
 
 export default function Profile() {
   const { userInfo, setUserInfo, userData, setUserData } =
@@ -30,8 +31,9 @@ export default function Profile() {
   // console.log("data: ", data);
   /* test */
 
-  const handlePreference =  () => {
-    // console.log(data);
+  const handlePreference = async () => {
+    const response = await PredictExpirationDate("chicken breast");
+    console.log("expiratopn data: ", response);
   };
   const handleAppereance = async () => {};
   const handleNotification = async () => {};

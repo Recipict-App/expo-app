@@ -63,6 +63,34 @@ export async function ClassifyCategory(
   return data.category;
 }
 
+export async function PredictExpirationDate(
+  ingredientName: string
+): Promise<number> {
+  // input validation
+  if (!ingredientName) throw new Error("Invalid ingredient name");
+
+  // call the api
+  const response = await fetch(
+    `https://us-central1-recipict-gcp.cloudfunctions.net/function-expiration-date-prediction?name=${ingredientName}`,
+    {
+      method: "GET",
+      mode: "cors",
+    }
+  );
+
+  // check for errors
+  if (!response.ok)
+    throw new Error(
+      `HTTP error when classifying ingredient! status: ${response.status}`
+    );
+
+  // return the category
+  const data: {output: string} = await response.json();
+  const output = parseInt(data.output);
+
+  return output;
+}
+
 /* Helpers */
 
 async function AssignProperiesToIngredient(rawData: any): Promise<{

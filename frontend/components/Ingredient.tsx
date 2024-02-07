@@ -68,7 +68,12 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
     });
   };
 
-  const showDate = expiryDate?.toString().slice(0, 10) || "Undefined";
+  const fromDate = new Date(dateAdded);
+  const toDate = new Date(expiryDate);
+  const dayDifference = Math.max(
+    Math.floor((toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24)),
+    0
+  );
 
   return (
     <TouchableOpacity
@@ -89,7 +94,7 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
               numberOfLines={1}
               className="text-xs font-ppr text-grey max-w-[220px]"
             >
-              {quantity + " " + unit + " - " + showDate}
+              {quantity + " " + unit + " - " + dayDifference + " day(s) before 💀"}
             </Text>
           </View>
         </View>

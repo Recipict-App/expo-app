@@ -68,7 +68,7 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
     });
   };
 
-  const showDate = dateAdded?.toString().slice(0, 10) || "Undefined";
+  const showDate = expiryDate?.toString().slice(0, 10) || "Undefined";
 
   return (
     <TouchableOpacity

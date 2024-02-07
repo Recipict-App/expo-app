@@ -85,7 +85,7 @@ export async function PredictExpirationDate(
     );
 
   // return the category
-  const data: {output: string} = await response.json();
+  const data: { output: string } = await response.json();
   const output = parseInt(data.output);
 
   return output;
@@ -105,7 +105,10 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
         date = item.mentionText;
       } else if (item.type == "item_name") {
         // call helper to get category for each item
-        const category = await ClassifyCategory(item.mentionText);
+        const category: string = await ClassifyCategory(item.mentionText);
+        const expirationDate: number = await PredictExpirationDate(
+          item.mentionText
+        );
 
         // create json object based on date
         if (date) {
@@ -113,7 +116,9 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
             name: item.mentionText,
             quantity: 1,
             unit: "gr",
-            expiryDate: date,
+            expiryDate: new Date(
+              new Date().getTime() + expirationDate * 24 * 60 * 60 * 1000
+            ),
             dateAdded: date,
             type: category,
             id: Crypto.randomUUID(),
@@ -123,7 +128,9 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
             name: item.mentionText,
             quantity: 1,
             unit: "gr",
-            expiryDate: "Not Added",
+            expiryDate: new Date(
+              new Date().getTime() + expirationDate * 24 * 60 * 60 * 1000
+            ),
             dateAdded: new Date(),
             type: category,
             id: Crypto.randomUUID(),

@@ -115,7 +115,7 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
           return {
             name: item.mentionText,
             quantity: 1,
-            unit: "gr",
+            unit: "ea",
             expiryDate: new Date(
               new Date().getTime() + expirationDate * 24 * 60 * 60 * 1000
             ),
@@ -127,7 +127,7 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
           return {
             name: item.mentionText,
             quantity: 1,
-            unit: "gr",
+            unit: "ea",
             expiryDate: new Date(
               new Date().getTime() + expirationDate * 24 * 60 * 60 * 1000
             ),

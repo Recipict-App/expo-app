@@ -69,10 +69,10 @@ export default function pantry() {
               {/* Shelf */}
               {ingredients[0] ? (
                 /* Dispay items */
-                Object.keys(groupedItems).map(function (key) {
+                Object.keys(groupedItems).map((key, index) => {
                   return (
                     <Shelf
-                      key={key}
+                      key={index}
                       category={key}
                       ingredients={groupedItems[key]}
                     />

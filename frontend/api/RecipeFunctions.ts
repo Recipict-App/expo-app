@@ -2,6 +2,8 @@
 /* Migrating to react query */
 
 export async function fetchRecommendedRecipes(requestBody: any) {
+  console.log("Fetching recommended recipes with REACT QUERY...");
+
   let newRecipes: any[] = [];
   let newReadyRecipes: any[] = [];
   let newMissingRecipes: any[] = [];
@@ -73,6 +75,8 @@ export async function fetchRecommendedRecipes(requestBody: any) {
 }
 
 export async function fetchRandomRecipes(requestBody: any) {
+  console.log("Fetching random recipes with REACT QUERY...");
+  
   let newRecipes: any[] = [];
 
   const apiResponse = await fetch(

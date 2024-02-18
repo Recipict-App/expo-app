@@ -44,11 +44,6 @@ export default function RootLayout() {
   const [userInfo, setUserInfo] = useState<userInfoType>();
   const [userData, setUserData] = useState<userDataProps[]>();
 
-  const [recipes, setRecipes] = useState<any>([]);
-  const [readyRecipes, setReadyRecipes] = useState<any>([]);
-  const [missingRecipes, setMissingRecipes] = useState<any>([]);
-  const [randomRecipes, setRandomRecipes] = useState<any>([]);
-
   const [scannedIngredients, setScannedIngredients] =
     useState<ingredientProps[]>();
 

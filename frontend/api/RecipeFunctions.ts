@@ -1,6 +1,4 @@
-import { userInfoType } from "../firebase-type";
 
-// TODO: refactor fetch
 export async function getRecommendedRecipes(
   requestBody: any,
   setRecipes: React.Dispatch<any>,
@@ -18,12 +16,13 @@ export async function getRecommendedRecipes(
       body: JSON.stringify(requestBody),
     }
   );
+
   let newRecipes: any[] = [];
   let newReadyRecipes: any[] = [];
   let newMissingRecipes: any[] = [];
 
-  const result = await apiResponse.json();
-  result.results.map((recipeInfo: any) => {
+  const response = await apiResponse.json();
+  response.results.map((recipeInfo: any) => {
     const {
       title,
       summary,
@@ -34,14 +33,15 @@ export async function getRecommendedRecipes(
       extendedIngredients,
       image,
     } = recipeInfo;
+
     const instructions = analyzedInstructions[0].steps.map((stepInfo: any) => {
-      // console.log(stepInfo);
       return {
         equipment: stepInfo.equipment,
         ingredients: stepInfo.ingredients,
         step: stepInfo.step,
       };
     });
+
     const totalIngredients = extendedIngredients.map((ingredient: any) => {
       return {
         name: ingredient.name,
@@ -50,38 +50,9 @@ export async function getRecommendedRecipes(
         original: ingredient.originalName
       };
     });
+
     if (missedIngredientCount == 0) {
-      newReadyRecipes = [
-        ...newReadyRecipes,
-        {
-          title,
-          summary,
-          instructions,
-          missedIngredientCount,
-          id,
-          readyInMinutes,
-          totalIngredients,
-          image,
-        },
-      ];
-    } else {
-      newMissingRecipes = [
-        ...newMissingRecipes,
-        {
-          title,
-          summary,
-          instructions,
-          missedIngredientCount,
-          id,
-          readyInMinutes,
-          totalIngredients,
-          image,
-        },
-      ];
-    }
-    newRecipes = [
-      ...newRecipes,
-      {
+      newReadyRecipes.push({
         title,
         summary,
         instructions,
@@ -90,8 +61,30 @@ export async function getRecommendedRecipes(
         readyInMinutes,
         totalIngredients,
         image,
-      },
-    ];
+      });
+    } else {
+      newMissingRecipes.push({
+        title,
+        summary,
+        instructions,
+        missedIngredientCount,
+        id,
+        readyInMinutes,
+        totalIngredients,
+        image,
+      });
+    }
+
+    newRecipes.push({
+      title,
+      summary,
+      instructions,
+      missedIngredientCount,
+      id,
+      readyInMinutes,
+      totalIngredients,
+      image,
+    });
 
     // console.log("instructions: ", instructions);
     // console.log("title: " + title);

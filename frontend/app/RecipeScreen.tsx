@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { View, Text, ScrollView, TextInput } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
@@ -8,7 +9,6 @@ import AlmostThere from "../components/AlmostThere";
 import { SheetManager } from "react-native-actions-sheet";
 
 import { UserContext } from "../userContext";
-import { useContext } from "react";
 import { useFetchRecommendedRecipes } from "../api/queries";
 
 export default function recipe() {

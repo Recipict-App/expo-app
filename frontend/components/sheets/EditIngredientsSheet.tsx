@@ -20,7 +20,7 @@ import * as Crypto from "expo-crypto";
 import { ScannedIngredientsContext } from "../../ScannedItemProvider";
 
 import { getUserDataFromFirebaseAndSetContext } from "../../api/DatabaseFunctions";
-import { editIngredientToFirebaseMutation } from "../../api/mutations";
+import { useEditIngredientToFirebase } from "../../api/mutations";
 
 export enum ingredientTypes {
   Vegetables = "Vegetables",
@@ -107,7 +107,7 @@ export default function EditIngredientSheet(
   );
 
   // initiate mutatation
-  const changeUserIngredient = editIngredientToFirebaseMutation();
+  const editIngredientMutation = useEditIngredientToFirebase();
 
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
@@ -162,7 +162,7 @@ export default function EditIngredientSheet(
 
     // push to firebase
     // await editIngredientToFirebase(userGoogleToken, newIngredients);
-    await changeUserIngredient.mutateAsync({
+    await editIngredientMutation.mutateAsync({
       userGoogleToken: userGoogleToken,
       newIngredients: newIngredients,
     });
@@ -241,7 +241,7 @@ export default function EditIngredientSheet(
 
     // push to firebase, and refresh context
     // await editIngredientToFirebase(userGoogleToken, newIngredients);
-    await changeUserIngredient.mutateAsync({
+    await editIngredientMutation.mutateAsync({
       userGoogleToken: userGoogleToken,
       newIngredients: newIngredients,
     });

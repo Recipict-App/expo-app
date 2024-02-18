@@ -4,7 +4,7 @@ import { queryKeysEnum } from "./_queryKeys";
 
 import { ingredientProps } from "../firebase-type";
 
-export function editIngredientToFirebaseMutation() {
+export function useEditIngredientToFirebase() {
   const queryClient = useQueryClient();
 
   return useMutation({

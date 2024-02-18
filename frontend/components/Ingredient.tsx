@@ -68,7 +68,7 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
     });
   };
 
-  const fromDate = new Date(dateAdded);
+  const fromDate = new Date();
   const toDate = new Date(expiryDate);
   const dayDifference = Math.max(
     Math.floor((toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24)),
@@ -94,7 +94,12 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
               numberOfLines={1}
               className="text-xs font-ppr text-grey max-w-[220px]"
             >
-              {quantity + " " + unit + " - " + dayDifference + " day(s) before 💀"}
+              {quantity +
+                " " +
+                unit +
+                "   |   " +
+                dayDifference +
+                " days before expired"}
             </Text>
           </View>
         </View>

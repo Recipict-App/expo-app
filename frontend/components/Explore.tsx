@@ -1,14 +1,35 @@
 import { View, Text } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { RecipeBoxProps, RecipeBox } from "./RecipeBox";
+import { RecipeBox } from "./RecipeBox";
 
 import { UserContext } from "../userContext";
 import { useContext } from "react";
 
+import { useFetchRandomRecipes } from "../api/queries";
+
 export default function Explore() {
-  const { randomRecipes } = useContext(UserContext);
+  const { userData } = useContext(UserContext);
+  if (!userData) return null;
+  const userDetails = userData[0];
+
+  const ingredientsString = userDetails.ingredients
+    .map((ingredient) => ingredient.name)
+    .join(",");
+  const cuisinesString = userDetails.preferences.cuisine.join(",");
+  const dietsString = userDetails.preferences.diet.join(",");
+
+  const requestBody = {
+    ingredients: ingredientsString,
+    subscription: userDetails.subscription,
+    mode: "min-missing-ingredient",
+    cuisines: cuisinesString,
+    diets: dietsString,
+  };
+
+  const { isPending, error, data, refetch } =
+    useFetchRandomRecipes(requestBody);
+
   return (
     <View className="flex items-center mt-[50px] w-full">
       {/* Explore Header */}
@@ -42,7 +63,7 @@ export default function Explore() {
         />
       </View>
       <View className="w-full flex" style={{ gap: 10 }}>
-        {randomRecipes.map((item:any, index:any) => {
+        {data?.newRecipes.map((item:any, index:any) => {
           return (
             <RecipeBox
               key={index}

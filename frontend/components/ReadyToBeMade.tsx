@@ -1,21 +1,16 @@
 import {
   View,
   Text,
-  ScrollView,
   FlatList,
-  Button,
-  Alert,
   ImageBackground,
 } from "react-native";
 import { Image } from "expo-image";
-import React, { useRef } from "react";
+import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import { SheetManager } from "react-native-actions-sheet";
 
-import { UserContext } from "../userContext";
-import { useContext } from "react";
-import { useFetchRecommendedRecipes } from "../api/queries";
+
 
 function throttle(cb: any, delay = 1000) {
   let shouldWait = false;

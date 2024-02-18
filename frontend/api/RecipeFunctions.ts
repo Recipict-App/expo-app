@@ -243,8 +243,8 @@ export async function fetchRandomRecipes(requestBody: any) {
     }
   );
 
-  const result = await apiResponse.json();
-  result.recipes.map((recipeInfo: any) => {
+  const response = await apiResponse.json();
+  response.recipes.map((recipeInfo: any) => {
     const {
       title,
       summary,
@@ -284,6 +284,5 @@ export async function fetchRandomRecipes(requestBody: any) {
     });
   });
 
-  console.log("Random Recipes Loaded 🥹");
   return { newRecipes };
 }

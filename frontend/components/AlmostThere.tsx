@@ -1,10 +1,7 @@
 import {
   View,
   Text,
-  ScrollView,
   FlatList,
-  Button,
-  Alert,
   ImageBackground,
 } from "react-native";
 import { Image } from "expo-image";
@@ -12,9 +9,6 @@ import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SheetManager } from "react-native-actions-sheet";
 
-import { UserContext } from "../userContext";
-import { useContext } from "react";
-import { useFetchRecommendedRecipes } from "../api/queries";
 
 const handleShowRecipe = (name: String, imageURI: string, ingredients: any) => {
   // console.log(name);

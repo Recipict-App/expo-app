@@ -14,28 +14,13 @@ import { useFetchRecommendedRecipes } from "../api/queries";
 export default function recipe() {
   const { userData } = useContext(UserContext);
   if (!userData) return null;
-
   const userDetails = userData[0];
-  // extract and append ingredients' name to string
-  let ingredientsString = "";
-  userDetails.ingredients.forEach((ingredient) => {
-    ingredientsString += ingredient.name + ",";
-  });
-  ingredientsString = ingredientsString.slice(0, -1);
 
-  // extract and append cuisines' name to string
-  let cuisinesString = "";
-  userDetails.preferences.cuisine.forEach((eachCuisine) => {
-    cuisinesString += eachCuisine + ",";
-  });
-  cuisinesString = cuisinesString.slice(0, -1);
-
-  // extract and append cuisines' name to string
-  let dietsString = "";
-  userDetails.preferences.diet.forEach((eachDiet) => {
-    dietsString += eachDiet + ",";
-  });
-  dietsString = dietsString.slice(0, -1);
+  const ingredientsString = userDetails.ingredients
+    .map((ingredient) => ingredient.name)
+    .join(",");
+  const cuisinesString = userDetails.preferences.cuisine.join(",");
+  const dietsString = userDetails.preferences.diet.join(",");
 
   const requestBody = {
     ingredients: ingredientsString,
@@ -44,13 +29,13 @@ export default function recipe() {
     cuisines: cuisinesString,
     diets: dietsString,
   };
-  
-  const { isPending, error, data, refetch } = useFetchRecommendedRecipes(requestBody);
+
+  const { isPending, error, data, refetch } =
+    useFetchRecommendedRecipes(requestBody);
 
   const handleShowRecipe = () => {
     SheetManager.show("saved-recipes-sheet");
   };
-
 
   return (
     <SafeAreaView
@@ -85,7 +70,6 @@ export default function recipe() {
 
           <ReadyToBeMade recipes={data?.newReadyRecipes} />
           <AlmostThere recipes={data?.newMissingRecipes} />
-
         </View>
       </ScrollView>
     </SafeAreaView>

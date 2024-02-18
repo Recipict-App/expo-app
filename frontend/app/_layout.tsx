@@ -25,10 +25,6 @@ import { useEffect, useState } from "react";
 import { UserContext } from "../userContext";
 import { ScannedIngredientsContext } from "../ScannedItemProvider";
 import { userInfoType, userDataProps, ingredientProps } from "../firebase-type";
-import {
-  getRecommendedRecipes,
-  getRandomRecipes,
-} from "../api/RecipeFunctions";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 2 } },
@@ -56,52 +52,6 @@ export default function RootLayout() {
   const [scannedIngredients, setScannedIngredients] =
     useState<ingredientProps[]>();
 
-  const handleGetRecipes = async () => {
-    if (!userData) return null;
-    const data = userData[0];
-    // extract and append ingredients' name to string
-    let ingredientsString = "";
-    data.ingredients.forEach((ingredient) => {
-      ingredientsString += ingredient.name + ",";
-    });
-    ingredientsString = ingredientsString.slice(0, -1);
-
-    // extract and append cuisines' name to string
-    let cuisinesString = "";
-    data.preferences.cuisine.forEach((eachCuisine) => {
-      cuisinesString += eachCuisine + ",";
-    });
-    cuisinesString = cuisinesString.slice(0, -1);
-
-    // extract and append cuisines' name to string
-    let dietsString = "";
-    data.preferences.diet.forEach((eachDiet) => {
-      dietsString += eachDiet + ",";
-    });
-    dietsString = dietsString.slice(0, -1);
-
-    const requestBody = {
-      ingredients: ingredientsString,
-      subscription: data.subscription,
-      mode: "min-missing-ingredient",
-      cuisines: cuisinesString,
-      diets: dietsString,
-    };
-
-    await getRecommendedRecipes(
-      requestBody,
-      setRecipes,
-      setReadyRecipes,
-      setMissingRecipes
-    );
-
-    await getRandomRecipes(requestBody, setRandomRecipes);
-  };
-
-  useEffect(() => {
-    handleGetRecipes();
-  }, [userData]);
-
   let [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,
     Poppins_600SemiBold,
@@ -118,10 +68,6 @@ export default function RootLayout() {
           setUserInfo,
           userData,
           setUserData,
-          recipes,
-          readyRecipes,
-          missingRecipes,
-          randomRecipes,
         }}
       >
         <ScannedIngredientsContext.Provider

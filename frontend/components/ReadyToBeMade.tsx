@@ -15,6 +15,7 @@ import { SheetManager } from "react-native-actions-sheet";
 
 import { UserContext } from "../userContext";
 import { useContext } from "react";
+import { useFetchRecommendedRecipes } from "../api/queries";
 
 function throttle(cb: any, delay = 1000) {
   let shouldWait = false;
@@ -44,9 +45,7 @@ const handleShowRecipe = (name: String) => {
   });
 };
 
-export default function ReadyToBeMade() {
-  const { readyRecipes } = useContext(UserContext);
-
+export default function ReadyToBeMade({ recipes }: any) {
   const RecipeItem = ({
     name,
     imageURI,
@@ -101,9 +100,9 @@ export default function ReadyToBeMade() {
       <View className="flex flex-row gap-[9px] overflow-hidden pb-[15px]">
         <FlatList
           horizontal
-          data={readyRecipes}
+          data={recipes}
           renderItem={({ item, index }) => (
-            <RecipeItem key={item.id} name={item.title} imageURI={item.image} />
+            <RecipeItem key={index} name={item.title} imageURI={item.image} />
           )}
           keyExtractor={(item) => item.toString()}
           showsHorizontalScrollIndicator={false}

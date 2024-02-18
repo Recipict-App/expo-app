@@ -175,6 +175,7 @@ export async function fetchRecommendedRecipes(requestBody: any) {
   );
 
   const response = await apiResponse.json();
+  
   response.results.map((recipeInfo: any) => {
     const {
       title,
@@ -240,6 +241,6 @@ export async function fetchRecommendedRecipes(requestBody: any) {
     });
   });
 
-  return
   console.log("Recommended Recipes Loaded 🥰");
+  return { newRecipes, newReadyRecipes, newMissingRecipes };
 }

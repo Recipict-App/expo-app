@@ -86,7 +86,7 @@ export default function ReadyToBeMade({ recipes }: any) {
             transform: [{ rotate: "20deg" }],
           }}
           contentFit="contain"
-          source={require("../assets/images/Purply.png")}
+          source={require("../../assets/images/Purply.png")}
         />
       </View>
       {/* list of recipe */}

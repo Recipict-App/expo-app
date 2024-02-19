@@ -1,15 +1,19 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { Ingredient } from "../components/Ingredient";
-import { ingredientProps } from "../firebase-type";
+import { Ingredient } from "./Ingredient";
+import { ingredientProps } from "../../firebase-type";
 
 export interface ShelfProps {
   category: string;
   ingredients: ingredientProps[];
-  mode?: string
+  mode?: string;
 }
 
-export const Shelf: React.FC<ShelfProps> = ({ category, ingredients, mode }) => {
+export const Shelf: React.FC<ShelfProps> = ({
+  category,
+  ingredients,
+  mode,
+}) => {
   return (
     <View className="w-11/12 mt-3">
       <Text
@@ -31,7 +35,7 @@ export const Shelf: React.FC<ShelfProps> = ({ category, ingredients, mode }) => 
           return (
             <Ingredient
               key={index}
-              id = {item.id}
+              id={item.id}
               name={item.name}
               quantity={item.quantity}
               unit={item.unit}

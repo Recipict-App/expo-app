@@ -2,10 +2,21 @@ import { Text, View } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
-import { ingredientProps } from "../firebase-type";
-import { UserContext } from "../userContext";
+import { ingredientProps } from "../../firebase-type";
+import { UserContext } from "../../userContext";
 import { useContext } from "react";
 import { Redirect } from "expo-router";
+
+const debounce = (cb: any, delay = 1000) => {
+  let timeout: any;
+
+  return (...args: any) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      cb(...args);
+    }, delay);
+  };
+};
 
 function throttle(cb: any, delay = 1000) {
   let shouldWait = false;
@@ -24,7 +35,7 @@ function throttle(cb: any, delay = 1000) {
   };
 }
 
-export const ScannedItemsIngredient: React.FC<ingredientProps> = ({
+export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
   name,
   quantity,
   unit,
@@ -32,6 +43,7 @@ export const ScannedItemsIngredient: React.FC<ingredientProps> = ({
   dateAdded,
   type,
   id,
+  mode,
 }) => {
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
@@ -51,12 +63,17 @@ export const ScannedItemsIngredient: React.FC<ingredientProps> = ({
           type: type,
           id: id,
         },
+        mode: mode,
       },
     });
   };
 
-  
-  const showDate = dateAdded?.toString().slice(0, 10) || "Undefined";
+  const fromDate = new Date();
+  const toDate = new Date(expiryDate);
+  const dayDifference = Math.max(
+    Math.floor((toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24)),
+    0
+  );
 
   return (
     <TouchableOpacity
@@ -77,7 +94,12 @@ export const ScannedItemsIngredient: React.FC<ingredientProps> = ({
               numberOfLines={1}
               className="text-xs font-ppr text-grey max-w-[220px]"
             >
-              {quantity + " " + unit + " - " + showDate}
+              {quantity +
+                " " +
+                unit +
+                "   |   " +
+                dayDifference +
+                " days before expired"}
             </Text>
           </View>
         </View>
@@ -85,7 +107,7 @@ export const ScannedItemsIngredient: React.FC<ingredientProps> = ({
         {/* Arrow */}
         <Image
           className="flex w-[6px] h-[10px] object-contain mr-7"
-          source={require("../assets/icons/Arrow.svg")}
+          source={require("../../assets/icons/Arrow.svg")}
         />
       </View>
     </TouchableOpacity>

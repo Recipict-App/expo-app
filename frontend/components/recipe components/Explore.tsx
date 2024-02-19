@@ -3,10 +3,10 @@ import { Image } from "expo-image";
 import React from "react";
 import { RecipeBox } from "./RecipeBox";
 
-import { UserContext } from "../userContext";
+import { UserContext } from "../../userContext";
 import { useContext } from "react";
 
-import { useFetchRandomRecipes } from "../api/queries";
+import { useFetchRandomRecipes } from "../../api/queries";
 
 export default function Explore() {
   const { userData } = useContext(UserContext);
@@ -59,11 +59,11 @@ export default function Explore() {
             zIndex: 1,
           }}
           contentFit="contain"
-          source={require("../assets/images/Satay.png")}
+          source={require("../../assets/images/Satay.png")}
         />
       </View>
       <View className="w-full flex" style={{ gap: 10 }}>
-        {data?.newRecipes.map((item:any, index:any) => {
+        {data?.newRecipes.map((item: any, index: any) => {
           return (
             <RecipeBox
               key={index}

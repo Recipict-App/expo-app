@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Image } from "expo-image";
-import { RecipeBoxProps, RecipeBox } from "../RecipeBox";
+import { RecipeBoxProps, RecipeBox } from "../recipe components/RecipeBox";
 import { SheetManager } from "react-native-actions-sheet";
 
 const dummyRecipePreview: RecipeBoxProps[] = [

@@ -1,15 +1,13 @@
 import { Text, View, ScrollView } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
-import { Ingredient } from "../components/Ingredient";
+import { Ingredient } from "../components/ingredient components/Ingredient";
 import { Link, Redirect } from "expo-router";
 
 import { ingredientProps } from "../firebase-type";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
-import Explore from "../components/Explore";
-
-
+import Explore from "../components/recipe components/Explore";
 
 export default function Home() {
   const { userData, setUserData } = useContext(UserContext);

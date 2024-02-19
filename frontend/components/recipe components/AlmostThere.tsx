@@ -93,7 +93,7 @@ export default function AlmostThere({ recipes }: any) {
             transform: [{ rotate: "20deg" }],
           }}
           contentFit="contain"
-          source={require("../assets/images/Orangy.png")}
+          source={require("../../assets/images/Orangy.png")}
         />
       </View>
       {/* list of recipe */}

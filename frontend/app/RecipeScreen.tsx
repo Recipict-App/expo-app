@@ -4,8 +4,8 @@ import { Image } from "expo-image";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import ReadyToBeMade from "../components/ReadyToBeMade";
-import AlmostThere from "../components/AlmostThere";
+import ReadyToBeMade from "../components/recipe components/ReadyToBeMade";
+import AlmostThere from "../components/recipe components/AlmostThere";
 import { SheetManager } from "react-native-actions-sheet";
 
 import { UserContext } from "../userContext";

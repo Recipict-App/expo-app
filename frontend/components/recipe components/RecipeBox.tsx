@@ -84,7 +84,7 @@ export const RecipeBox: React.FC<RecipeBoxProps> = ({
           </View>
           <Image
             style={{ width: 25, height: 25 }}
-            source={require("../assets/icons/ArrowRecipe.svg")}
+            source={require("../../assets/icons/ArrowRecipe.svg")}
           />
         </View>
       </TouchableOpacity>

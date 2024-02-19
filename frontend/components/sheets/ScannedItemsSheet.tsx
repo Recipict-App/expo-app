@@ -7,7 +7,7 @@ import ActionSheet, {
 } from "react-native-actions-sheet";
 
 import { ingredientProps } from "../../firebase-type";
-import { Shelf } from "../Shelf";
+import { Shelf } from "../ingredient components/Shelf";
 
 import { useContext } from "react";
 import { UserContext } from "../../userContext";
@@ -39,7 +39,10 @@ export default function ScannedItemsSheet(props: SheetProps) {
   };
 
   const handleAdd = async () => {
-    const newIngredients: ingredientProps[] = [...ingredients, ...scannedIngredients];
+    const newIngredients: ingredientProps[] = [
+      ...ingredients,
+      ...scannedIngredients,
+    ];
 
     // push to firebase, and refresh context
     await editIngredientToFirebase(userGoogleToken, newIngredients);

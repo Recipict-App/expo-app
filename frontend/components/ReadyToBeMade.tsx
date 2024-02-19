@@ -1,16 +1,9 @@
-import {
-  View,
-  Text,
-  FlatList,
-  ImageBackground,
-} from "react-native";
+import { View, Text, FlatList, ImageBackground } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import { SheetManager } from "react-native-actions-sheet";
-
-
 
 function throttle(cb: any, delay = 1000) {
   let shouldWait = false;
@@ -30,7 +23,6 @@ function throttle(cb: any, delay = 1000) {
 }
 
 const handleShowRecipe = (name: String, imageURI: string, ingredients: any) => {
-  // console.log(name);
   SheetManager.show("recipe-ingredient-sheet", {
     payload: {
       recipe: {

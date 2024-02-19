@@ -1,20 +1,16 @@
 import {
   View,
   Text,
-  ScrollView,
   FlatList,
-  Button,
-  Alert,
   ImageBackground,
 } from "react-native";
 import { Image } from "expo-image";
-import React, { useRef } from "react";
+import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import { SheetManager } from "react-native-actions-sheet";
 
-import { UserContext } from "../userContext";
-import { useContext } from "react";
+
 
 function throttle(cb: any, delay = 1000) {
   let shouldWait = false;
@@ -46,9 +42,7 @@ const handleShowRecipe = (name: String, imageURI: string, ingredients: any) => {
   });
 };
 
-export default function ReadyToBeMade() {
-  const { readyRecipes } = useContext(UserContext);
-
+export default function ReadyToBeMade({ recipes }: any) {
   const RecipeItem = ({
     name,
     imageURI,
@@ -107,16 +101,11 @@ export default function ReadyToBeMade() {
       <View className="flex flex-row gap-[9px] overflow-hidden pb-[15px]">
         <FlatList
           horizontal
-          data={readyRecipes}
+          data={recipes}
           renderItem={({ item, index }) => (
-            <RecipeItem
-              key={item.id}
-              name={item.title}
-              imageURI={item.image}
-              ingredients={item.totalIngredients}
-            />
+            <RecipeItem key={index} name={item.title} imageURI={item.image} />
           )}
-          keyExtractor={(item) => item.toString()}
+          keyExtractor={(item, index)=> item.toString()}
           showsHorizontalScrollIndicator={false}
         />
       </View>

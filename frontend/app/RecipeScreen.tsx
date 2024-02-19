@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { View, Text, ScrollView, TextInput } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
@@ -8,13 +9,34 @@ import AlmostThere from "../components/AlmostThere";
 import { SheetManager } from "react-native-actions-sheet";
 
 import { UserContext } from "../userContext";
-import { useContext } from "react";
+import { useFetchRecommendedRecipes } from "../api/queries";
 
 export default function recipe() {
-  const { userData, setUserData, recipes } = useContext(UserContext);
+  const { userData } = useContext(UserContext);
+  if (!userData) return null;
+  const userDetails = userData[0];
+
+  const ingredientsString = userDetails.ingredients
+    .map((ingredient) => ingredient.name)
+    .join(",");
+  const cuisinesString = userDetails.preferences.cuisine.join(",");
+  const dietsString = userDetails.preferences.diet.join(",");
+
+  const requestBody = {
+    ingredients: ingredientsString,
+    subscription: userDetails.subscription,
+    mode: "min-missing-ingredient",
+    cuisines: cuisinesString,
+    diets: dietsString,
+  };
+
+  const { isPending, error, data, refetch } =
+    useFetchRecommendedRecipes(requestBody);
+
   const handleShowRecipe = () => {
     SheetManager.show("saved-recipes-sheet");
   };
+
   return (
     <SafeAreaView
       className="bg-white"
@@ -46,9 +68,8 @@ export default function recipe() {
             />
           </View>
 
-          <ReadyToBeMade />
-
-          <AlmostThere />
+          <ReadyToBeMade recipes={data?.newReadyRecipes} />
+          <AlmostThere recipes={data?.newMissingRecipes} />
         </View>
       </ScrollView>
     </SafeAreaView>

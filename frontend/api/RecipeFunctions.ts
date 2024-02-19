@@ -1,12 +1,13 @@
-import { userInfoType } from "../firebase-type";
 
-// TODO: refactor fetch
-export async function getRecommendedRecipes(
-  requestBody: any,
-  setRecipes: React.Dispatch<any>,
-  setReadyRecipes: React.Dispatch<any>,
-  setMissingRecipes: React.Dispatch<any>
-) {
+/* Migrating to react query */
+
+export async function fetchRecommendedRecipes(requestBody: any) {
+  console.log("Fetching recommended recipes with REACT QUERY...");
+
+  let newRecipes: any[] = [];
+  let newReadyRecipes: any[] = [];
+  let newMissingRecipes: any[] = [];
+
   const apiResponse = await fetch(
     `https://us-central1-recipict-gcp.cloudfunctions.net/function-spoonacular-recipe-by-ingredient`,
     {
@@ -18,12 +19,10 @@ export async function getRecommendedRecipes(
       body: JSON.stringify(requestBody),
     }
   );
-  let newRecipes: any[] = [];
-  let newReadyRecipes: any[] = [];
-  let newMissingRecipes: any[] = [];
 
-  const result = await apiResponse.json();
-  result.results.map((recipeInfo: any) => {
+  const response = await apiResponse.json();
+
+  response.results.map((recipeInfo: any) => {
     const {
       title,
       summary,
@@ -34,79 +33,52 @@ export async function getRecommendedRecipes(
       extendedIngredients,
       image,
     } = recipeInfo;
+
     const instructions = analyzedInstructions[0].steps.map((stepInfo: any) => {
-      // console.log(stepInfo);
       return {
         equipment: stepInfo.equipment,
         ingredients: stepInfo.ingredients,
         step: stepInfo.step,
       };
     });
+
     const totalIngredients = extendedIngredients.map((ingredient: any) => {
       return {
         name: ingredient.name,
         amount: ingredient.amount,
         unit: ingredient.unit == "" ? "pc" : ingredient.unit,
-        original: ingredient.originalName
+        original: ingredient.originalName,
       };
     });
-    if (missedIngredientCount == 0) {
-      newReadyRecipes = [
-        ...newReadyRecipes,
-        {
-          title,
-          summary,
-          instructions,
-          missedIngredientCount,
-          id,
-          readyInMinutes,
-          totalIngredients,
-          image,
-        },
-      ];
-    } else {
-      newMissingRecipes = [
-        ...newMissingRecipes,
-        {
-          title,
-          summary,
-          instructions,
-          missedIngredientCount,
-          id,
-          readyInMinutes,
-          totalIngredients,
-          image,
-        },
-      ];
-    }
-    newRecipes = [
-      ...newRecipes,
-      {
-        title,
-        summary,
-        instructions,
-        missedIngredientCount,
-        id,
-        readyInMinutes,
-        totalIngredients,
-        image,
-      },
-    ];
 
-    // console.log("instructions: ", instructions);
-    // console.log("title: " + title);
-    // console.log("summary: " + summary);
+    const recipe = {
+      title,
+      summary,
+      instructions,
+      missedIngredientCount,
+      id,
+      readyInMinutes,
+      totalIngredients,
+      image,
+    };
+
+    newRecipes.push(recipe);
+
+    if (missedIngredientCount == 0) {
+      newReadyRecipes.push(recipe);
+    } else {
+      newMissingRecipes.push(recipe);
+    }
   });
-  setRecipes(newRecipes);
-  setReadyRecipes(newReadyRecipes);
-  setMissingRecipes(newMissingRecipes);
-  console.log("Recommended Recipes Loaded 🥰");
+
+  return { newRecipes, newReadyRecipes, newMissingRecipes };
 }
 
-export async function getRandomRecipes(
-  requestBody: any,
-  setRandomRecipes: React.Dispatch<any>
-) {
+export async function fetchRandomRecipes(requestBody: any) {
+  console.log("Fetching random recipes with REACT QUERY...");
+  
+  let newRecipes: any[] = [];
+
   const apiResponse = await fetch(
     `https://us-central1-recipict-gcp.cloudfunctions.net/function-random-recipe`,
     {
@@ -118,10 +90,9 @@ export async function getRandomRecipes(
       body: JSON.stringify(requestBody),
     }
   );
-  let newRecipes: any[] = [];
 
-  const result = await apiResponse.json();
-  result.recipes.map((recipeInfo: any) => {
+  const response = await apiResponse.json();
+  response.recipes.map((recipeInfo: any) => {
     const {
       title,
       summary,
@@ -132,14 +103,15 @@ export async function getRandomRecipes(
       extendedIngredients,
       image,
     } = recipeInfo;
+
     const instructions = analyzedInstructions[0].steps.map((stepInfo: any) => {
-      // console.log(stepInfo);
       return {
         equipment: stepInfo.equipment,
         ingredients: stepInfo.ingredients,
         step: stepInfo.step,
       };
     });
+
     const totalIngredients = extendedIngredients.map((ingredient: any) => {
       return {
         name: ingredient.name,
@@ -147,20 +119,18 @@ export async function getRandomRecipes(
         unit: ingredient.unit == "" ? "ea" : ingredient.unit,
       };
     });
-    newRecipes = [
-      ...newRecipes,
-      {
-        title,
-        summary,
-        instructions,
-        missedIngredientCount,
-        id,
-        readyInMinutes,
-        totalIngredients,
-        image,
-      },
-    ];
+
+    newRecipes.push({
+      title,
+      summary,
+      instructions,
+      missedIngredientCount,
+      id,
+      readyInMinutes,
+      totalIngredients,
+      image,
+    });
   });
-  setRandomRecipes(newRecipes);
-  console.log("Random Recipes Loaded 🥹");
+
+  return { newRecipes };
 }

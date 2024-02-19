@@ -1,10 +1,7 @@
 import {
   View,
   Text,
-  ScrollView,
   FlatList,
-  Button,
-  Alert,
   ImageBackground,
 } from "react-native";
 import { Image } from "expo-image";
@@ -12,21 +9,6 @@ import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SheetManager } from "react-native-actions-sheet";
 
-import { UserContext } from "../userContext";
-import { useContext } from "react";
-
-const dummyIngredients = [
-  "Garlic",
-  "Chili",
-  "Rice",
-  "Dany",
-  "Other spices idk what but a long one",
-  "Recipict",
-  "Purply",
-  "Orangy",
-  "Bowly",
-  "Satay",
-];
 
 const handleShowRecipe = (name: String, imageURI: string, ingredients: any) => {
   // console.log(name);
@@ -91,9 +73,7 @@ const RecipeItem = ({
   </TouchableOpacity>
 );
 
-export default function AlmostThere() {
-  const recipePreview = [1, 2, 3, 4];
-  const { userData, setUserData, missingRecipes } = useContext(UserContext);
+export default function AlmostThere({ recipes }: any) {
   return (
     <View className=" bg-[#FEC1A6] w-full h-[284] rounded-2xl mt-9 pt-[12px] justify-between flex">
       <View
@@ -120,16 +100,16 @@ export default function AlmostThere() {
       <View className="flex flex-row gap-[9px] overflow-hidden pb-[15px]">
         <FlatList
           horizontal
-          data={missingRecipes}
-          renderItem={({ item }) => (
+          data={recipes}
+          renderItem={({ item, index }) => (
             <RecipeItem
-              key={item.id}
+              key={index}
               name={item.title}
               imageURI={item.image}
               ingredients={item.totalIngredients}
             />
           )}
-          keyExtractor={(item) => item.toString()}
+          keyExtractor={(item, index)=> item.toString()}
           showsHorizontalScrollIndicator={false}
         />
       </View>

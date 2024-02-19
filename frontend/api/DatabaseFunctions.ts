@@ -80,6 +80,7 @@ export async function getOrCreateUserDataInFirebase(
 
     if (createUserResponse.status == 200) {
       console.log("User created in Firebase, retrieving user data... 🥰");
+
       const user = await createUserResponse.json();
       const userDatabase = user.userData;
 
@@ -149,9 +150,8 @@ export async function editIngredientToFirebase(
     }
   );
 
-  if (response.status !== 200) {
+  if (response.status !== 200)
     console.log("Something went wrong when trying to edit ingredients 😡");
-  }
 
   const data = await response.json();
 

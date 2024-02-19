@@ -1,4 +1,5 @@
 import { Camera, CameraType, FlashMode } from "expo-camera";
+import { useIsFocused } from "@react-navigation/native";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
@@ -6,7 +7,13 @@ import * as FileSystem from "expo-file-system";
 import React from "react";
 import { useState } from "react";
 
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Image } from "expo-image";
 
 import { SheetManager } from "react-native-actions-sheet";
@@ -14,9 +21,7 @@ import { SheetManager } from "react-native-actions-sheet";
 import { useContext } from "react";
 import { ScannedIngredientsContext } from "../ScannedItemProvider";
 
-import { useIsFocused } from "@react-navigation/native";
-
-import {  ImageToItems } from "../api/IngredientsFunctions";
+import { ImageToItems } from "../api/IngredientsFunctions";
 
 export default function App() {
   const isFocused = useIsFocused();
@@ -32,11 +37,26 @@ export default function App() {
   const cameraRef = React.useRef<Camera>(null);
   const [pickedImage, setPickedImage] = useState<String | null>(null);
   const [torch, setTorch] = useState<FlashMode>(FlashMode.off);
-  if (!CameraPermission || !galleryPermission || !imagePickerPermission) {
-    // Camera permissions are still loading
-    return <View />;
-  }
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  /* guards */
+  if (isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-[rgba(0, 0, 0, 1)]">
+        <ActivityIndicator
+          size="large"
+          color="#00ff00"
+          className="opacity-100"
+        />
+        <Text className="text-center font-pps mt-4">
+          🫣👀 at what you just 🛒🛍️
+        </Text>
+      </View>
+    );
+  }
+  if (!CameraPermission || !galleryPermission || !imagePickerPermission)
+    return <View />;
   if (!CameraPermission.granted) {
     requestCameraPermission();
     // Camera permissions are not granted yet
@@ -48,7 +68,6 @@ export default function App() {
       </View>
     );
   }
-
   if (!galleryPermission.granted) {
     requestgalleryPermission();
     // Camera permissions are not granted yet
@@ -60,7 +79,6 @@ export default function App() {
       </View>
     );
   }
-
   if (!imagePickerPermission.granted) {
     requestimagePickerPermission();
     // Camera permissions are not granted yet
@@ -114,16 +132,22 @@ export default function App() {
       });
 
       // get items from image
-      const items = await ImageToItems(base64ImageData);
-      setScannedIngredients(items.items);
-      SheetManager.show("scanned-items-sheet");
+      try {
+        setIsLoading(true);
+        const items = await ImageToItems(base64ImageData);
+        setScannedIngredients(items);
+        SheetManager.show("scanned-items-sheet");
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
   const handleTorch = () => {
     setTorch(torch === FlashMode.off ? FlashMode.torch : FlashMode.off);
   };
-
 
   return (
     <View style={styles.container}>

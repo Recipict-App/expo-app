@@ -19,8 +19,8 @@ export default function pantry() {
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
-  const data = userData[0];
-  const ingredients = data.ingredients;
+  const data2 = userData[0];
+  const ingredients = data2.ingredients;
 
   // Group items by type for display
   function groupByType(objectArray: ingredientProps[]) {
@@ -69,10 +69,10 @@ export default function pantry() {
               {/* Shelf */}
               {ingredients[0] ? (
                 /* Dispay items */
-                Object.keys(groupedItems).map(function (key) {
+                Object.keys(groupedItems).map((key, index) => {
                   return (
                     <Shelf
-                      key={key}
+                      key={index}
                       category={key}
                       ingredients={groupedItems[key]}
                     />

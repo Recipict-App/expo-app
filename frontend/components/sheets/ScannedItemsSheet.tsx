@@ -39,7 +39,7 @@ export default function ScannedItemsSheet(props: SheetProps) {
   };
 
   const handleAdd = async () => {
-    const newIngredients = [...ingredients, ...scannedIngredients];
+    const newIngredients: ingredientProps[] = [...ingredients, ...scannedIngredients];
 
     // push to firebase, and refresh context
     await editIngredientToFirebase(userGoogleToken, newIngredients);
@@ -83,7 +83,6 @@ export default function ScannedItemsSheet(props: SheetProps) {
               {Object.keys(groupedItems).map(function (key) {
                 return (
                   <>
-                    {console.log("Scanned Items is Empty...")}
                     <Shelf
                       key={key}
                       category={key}

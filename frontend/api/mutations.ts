@@ -21,7 +21,7 @@ export function useEditIngredientToFirebase() {
         console.log(error);
       } else {
         console.log("Successfully edited ingredient! 🤩");
-        await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.ingredients, queryKeysEnum.recipes] });
+        await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
       }
     },
   });

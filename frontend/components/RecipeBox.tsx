@@ -6,12 +6,21 @@ import { SheetManager } from "react-native-actions-sheet";
 
 export interface RecipeBoxProps {
   name: string;
-  ingredients: number;
+  ingredients: any;
   duration: number;
-  imageURI?: string;
+  imageURI: string;
 }
-const handleShowRecipe = () => {
-  SheetManager.show("recipe-ingredient-sheet");
+const handleShowRecipe = (name: String, imageURI: string, ingredients: any) => {
+  // console.log(name);
+  SheetManager.show("recipe-ingredient-sheet", {
+    payload: {
+      recipe: {
+        name: name,
+        imageURI: imageURI,
+        ingredients: ingredients,
+      },
+    },
+  });
 };
 
 function throttle(cb: any, delay = 1000) {
@@ -41,7 +50,7 @@ export const RecipeBox: React.FC<RecipeBoxProps> = ({
     <View className="flex w-full h-[100] justify-between rounded-3xl bg-[#F8F8F6]">
       <TouchableOpacity
         className=" min-w-full min-h-full "
-        onPress={throttle(handleShowRecipe)}
+        onPress={() => throttle(handleShowRecipe(name, imageURI, ingredients))}
       >
         <View className="flex flex-row justify-between items-center w-full h-full p-[15px]">
           <View className="flex flex-row justify-center items-center">
@@ -59,15 +68,15 @@ export const RecipeBox: React.FC<RecipeBoxProps> = ({
                 }}
               />
             </View>
-            <View className="flex px-[24px] ml-[10px]">
+            <View className="flex ml-[10px]">
               <Text
                 numberOfLines={1}
-                className=" text-base font-pps text-clip max-w-[175px]"
+                className=" text-base font-pps text-clip max-w-[150px]"
               >
                 {name}
               </Text>
               <Text className=" text-xs font-ppr">
-                {ingredients} ingredients
+                {ingredients.length} ingredients
               </Text>
               <Text className=" text-xs font-ppr">{duration} minutes</Text>
               <Text className=" text-xs font-ppr">idk kcal</Text>

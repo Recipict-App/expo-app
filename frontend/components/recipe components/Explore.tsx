@@ -7,6 +7,7 @@ import { UserContext } from "../../userContext";
 import { useContext } from "react";
 
 import { useFetchRandomRecipes } from "../../api/queries";
+import RecipeBoxSkeleton from "../skeletons/RecipeBoxSkeleton";
 
 export default function Explore() {
   const { userData } = useContext(UserContext);
@@ -63,6 +64,14 @@ export default function Explore() {
         />
       </View>
       <View className="w-full flex" style={{ gap: 10 }}>
+        {isPending && (
+          <>
+            <RecipeBoxSkeleton />
+            <RecipeBoxSkeleton />
+            <RecipeBoxSkeleton />
+          </>
+        )}
+
         {data?.newRecipes.map((item: any, index: any) => {
           return (
             <RecipeBox
@@ -74,6 +83,7 @@ export default function Explore() {
             />
           );
         })}
+
       </View>
     </View>
   );

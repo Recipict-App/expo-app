@@ -1,77 +1,7 @@
-import {
-  View,
-  Text,
-  FlatList,
-  ImageBackground,
-} from "react-native";
+import { View, Text, FlatList } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { SheetManager } from "react-native-actions-sheet";
-
-
-const handleShowRecipe = (name: String, imageURI: string, ingredients: any) => {
-  // console.log(name);
-  SheetManager.show("recipe-ingredient-sheet", {
-    payload: {
-      recipe: {
-        name: name,
-        imageURI: imageURI,
-        ingredients: ingredients,
-      },
-    },
-  });
-};
-
-function throttle(cb: any, delay = 1000) {
-  let shouldWait = false;
-
-  return (...args: any) => {
-    if (shouldWait) {
-      return;
-    }
-
-    cb(...args);
-    shouldWait = true;
-
-    setTimeout(() => {
-      shouldWait = false;
-    }, delay);
-  };
-}
-
-const RecipeItem = ({
-  name,
-  imageURI,
-  ingredients,
-}: {
-  name: string;
-  imageURI: string;
-  ingredients: any;
-}) => (
-  <TouchableOpacity onPress={() => throttle(handleShowRecipe(name, imageURI, ingredients))}>
-    <View
-      className=" rounded-2xl m-[5] flex justify-end items-center overflow-hidden"
-      style={{ width: 127, height: 210 }}
-    >
-      <ImageBackground
-        style={{ width: "110%", height: "110%" }}
-        source={{
-          uri: imageURI,
-        }}
-      >
-        <View
-          className="w-full h-full justify-end items-center"
-          style={{ backgroundColor: "rgba(0,0,0,0.2)" }}
-        >
-          <Text className="text-white font-pps w-3/5 flex text-center pb-4">
-            {name}
-          </Text>
-        </View>
-      </ImageBackground>
-    </View>
-  </TouchableOpacity>
-);
+import RecipeBoxBig from "./RecipeBoxBig";
 
 export default function AlmostThere({ recipes }: any) {
   return (
@@ -102,14 +32,14 @@ export default function AlmostThere({ recipes }: any) {
           horizontal
           data={recipes}
           renderItem={({ item, index }) => (
-            <RecipeItem
+            <RecipeBoxBig
               key={index}
               name={item.title}
               imageURI={item.image}
               ingredients={item.totalIngredients}
             />
           )}
-          keyExtractor={(item, index)=> index.toString()}
+          keyExtractor={(item, index) => index.toString()}
           showsHorizontalScrollIndicator={false}
         />
       </View>

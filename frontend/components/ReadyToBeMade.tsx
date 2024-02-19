@@ -99,7 +99,7 @@ export default function ReadyToBeMade({ recipes }: any) {
           renderItem={({ item, index }) => (
             <RecipeItem key={index} name={item.title} imageURI={item.image} />
           )}
-          keyExtractor={(item, index)=> item._id.toString()}
+          keyExtractor={(item, index)=> item.toString()}
           showsHorizontalScrollIndicator={false}
         />
       </View>

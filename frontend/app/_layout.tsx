@@ -52,6 +52,7 @@ export default function RootLayout() {
     Poppins_600SemiBold,
     Poppins_700Bold,
   });
+
   if (!fontsLoaded && !fontError) {
     return null;
   }

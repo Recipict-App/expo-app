@@ -6,13 +6,14 @@ export function useFetchRecommendedRecipes(pantryData: any) {
   return useQuery({
     queryKey: [queryKeysEnum.recipes],
     queryFn: () => fetchRecommendedRecipes(pantryData),
-  })
+    staleTime: Infinity,
+  });
 }
 
 export function useFetchRandomRecipes(pantryData: any) {
   return useQuery({
-    queryKey: [queryKeysEnum.recipes],
+    queryKey: ["RANDOM_RECIPE"],
     queryFn: () => fetchRandomRecipes(pantryData),
-  })
+    staleTime: Infinity,
+  });
 }
-

@@ -109,7 +109,7 @@ export default function AlmostThere({ recipes }: any) {
               ingredients={item.totalIngredients}
             />
           )}
-          keyExtractor={(item, index)=> item.toString()}
+          keyExtractor={(item, index)=> index.toString()}
           showsHorizontalScrollIndicator={false}
         />
       </View>

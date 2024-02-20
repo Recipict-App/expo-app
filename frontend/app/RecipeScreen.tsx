@@ -68,8 +68,8 @@ export default function recipe() {
             />
           </View>
 
-          <ReadyToBeMade recipes={data?.newReadyRecipes} />
-          <AlmostThere recipes={data?.newMissingRecipes} />
+          <ReadyToBeMade recipes={data?.newReadyRecipes} isPending={isPending} />
+          <AlmostThere recipes={data?.newMissingRecipes} isPending={isPending} />
         </View>
       </ScrollView>
     </SafeAreaView>

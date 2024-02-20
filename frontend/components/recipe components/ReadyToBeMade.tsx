@@ -1,11 +1,11 @@
 import { View, Text, FlatList } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
+
 import RecipeBoxBig from "./RecipeBoxBig";
+import RecipeBoxBigSkeleton from "../skeletons/RecipeBoxBigSkeleton";
 
-
-export default function ReadyToBeMade({ recipes }: any) {
-
+export default function ReadyToBeMade({ recipes, isPending }: any) {
   return (
     <View className=" bg-[#BCBBFF] w-full h-[284] rounded-2xl mt-9 pt-[12px] justify-between flex">
       <View className="ml-[10px] flex flex-row" style={{ zIndex: 1 }}>
@@ -28,15 +28,32 @@ export default function ReadyToBeMade({ recipes }: any) {
       </View>
       {/* list of recipe */}
       <View className="flex flex-row gap-[9px] overflow-hidden pb-[15px]">
-        <FlatList
-          horizontal
-          data={recipes}
-          renderItem={({ item, index }) => (
-            <RecipeBoxBig key={index} name={item.title} imageURI={item.image} ingredients={item.ingredients} />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
-        />
+        {!isPending ? (
+          <FlatList
+            horizontal
+            data={recipes}
+            renderItem={({ item, index }) => (
+              <RecipeBoxBig
+                key={index}
+                name={item.title}
+                imageURI={item.image}
+                ingredients={item.ingredients}
+              />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            showsHorizontalScrollIndicator={false}
+          />
+        ) : (
+          <>
+            <FlatList
+              horizontal
+              data={[1,2,3,4]}
+              renderItem={({ item, index }) => <RecipeBoxBigSkeleton />}
+              keyExtractor={(item, index) => index.toString()}
+              showsHorizontalScrollIndicator={false}
+            />
+          </>
+        )}
       </View>
     </View>
   );

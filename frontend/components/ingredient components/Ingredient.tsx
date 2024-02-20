@@ -7,33 +7,7 @@ import { UserContext } from "../../userContext";
 import { useContext } from "react";
 import { Redirect } from "expo-router";
 
-const debounce = (cb: any, delay = 1000) => {
-  let timeout: any;
-
-  return (...args: any) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      cb(...args);
-    }, delay);
-  };
-};
-
-function throttle(cb: any, delay = 1000) {
-  let shouldWait = false;
-
-  return (...args: any) => {
-    if (shouldWait) {
-      return;
-    }
-
-    cb(...args);
-    shouldWait = true;
-
-    setTimeout(() => {
-      shouldWait = false;
-    }, delay);
-  };
-}
+import { useDebounceCallback } from "usehooks-ts";
 
 export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
   name,
@@ -68,17 +42,20 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
     });
   };
 
-  const fromDate = new Date();
-  const toDate = new Date(expiryDate);
+  const debouncedhandleShowIngredient = useDebounceCallback(handleShowIngredient, 500, {
+    leading: true,
+    trailing: false,
+  });
+
   const dayDifference = Math.max(
-    Math.floor((toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24)),
+    Math.floor((new Date(expiryDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)),
     0
   );
 
   return (
     <TouchableOpacity
       className="w-full"
-      onPress={throttle(handleShowIngredient)}
+      onPress={debouncedhandleShowIngredient}
     >
       <View className="w-full h-[72px] rounded-3xl bg-[#F8F8F6] flex-row pl-[20px] items-center justify-between">
         <View className="flex flex-row">

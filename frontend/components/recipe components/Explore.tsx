@@ -80,6 +80,8 @@ export default function Explore() {
               duration={item.readyInMinutes}
               ingredients={item.totalIngredients}
               imageURI={item.image}
+              equipment={item.requiredEquipment}
+              calories = {item.calories}
             />
           );
         })}

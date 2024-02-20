@@ -11,7 +11,6 @@ export interface RecipeBoxProps {
   imageURI: string;
 }
 const handleShowRecipe = (name: String, imageURI: string, ingredients: any) => {
-  // console.log(name);
   SheetManager.show("recipe-ingredient-sheet", {
     payload: {
       recipe: {

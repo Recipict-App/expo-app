@@ -69,15 +69,17 @@ export default function Home() {
             >
               <Text className=" text-lg font-ppr">Things you bought</Text>
 
-              {!ingredients &&
-                <>
-                  <IngredientSkeleton />
-                  <IngredientSkeleton />
-                  <IngredientSkeleton />
-                  <IngredientSkeleton />
-                </>
+              {
+                // todo: fix loading state
+                !ingredients && (
+                  <>
+                    <IngredientSkeleton />
+                    <IngredientSkeleton />
+                    <IngredientSkeleton />
+                    <IngredientSkeleton />
+                  </>
+                )
               }
-              
 
               {ingredients[0] ? (
                 ingredients.map((item: ingredientProps, index: number) => {

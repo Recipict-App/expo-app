@@ -168,7 +168,6 @@ export default function EditIngredientSheet(
     });
 
     // refresh data to get fresh data from firebase
-    console.log("new data from firebase is about to be fetched");
     await getUserDataFromFirebaseAndSetContext(setUserData);
     console.log("new data from firebase is fetched");
 
@@ -203,7 +202,7 @@ export default function EditIngredientSheet(
       return eachIngredient;
     });
     setScannedIngredients(newIngredients);
-    console.log(newIngredients);
+    // console.log(newIngredients);
   };
 
   const handleChange = () => {

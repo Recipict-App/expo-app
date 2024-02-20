@@ -9,14 +9,26 @@ export interface RecipeBoxProps {
   ingredients: any;
   duration: number;
   imageURI: string;
+  equipment: string[];
+  calories: string;
 }
-const handleShowRecipe = (name: String, imageURI: string, ingredients: any) => {
+const handleShowRecipe = (
+  name: String,
+  imageURI: string,
+  ingredients: any,
+  duration: number,
+  equipment: string[],
+  calories: string
+) => {
   SheetManager.show("recipe-ingredient-sheet", {
     payload: {
       recipe: {
         name: name,
         imageURI: imageURI,
         ingredients: ingredients,
+        duration: duration,
+        equipment: equipment,
+        calories: calories,
       },
     },
   });
@@ -44,12 +56,25 @@ export const RecipeBox: React.FC<RecipeBoxProps> = ({
   ingredients,
   duration,
   imageURI,
+  equipment,
+  calories,
 }) => {
   return (
     <View className="flex w-full h-[100] justify-between rounded-3xl bg-[#F8F8F6]">
       <TouchableOpacity
         className=" min-w-full min-h-full "
-        onPress={() => throttle(handleShowRecipe(name, imageURI, ingredients))}
+        onPress={() =>
+          throttle(
+            handleShowRecipe(
+              name,
+              imageURI,
+              ingredients,
+              duration,
+              equipment,
+              calories
+            )
+          )
+        }
       >
         <View className="flex flex-row justify-between items-center w-full h-full p-[15px]">
           <View className="flex flex-row justify-center items-center">
@@ -77,8 +102,15 @@ export const RecipeBox: React.FC<RecipeBoxProps> = ({
               <Text className=" text-xs font-ppr">
                 {ingredients.length} ingredients
               </Text>
-              <Text className=" text-xs font-ppr">{duration} minutes</Text>
-              <Text className=" text-xs font-ppr">idk kcal</Text>
+              <Text className=" text-xs font-ppr">
+                {duration !== -1
+                  ? duration + " minutes"
+                  : "Duration Not Available"}
+              </Text>
+
+              <Text className=" text-xs font-ppr">
+                {calories ? calories + " calories/serving" : "Calories Not Available"}
+              </Text>
             </View>
           </View>
           <Image

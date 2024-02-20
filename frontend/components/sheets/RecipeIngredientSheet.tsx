@@ -11,7 +11,7 @@ import {
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SheetManager } from "react-native-actions-sheet";
 import { Image } from "expo-image";
-import recipe from "../../app/RecipeScreen";
+import { useWindowDimensions } from "react-native";
 
 const dummyIngredients = [
   "Garlic",
@@ -46,39 +46,33 @@ function throttle(cb: any, delay = 1000) {
 const handleCloseRecipe = () => {
   SheetManager.hide("recipe-ingredient-sheet");
 };
+
 export default function RecipeIngredientSheet(
   props: SheetProps<{
     recipe: {
       name: String;
       imageURI: string;
       ingredients: any;
+      duration: number;
+      equipment: string[];
+      calories: string;
     };
   }>
 ) {
-  console.log(props.payload?.recipe.ingredients);
-  return (
-    <ActionSheet id={props.sheetId}>
-      <View className=" max-h-[80%] h-fit flex items-center gap-4 px-5 py-2 ">
-        <View className="w-full h-[20] flex justify-center items-center">
-          <View
-            style={{
-              width: "50%",
-              height: 4,
-              borderRadius: 10,
-              backgroundColor: "#9F9F9F",
-            }}
-          >
-            <TouchableOpacity
-              className=" min-h-full min-w-full"
-              onPress={throttle(handleCloseRecipe)}
-            />
-          </View>
-        </View>
-        <Text className="font-pps text-2xl">{props.payload?.recipe.name}</Text>
+  let { width } = useWindowDimensions();
+  // console.log(props.payload?.recipe.ingredients);
+  const SummaryComponent: any = () => {
+    return (
+      <View
+        className=" flex items-center h-full justify-center"
+        style={{ width: width }}
+      >
+        {/* Title */}
+        <Text className="font-pps text-2xl text-center">{props.payload?.recipe.name}</Text>
         {/* Image */}
-        <View className=" w-4/5 h-1/3 rounded-2xl overflow-hidden">
+        <View className=" w-4/5 h-1/3 rounded-2xl overflow-hidden bg-green justify-center">
           <Image
-            className="w-[110%] h-[110%]"
+            className="w-[120%] h-[120%]"
             source={{ uri: props.payload?.recipe.imageURI }}
             contentFit="contain"
           />
@@ -94,7 +88,7 @@ export default function RecipeIngredientSheet(
                 <View className="flex w-4/5 flex-row mx-2">
                   <Text className="font-ppr text-base">- </Text>
                   <Text className="font-ppr text-base">
-                     {item.amount} {item.unit} {item.name}
+                    {item.amount} {item.unit} {item.name}
                   </Text>
                 </View>
               )}
@@ -104,20 +98,30 @@ export default function RecipeIngredientSheet(
           {/* General Information */}
           <View className=" flex h-full w-[200px] space-y-2 p-3">
             <Text className="font-pps text-base">Duration:</Text>
-            <Text className="font-ppr text-base">50 minutes</Text>
-            <Text className="font-pps text-base">Calories: </Text>
-            <Text className="font-ppr text-base">20 kcal</Text>
+            <Text className="font-ppr text-base">
+              {props.payload?.recipe.duration !== -1
+                ? props.payload?.recipe.duration + " minutes"
+                : "Duration Not Available"}
+            </Text>
+            <Text className="font-pps text-base">Cal/Serving: </Text>
+            <Text className="font-ppr text-base">
+              {props.payload?.recipe.calories
+                ? props.payload?.recipe.calories + " cal"
+                : "Calories Not Available"}
+            </Text>
             <Text className="font-pps text-base">Equipment(s): </Text>
-            <Text className="font-ppr text-base">Pan, Wok</Text>
+            <Text className="font-ppr text-base">
+              {props.payload?.recipe.equipment[0]
+                ? props.payload?.recipe.equipment[0]
+                : "Not Given"}
+            </Text>
           </View>
         </View>
-        <View
-          className="flex h-[40] w-full flex-row justify-center items-center"
-          style={{ gap: 20 }}
-        >
+        {/* footer */}
+        <View className="flex h-[40] w-full flex-row justify-between items-center px-[20]">
           {/* close button */}
           <View
-            className="flex w-[10%] h-full justify-center items-center rounded-xl"
+            className="flex w-[40] h-full justify-center items-center rounded-xl"
             style={{ backgroundColor: "#FFCCC5" }}
           >
             <TouchableOpacity
@@ -135,7 +139,7 @@ export default function RecipeIngredientSheet(
             </TouchableOpacity>
           </View>
           {/* see instruction button */}
-          <View className="flex w-[70%] h-full justify-center items-center bg-green rounded-2xl">
+          <View className="flex w-[70%] h-full items-center bg-green rounded-2xl">
             <TouchableOpacity
               className="flex min-w-full min-h-full justify-center items-center rounded-2xl"
               style={{ width: 100 }}
@@ -149,6 +153,21 @@ export default function RecipeIngredientSheet(
             </TouchableOpacity>
           </View>
         </View>
+      </View>
+    );
+  };
+
+  return (
+    <ActionSheet id={props.sheetId}>
+      <View className="h-full w-full flex items-center">
+        <FlatList
+          horizontal
+          data={[1]}
+          renderItem={({ item, index }) => <SummaryComponent />}
+          keyExtractor={(item, index) => index.toString()}
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+        />
       </View>
     </ActionSheet>
   );

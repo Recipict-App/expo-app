@@ -25,7 +25,7 @@ export default function ScannedItemsSheet(props: SheetProps) {
 
   console.log("scanned Items: " + scannedIngredients);
   // console.log(scannedIngredients);
-  
+
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return null;
@@ -86,14 +86,12 @@ export default function ScannedItemsSheet(props: SheetProps) {
               {/* Dispay items */}
               {Object.keys(groupedItems).map(function (key, index) {
                 return (
-                  <>
-                    <Shelf
-                      key={index}
-                      category={key}
-                      ingredients={groupedItems[key]}
-                      mode="temporary"
-                    />
-                  </>
+                  <Shelf
+                    key={index}
+                    category={key}
+                    ingredients={groupedItems[key]}
+                    mode="temporary"
+                  />
                 );
               })}
               {/* Buttons */}

@@ -12,28 +12,35 @@ import { Redirect } from "expo-router";
 import { Shelf } from "../components/ingredient components/Shelf";
 import { ingredientProps } from "../firebase-type";
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../userContext";
 
+// Group items by type for display
+function groupByType(objectArray: ingredientProps[]) {
+  return objectArray.reduce(function (acc: any, obj: ingredientProps) {
+    var key = obj["type"];
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(obj);
+    return acc;
+  }, {});
+}
+
 export default function pantry() {
+  const [searchInput, setSearchInput] = useState<string>("");
+
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
-  const data2 = userData[0];
-  const ingredients = data2.ingredients;
 
-  // Group items by type for display
-  function groupByType(objectArray: ingredientProps[]) {
-    return objectArray.reduce(function (acc: any, obj: ingredientProps) {
-      var key = obj["type"];
-      if (!acc[key]) {
-        acc[key] = [];
-      }
-      acc[key].push(obj);
-      return acc;
-    }, {});
-  }
-  const groupedItems = groupByType(ingredients);
+  // process the data
+  const data = userData[0];
+  const ingredients = data.ingredients;
+  const filteredIngredients = ingredients.filter((ingredient) => {
+    return ingredient.name.toLowerCase().includes(searchInput.toLowerCase());
+  });
+  const groupedItems = groupByType(filteredIngredients);
 
   // Button handlers
   const handleShowIngredient = () => {
@@ -62,6 +69,8 @@ export default function pantry() {
               <TextInput
                 className="flex ml-4 font-ppr text-sm w-full justify-center "
                 placeholder="Search"
+                onChangeText={setSearchInput}
+                value={searchInput}
               />
             </View>
 

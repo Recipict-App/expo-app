@@ -37,7 +37,9 @@ export default function ReadyToBeMade({ recipes, isPending }: any) {
                 key={index}
                 name={item.title}
                 imageURI={item.image}
-                ingredients={item.ingredients}
+                ingredients={item.totalIngredients}
+                equipment={item.requiredEquipment}
+                calories={item.calories}
               />
             )}
             keyExtractor={(item, index) => index.toString()}
@@ -47,7 +49,7 @@ export default function ReadyToBeMade({ recipes, isPending }: any) {
           <>
             <FlatList
               horizontal
-              data={[1,2,3,4]}
+              data={[1, 2, 3, 4]}
               renderItem={({ item, index }) => <RecipeBoxBigSkeleton />}
               keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator={false}

@@ -24,7 +24,8 @@ export default function ScannedItemsSheet(props: SheetProps) {
   );
 
   console.log("scanned Items: " + scannedIngredients);
-
+  console.log(scannedIngredients);
+  
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return null;

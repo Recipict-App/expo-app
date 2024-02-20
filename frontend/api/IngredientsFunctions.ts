@@ -90,6 +90,32 @@ export async function PredictExpirationDate(
 
   return output;
 }
+export async function ExtractGenericName(
+  ingredientName: string
+): Promise<string> {
+  // input validation
+  if (!ingredientName) throw new Error("Invalid ingredient name");
+
+  // call the api
+  const response = await fetch(
+    `https://us-central1-recipict-gcp.cloudfunctions.net/function-ingredient-extract-generic-name-py?name=${ingredientName}`,
+    {
+      method: "GET",
+      mode: "cors",
+    }
+  );
+
+  // check for errors
+  if (!response.ok)
+    throw new Error(
+      `HTTP error when classifying ingredient! status: ${response.status}`
+    );
+
+  // return the category
+  const data = await response.json();
+
+  return data.name.toLowerCase();
+}
 
 /* Helpers */
 
@@ -109,6 +135,7 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
         const expirationDate: number = await PredictExpirationDate(
           item.mentionText
         );
+        const genericName: string = await ExtractGenericName(item.mentionText);
 
         // create json object based on date
         if (date) {
@@ -122,6 +149,7 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
             dateAdded: date,
             type: category,
             id: Crypto.randomUUID(),
+            genericName: genericName,
           };
         } else {
           return {
@@ -134,6 +162,7 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
             dateAdded: new Date(),
             type: category,
             id: Crypto.randomUUID(),
+            genericName: genericName,
           };
         }
       }

@@ -21,6 +21,7 @@ export interface ingredient {
   expiryDate: Date;
   dateAdded: Date;
   type: ingredientTypes;
+  genericName: string;
 }
 
 export enum subscriptionTypes {
@@ -61,6 +62,7 @@ export interface ingredientProps {
   expiryDate: Date;
   dateAdded: Date;
   type: ingredientTypes;
+  genericName: string;
 }
 
 interface recipeInfo {

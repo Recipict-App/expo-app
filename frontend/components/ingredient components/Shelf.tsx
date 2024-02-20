@@ -42,6 +42,7 @@ export const Shelf: React.FC<ShelfProps> = ({
               expiryDate={item.expiryDate}
               dateAdded={item.dateAdded}
               type={item.type}
+              genericName={item.genericName}
               mode={mode ? mode : "normal"}
             />
           );

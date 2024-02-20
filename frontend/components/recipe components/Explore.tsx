@@ -15,7 +15,7 @@ export default function Explore() {
   const userDetails = userData[0];
 
   const ingredientsString = userDetails.ingredients
-    .map((ingredient) => ingredient.name)
+    .map((ingredient) => ingredient.genericName)
     .join(",");
   const cuisinesString = userDetails.preferences.cuisine.join(",");
   const dietsString = userDetails.preferences.diet.join(",");

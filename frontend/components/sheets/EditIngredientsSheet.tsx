@@ -185,6 +185,7 @@ export default function EditIngredientSheet(
       expiryDate: dateValue,
       dateAdded: chosenIngredient.dateAdded,
       type: typeValue,
+      genericName: nameValue,
     };
 
     // if there is no ingredient in ingredients, add new ingredient
@@ -222,6 +223,7 @@ export default function EditIngredientSheet(
       expiryDate: dateValue,
       dateAdded: chosenIngredient.dateAdded,
       type: typeValue,
+      genericName: nameValue,
     };
 
     // if there is no ingredient in ingredients, add new ingredient

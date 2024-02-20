@@ -8,6 +8,7 @@ export default function RecipeBoxBigSkeleton() {
     <SkeletonSimpler
       loading={true}
       layout={[{ width: 128, height: 210, borderRadius: 16, margin: 5}]}
+      theme="dark"
     >
       <View />
     </SkeletonSimpler>

@@ -1,4 +1,3 @@
-
 /* Migrating to react query */
 
 export async function fetchRecommendedRecipes(requestBody: any) {
@@ -33,8 +32,13 @@ export async function fetchRecommendedRecipes(requestBody: any) {
       extendedIngredients,
       image,
     } = recipeInfo;
-
+    const requiredEquipment: string[] = [];
     const instructions = analyzedInstructions[0].steps.map((stepInfo: any) => {
+      for (let i = 0; i < stepInfo.equipment.length; i++) {
+        if (!requiredEquipment.includes(stepInfo.equipment[i].name)) {
+          requiredEquipment.push(stepInfo.equipment[i].name);
+        }
+      }
       return {
         equipment: stepInfo.equipment,
         ingredients: stepInfo.ingredients,
@@ -51,6 +55,7 @@ export async function fetchRecommendedRecipes(requestBody: any) {
       };
     });
 
+    const calories = extractCalories(summary);
     const recipe = {
       title,
       summary,
@@ -60,6 +65,8 @@ export async function fetchRecommendedRecipes(requestBody: any) {
       readyInMinutes,
       totalIngredients,
       image,
+      calories,
+      requiredEquipment,
     };
 
     newRecipes.push(recipe);
@@ -73,10 +80,16 @@ export async function fetchRecommendedRecipes(requestBody: any) {
 
   return { newRecipes, newReadyRecipes, newMissingRecipes };
 }
+function extractCalories(inputString: string): string | null {
+  const regex = /(\d+)\s*calories\b/i;
+  const match = inputString.match(regex);
+
+  return match && match[1] ? match[1] : null;
+}
 
 export async function fetchRandomRecipes(requestBody: any) {
   console.log("Fetching random recipes with REACT QUERY...");
-  
+
   let newRecipes: any[] = [];
 
   const apiResponse = await fetch(
@@ -103,8 +116,13 @@ export async function fetchRandomRecipes(requestBody: any) {
       extendedIngredients,
       image,
     } = recipeInfo;
-
+    const requiredEquipment: string[] = [];
     const instructions = analyzedInstructions[0].steps.map((stepInfo: any) => {
+      for (let i = 0; i < stepInfo.equipment.length; i++) {
+        if (!requiredEquipment.includes(stepInfo.equipment[i].name)) {
+          requiredEquipment.push(stepInfo.equipment[i].name);
+        }
+      }
       return {
         equipment: stepInfo.equipment,
         ingredients: stepInfo.ingredients,
@@ -119,16 +137,17 @@ export async function fetchRandomRecipes(requestBody: any) {
         unit: ingredient.unit == "" ? "ea" : ingredient.unit,
       };
     });
-
+    const calories = extractCalories(summary);
     newRecipes.push({
       title,
-      summary,
       instructions,
       missedIngredientCount,
       id,
       readyInMinutes,
       totalIngredients,
       image,
+      calories,
+      requiredEquipment,
     });
   });
 

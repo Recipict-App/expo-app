@@ -38,7 +38,6 @@ export default function RecipeBoxBig({
   equipment,
   calories,
 }: RecipeBoxBigProps) {
-  console.log("ingredients: " + ingredients);
   const debouncedOnClick = useDebounceCallback(handleShowRecipe, 500, {
     leading: true,
     trailing: false,

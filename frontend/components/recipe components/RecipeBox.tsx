@@ -4,6 +4,8 @@ import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SheetManager } from "react-native-actions-sheet";
 
+import { useDebounceCallback } from "usehooks-ts";
+
 export interface RecipeBoxProps {
   name: string;
   ingredients: any;
@@ -11,44 +13,6 @@ export interface RecipeBoxProps {
   imageURI: string;
   equipment: string[];
   calories: string;
-}
-const handleShowRecipe = (
-  name: String,
-  imageURI: string,
-  ingredients: any,
-  duration: number,
-  equipment: string[],
-  calories: string
-) => {
-  SheetManager.show("recipe-ingredient-sheet", {
-    payload: {
-      recipe: {
-        name: name,
-        imageURI: imageURI,
-        ingredients: ingredients,
-        duration: duration,
-        equipment: equipment,
-        calories: calories,
-      },
-    },
-  });
-};
-
-function throttle(cb: any, delay = 1000) {
-  let shouldWait = false;
-
-  return (...args: any) => {
-    if (shouldWait) {
-      return;
-    }
-
-    cb(...args);
-    shouldWait = true;
-
-    setTimeout(() => {
-      shouldWait = false;
-    }, delay);
-  };
 }
 
 export const RecipeBox: React.FC<RecipeBoxProps> = ({
@@ -59,22 +23,31 @@ export const RecipeBox: React.FC<RecipeBoxProps> = ({
   equipment,
   calories,
 }) => {
+  const handleShowRecipe = () => {
+    SheetManager.show("recipe-ingredient-sheet", {
+      payload: {
+        recipe: {
+          name: name,
+          imageURI: imageURI,
+          ingredients: ingredients,
+          duration: duration,
+          equipment: equipment,
+          calories: calories,
+        },
+      },
+    });
+  };
+
+  const debouncedhandleShowRecipe = useDebounceCallback(handleShowRecipe, 500, {
+    leading: true,
+    trailing: false,
+  });
+
   return (
     <View className="flex w-full h-[100] justify-between rounded-3xl bg-[#F8F8F6]">
       <TouchableOpacity
         className=" min-w-full min-h-full "
-        onPress={() =>
-          throttle(
-            handleShowRecipe(
-              name,
-              imageURI,
-              ingredients,
-              duration,
-              equipment,
-              calories
-            )
-          )
-        }
+        onPress={debouncedhandleShowRecipe}
       >
         <View className="flex flex-row justify-between items-center w-full h-full p-[15px]">
           <View className="flex flex-row justify-center items-center">
@@ -109,7 +82,9 @@ export const RecipeBox: React.FC<RecipeBoxProps> = ({
               </Text>
 
               <Text className=" text-xs font-ppr">
-                {calories ? calories + " calories/serving" : "Calories Not Available"}
+                {calories
+                  ? calories + " calories/serving"
+                  : "Calories Not Available"}
               </Text>
             </View>
           </View>

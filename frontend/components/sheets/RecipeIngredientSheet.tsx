@@ -13,36 +13,6 @@ import { SheetManager } from "react-native-actions-sheet";
 import { Image } from "expo-image";
 import { useWindowDimensions } from "react-native";
 
-const dummyIngredients = [
-  "Garlic",
-  "Chili",
-  "Rice",
-  "Dany",
-  "Other spices idk what but a long one",
-  "Recipict",
-  "Purply",
-  "Orangy",
-  "Bowly",
-  "Satay",
-];
-
-function throttle(cb: any, delay = 1000) {
-  let shouldWait = false;
-
-  return (...args: any) => {
-    if (shouldWait) {
-      return;
-    }
-
-    cb(...args);
-    shouldWait = true;
-
-    setTimeout(() => {
-      shouldWait = false;
-    }, delay);
-  };
-}
-
 const handleCloseRecipe = () => {
   SheetManager.hide("recipe-ingredient-sheet");
 };
@@ -68,11 +38,13 @@ export default function RecipeIngredientSheet(
         style={{ width: width }}
       >
         {/* Title */}
-        <Text className="font-pps text-2xl text-center">{props.payload?.recipe.name}</Text>
+        <Text className="font-pps text-2xl text-center">
+          {props.payload?.recipe.name}
+        </Text>
         {/* Image */}
-        <View className=" w-4/5 h-1/3 rounded-2xl overflow-hidden bg-green justify-center">
+        <View className=" w-4/5 h-1/3 rounded-2xl overflow-hidden  justify-center">
           <Image
-            className="w-[120%] h-[120%]"
+            className="w-[130%] h-[130%]"
             source={{ uri: props.payload?.recipe.imageURI }}
             contentFit="contain"
           />

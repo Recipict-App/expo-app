@@ -7,22 +7,7 @@ import { UserContext } from "../../userContext";
 import { useContext } from "react";
 import { Redirect } from "expo-router";
 
-function throttle(cb: any, delay = 1000) {
-  let shouldWait = false;
-
-  return (...args: any) => {
-    if (shouldWait) {
-      return;
-    }
-
-    cb(...args);
-    shouldWait = true;
-
-    setTimeout(() => {
-      shouldWait = false;
-    }, delay);
-  };
-}
+import { useDebounceCallback } from "usehooks-ts";
 
 export const ScannedItemsIngredient: React.FC<ingredientProps> = ({
   name,
@@ -37,6 +22,8 @@ export const ScannedItemsIngredient: React.FC<ingredientProps> = ({
   if (!userData) return <Redirect href="/" />;
   const data = userData[0];
   const userGoogleToken = data.googleToken;
+
+  
 
   const handleShowIngredient = async () => {
     await SheetManager.show("edit-ingredients-sheet", {
@@ -55,13 +42,18 @@ export const ScannedItemsIngredient: React.FC<ingredientProps> = ({
     });
   };
 
+  const debouncedhandleShowIngredient = useDebounceCallback(handleShowIngredient, 500, {
+    leading: true,
+    trailing: false,
+  });
+
   
   const showDate = dateAdded?.toString().slice(0, 10) || "Undefined";
 
   return (
     <TouchableOpacity
       className="w-full"
-      onPress={throttle(handleShowIngredient)}
+      onPress={debouncedhandleShowIngredient}
     >
       <View className="w-full h-[72px] rounded-3xl bg-[#F8F8F6] flex-row pl-[20px] items-center justify-between">
         <View className="flex flex-row">

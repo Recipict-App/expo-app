@@ -36,15 +36,17 @@ export async function ImageToItems(
   return items;
 }
 
-export async function ClassifyCategory(
-  ingredientName: string
-): Promise<string> {
+export async function getIngredientProperties(ingredientName: string): Promise<{
+  category: String;
+  expiration: String;
+  generic_name: String;
+}> {
   // input validation
   if (!ingredientName) throw new Error("Invalid ingredient name");
 
   // call the api
   const response = await fetch(
-    `https://us-central1-recipict-gcp.cloudfunctions.net/function-ingredient-classifier-py?name=${ingredientName}`,
+    `https://us-central1-recipict-gcp.cloudfunctions.net/function-assign-ingredient-property?name=${ingredientName}`,
     {
       method: "GET",
       mode: "cors",
@@ -54,67 +56,13 @@ export async function ClassifyCategory(
   // check for errors
   if (!response.ok)
     throw new Error(
-      `HTTP error when classifying ingredient! status: ${response.status}`
+      `HTTP error when analyzing ingredient! status: ${response.status}`
     );
 
   // return the category
   const data = await response.json();
 
-  return data.category;
-}
-
-export async function PredictExpirationDate(
-  ingredientName: string
-): Promise<number> {
-  // input validation
-  if (!ingredientName) throw new Error("Invalid ingredient name");
-
-  // call the api
-  const response = await fetch(
-    `https://us-central1-recipict-gcp.cloudfunctions.net/function-expiration-date-prediction?name=${ingredientName}`,
-    {
-      method: "GET",
-      mode: "cors",
-    }
-  );
-
-  // check for errors
-  if (!response.ok)
-    throw new Error(
-      `HTTP error when classifying ingredient! status: ${response.status}`
-    );
-
-  // return the category
-  const data: { output: string } = await response.json();
-  const output = parseInt(data.output);
-
-  return output;
-}
-export async function ExtractGenericName(
-  ingredientName: string
-): Promise<string> {
-  // input validation
-  if (!ingredientName) throw new Error("Invalid ingredient name");
-
-  // call the api
-  const response = await fetch(
-    `https://us-central1-recipict-gcp.cloudfunctions.net/function-ingredient-extract-generic-name-py?name=${ingredientName}`,
-    {
-      method: "GET",
-      mode: "cors",
-    }
-  );
-
-  // check for errors
-  if (!response.ok)
-    throw new Error(
-      `HTTP error when classifying ingredient! status: ${response.status}`
-    );
-
-  // return the category
-  const data = await response.json();
-
-  return data.name.toLowerCase();
+  return data;
 }
 
 /* Helpers */
@@ -150,18 +98,19 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
           // extract the unit from product_quantity
           quantity_unit = product_quantity.match(/[a-zA-Z]+/)?.[0] || "";
           // remove all letters from product_quantity
-          product_quantity = product_quantity.replace(/[a-zA-Z]/g, '');
+          product_quantity = product_quantity.replace(/[a-zA-Z]/g, "");
         }
-        
+
         // todo: do something with product_code
 
         // call helper to get category for each item
-        const [category, expirationDate, genericName] = await Promise.all([
-          ClassifyCategory(product_name),
-          PredictExpirationDate(product_name),
-          ExtractGenericName(product_name),
-        ]);
-
+        const {category, expiration, generic_name} = await getIngredientProperties(product_name);
+        // console.log('-----------------');
+        // console.log(category);
+        // console.log(Number(expiration));
+        // console.log(generic_name);
+        // console.log('-----------------');
+        
         // create json object based on date
         if (date) {
           return {
@@ -169,12 +118,12 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
             quantity: product_quantity,
             unit: quantity_unit || "pc",
             expiryDate: new Date(
-              new Date().getTime() + expirationDate * 24 * 60 * 60 * 1000
+              new Date().getTime() + Number(expiration) * 24 * 60 * 60 * 1000
             ),
             dateAdded: date,
             type: category,
             id: Crypto.randomUUID(),
-            genericName: genericName,
+            genericName: generic_name,
           };
         } else {
           return {
@@ -182,12 +131,12 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
             quantity: product_quantity,
             unit: quantity_unit || "pc",
             expiryDate: new Date(
-              new Date().getTime() + expirationDate * 24 * 60 * 60 * 1000
+              new Date().getTime() + Number(expiration) * 24 * 60 * 60 * 1000
             ),
             dateAdded: new Date(),
             type: category,
             id: Crypto.randomUUID(),
-            genericName: genericName,
+            genericName: generic_name,
           };
         }
       }

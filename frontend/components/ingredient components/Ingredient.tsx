@@ -47,7 +47,7 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
     trailing: false,
   });
 
-  const dayDifference = Math.max(
+  const dayDifference = 1 + Math.max(
     Math.floor((new Date(expiryDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)),
     0
   );

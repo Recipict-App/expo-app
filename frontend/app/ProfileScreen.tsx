@@ -11,9 +11,9 @@ import { deleteCurrentLocalUser } from "../api/DatabaseFunctions";
 
 /* testing apis */
 import { useQuery } from "@tanstack/react-query";
-import { ClassifyCategory, ExtractGenericName } from "../api/IngredientsFunctions";
 
-import { PredictExpirationDate } from "../api/IngredientsFunctions";
+
+import { getIngredientProperties } from "../api/IngredientsFunctions";
 /* testing apis */
 
 export default function Profile() {
@@ -32,14 +32,13 @@ export default function Profile() {
   /* test */
 
   const handlePreference = async () => {
-    const response = await PredictExpirationDate("chicken breast");
-    console.log("expiratopn data: ", response);
+    const {category, expiration, generic_name} = await getIngredientProperties("dairyqueen oat milk");
+    console.log(category);
+    console.log(expiration);
+    console.log(generic_name);
   };
-  const handleAppereance = async () => {
-    const response = await ExtractGenericName("ORGANIC BANANA");
-    console.log("expiratopn data: ", response);
-  };
-  const handleNotification = async () => {};
+  const handleAppereance =  () => {};
+  const handleNotification =  () => {};
   const handleLocation = () => {};
   const handleAboutUs = () => {};
 

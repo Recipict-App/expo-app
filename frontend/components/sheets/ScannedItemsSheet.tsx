@@ -23,7 +23,6 @@ export default function ScannedItemsSheet(props: SheetProps) {
     ScannedIngredientsContext
   );
 
-  console.log("scanned Items: " + scannedIngredients);
   // console.log(scannedIngredients);
 
   // get user data from local

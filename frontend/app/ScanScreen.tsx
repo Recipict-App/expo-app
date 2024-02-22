@@ -134,7 +134,14 @@ export default function App() {
       // get items from image
       try {
         setIsLoading(true);
+
+        const startTime = performance.now();
+        
         const items = await ImageToItems(base64ImageData);
+
+        const endTime = performance.now();
+        console.log("Execution time:", ((endTime - startTime) / 1000).toFixed(3), "seconds");
+
         setScannedIngredients(items);
         SheetManager.show("scanned-items-sheet");
       } catch (error) {

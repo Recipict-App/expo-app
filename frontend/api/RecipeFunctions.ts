@@ -80,6 +80,7 @@ export async function fetchRecommendedRecipes(requestBody: any) {
 
   return { newRecipes, newReadyRecipes, newMissingRecipes };
 }
+
 function extractCalories(inputString: string): string | null {
   const regex = /(\d+)\s*calories\b/i;
   const match = inputString.match(regex);

@@ -11,26 +11,6 @@ interface RecipeBoxBigProps {
   calories: string;
 }
 
-const handleShowRecipe = (
-  name: String,
-  imageURI: string,
-  ingredients: any,
-  equipment: string[],
-  calories: string
-) => {
-  SheetManager.show("recipe-ingredient-sheet", {
-    payload: {
-      recipe: {
-        name: name,
-        imageURI: imageURI,
-        ingredients: ingredients,
-        equipment: equipment,
-        calories: calories,
-      },
-    },
-  });
-};
-
 export default function RecipeBoxBig({
   name,
   imageURI,
@@ -38,17 +18,27 @@ export default function RecipeBoxBig({
   equipment,
   calories,
 }: RecipeBoxBigProps) {
+  const handleShowRecipe = () => {
+    SheetManager.show("recipe-ingredient-sheet", {
+      payload: {
+        recipe: {
+          name: name,
+          imageURI: imageURI,
+          ingredients: ingredients,
+          equipment: equipment,
+          calories: calories,
+        },
+      },
+    });
+  };
+
   const debouncedOnClick = useDebounceCallback(handleShowRecipe, 500, {
     leading: true,
     trailing: false,
   });
 
   return (
-    <TouchableOpacity
-      onPress={() =>
-        debouncedOnClick(name, imageURI, ingredients, equipment, calories)
-      }
-    >
+    <TouchableOpacity onPress={debouncedOnClick}>
       <View
         className=" rounded-2xl m-[5] flex justify-end items-center overflow-hidden"
         style={{ width: 127, height: 210 }}

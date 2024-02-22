@@ -84,7 +84,7 @@ const unit_data = [
     value: "ml",
   },
   {
-    value: "ea",
+    value: "pc",
   },
 ];
 

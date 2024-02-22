@@ -125,24 +125,49 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
   const items: ingredientProps[] = await Promise.all(
     rawData.document.entities.map(async (item: any) => {
       let date = "";
+      let product_code = "";
+      let product_name = "";
+      let product_quantity = "1";
+      let quantity_unit = "";
 
       // Assign category for each item
       if (item.type == "date") {
         date = item.mentionText;
       } else if (item.type == "item_name") {
+        // get the item properties
+        item.properties.forEach((property: any) => {
+          if (property.type == "product_code")
+            product_code = property.mentionText;
+          if (property.type == "product_name")
+            product_name = property.mentionText;
+          if (property.type == "product_quantity")
+            product_quantity = property.mentionText;
+        });
+
+        // check if product_quantity contains 'kg'
+        const containsLetter = /[a-zA-Z]/.test(product_quantity);
+        if (containsLetter) {
+          // extract the unit from product_quantity
+          quantity_unit = product_quantity.match(/[a-zA-Z]+/)?.[0] || "";
+          // remove all letters from product_quantity
+          product_quantity = product_quantity.replace(/[a-zA-Z]/g, '');
+        }
+        
+        // todo: do something with product_code
+
         // call helper to get category for each item
-        const category: string = await ClassifyCategory(item.mentionText);
-        const expirationDate: number = await PredictExpirationDate(
-          item.mentionText
-        );
-        const genericName: string = await ExtractGenericName(item.mentionText);
+        const [category, expirationDate, genericName] = await Promise.all([
+          ClassifyCategory(product_name),
+          PredictExpirationDate(product_name),
+          ExtractGenericName(product_name),
+        ]);
 
         // create json object based on date
         if (date) {
           return {
-            name: item.mentionText,
-            quantity: 1,
-            unit: "ea",
+            name: product_name,
+            quantity: product_quantity,
+            unit: quantity_unit || "pc",
             expiryDate: new Date(
               new Date().getTime() + expirationDate * 24 * 60 * 60 * 1000
             ),
@@ -153,9 +178,9 @@ async function AssignProperiesToIngredient(rawData: any): Promise<{
           };
         } else {
           return {
-            name: item.mentionText,
-            quantity: 1,
-            unit: "ea",
+            name: product_name,
+            quantity: product_quantity,
+            unit: quantity_unit || "pc",
             expiryDate: new Date(
               new Date().getTime() + expirationDate * 24 * 60 * 60 * 1000
             ),

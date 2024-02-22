@@ -140,7 +140,7 @@ export default function App() {
         const items = await ImageToItems(base64ImageData);
 
         const endTime = performance.now();
-        console.log("Execution time:", ((endTime - startTime) / 1000).toFixed(3), "seconds");
+        console.log("Execution time:", ((endTime - startTime) / 1000).toFixed(2), "seconds");
 
         setScannedIngredients(items);
         SheetManager.show("scanned-items-sheet");

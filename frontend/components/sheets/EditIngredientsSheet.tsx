@@ -254,7 +254,7 @@ export default function EditIngredientSheet(
   return (
     <ActionSheet id={props.sheetId}>
       <View
-        className=" h-[42%] flex items-center px-5 py-2"
+        className="h-fit min-h-[42%] flex items-center px-5 py-2 "
         style={{ gap: 25 }}
       >
         <View

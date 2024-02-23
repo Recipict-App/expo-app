@@ -30,7 +30,7 @@ export async function ImageToItems(
 
   // parse the response
   const rawData = await response.json();
-  const data = await AssignProperiesToIngredient(rawData);
+  const data = await AssignPropertiesToIngredient(rawData);
   const items = data.items;
 
   return items;
@@ -67,7 +67,7 @@ export async function getIngredientProperties(ingredientName: string): Promise<{
 
 /* Helpers */
 
-async function AssignProperiesToIngredient(rawData: any): Promise<{
+async function AssignPropertiesToIngredient(rawData: any): Promise<{
   items: ingredientProps[];
 }> {
   const items: ingredientProps[] = await Promise.all(

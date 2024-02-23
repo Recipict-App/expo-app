@@ -3,8 +3,15 @@ import { Image } from "expo-image";
 import React from "react";
 import RecipeBoxBig from "./RecipeBoxBig";
 import RecipeBoxBigSkeleton from "../skeletons/RecipeBoxBigSkeleton";
+import { recipeType } from "../../types/recipe-type";
 
-export default function AlmostThere({ recipes, isPending }: any) {
+export default function AlmostThere({
+  recipes,
+  isPending,
+}: {
+  recipes: recipeType[] | undefined;
+  isPending: boolean;
+}) {
   return (
     <View className=" bg-[#FEC1A6] w-full h-[284] rounded-2xl mt-9 pt-[12px] justify-between flex">
       <View
@@ -33,25 +40,16 @@ export default function AlmostThere({ recipes, isPending }: any) {
           <FlatList
             horizontal
             data={recipes}
-            renderItem={({ item, index }) => (
-              <RecipeBoxBig
-                key={index}
-                name={item.title}
-                imageURI={item.image}
-                ingredients={item.totalIngredients}
-                equipment={item.requiredEquipment}
-                calories={item.calories}
-              />
-            )}
-            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => <RecipeBoxBig recipe={item} />}
+            keyExtractor={( index) => index.toString()}
             showsHorizontalScrollIndicator={false}
           />
         ) : (
           <FlatList
             horizontal
             data={[1, 2, 3, 4]}
-            renderItem={({ item, index }) => <RecipeBoxBigSkeleton />}
-            keyExtractor={(item, index) => index.toString()}
+            renderItem={() => <RecipeBoxBigSkeleton />}
+            keyExtractor={(index) => index.toString()}
             showsHorizontalScrollIndicator={false}
           />
         )}

@@ -75,13 +75,7 @@ export default function Explore() {
         {data?.newRecipes.map((item: any, index: any) => {
           return (
             <RecipeBox
-              key={index}
-              name={item.title}
-              duration={item.readyInMinutes}
-              ingredients={item.totalIngredients}
-              imageURI={item.image}
-              equipment={item.requiredEquipment}
-              calories = {item.calories}
+              recipe={item}
             />
           );
         })}

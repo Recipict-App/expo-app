@@ -2,32 +2,13 @@ import { ImageBackground, TouchableOpacity, View, Text } from "react-native";
 import { useDebounceCallback } from "usehooks-ts";
 
 import { SheetManager } from "react-native-actions-sheet";
+import { recipeType } from "../../types/recipe-type";
 
-interface RecipeBoxBigProps {
-  name: string;
-  imageURI: string;
-  ingredients: any;
-  equipment: string[];
-  calories: string;
-}
-
-export default function RecipeBoxBig({
-  name,
-  imageURI,
-  ingredients,
-  equipment,
-  calories,
-}: RecipeBoxBigProps) {
+export default function RecipeBoxBig({ recipe }: { recipe: recipeType }) {
   const handleShowRecipe = () => {
     SheetManager.show("recipe-ingredient-sheet", {
       payload: {
-        recipe: {
-          name: name,
-          imageURI: imageURI,
-          ingredients: ingredients,
-          equipment: equipment,
-          calories: calories,
-        },
+        recipe: recipe,
       },
     });
   };
@@ -46,7 +27,7 @@ export default function RecipeBoxBig({
         <ImageBackground
           style={{ width: "110%", height: "110%" }}
           source={{
-            uri: imageURI,
+            uri: recipe.image,
           }}
         >
           <View
@@ -54,7 +35,7 @@ export default function RecipeBoxBig({
             style={{ backgroundColor: "rgba(0,0,0,0.2)" }}
           >
             <Text className="text-white font-pps w-3/5 flex text-center pb-4">
-              {name}
+              {recipe.title}
             </Text>
           </View>
         </ImageBackground>

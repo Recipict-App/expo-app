@@ -4,8 +4,15 @@ import React from "react";
 
 import RecipeBoxBig from "./RecipeBoxBig";
 import RecipeBoxBigSkeleton from "../skeletons/RecipeBoxBigSkeleton";
+import { recipeType } from "../../types/recipe-type";
 
-export default function ReadyToBeMade({ recipes, isPending }: any) {
+export default function ReadyToBeMade({
+  recipes,
+  isPending,
+}: {
+  recipes: recipeType[] | undefined;
+  isPending: boolean;
+}) {
   return (
     <View className=" bg-[#BCBBFF] w-full h-[284] rounded-2xl mt-9 pt-[12px] justify-between flex">
       <View className="ml-[10px] flex flex-row" style={{ zIndex: 1 }}>
@@ -32,17 +39,8 @@ export default function ReadyToBeMade({ recipes, isPending }: any) {
           <FlatList
             horizontal
             data={recipes}
-            renderItem={({ item, index }) => (
-              <RecipeBoxBig
-                key={index}
-                name={item.title}
-                imageURI={item.image}
-                ingredients={item.totalIngredients}
-                equipment={item.requiredEquipment}
-                calories={item.calories}
-              />
-            )}
-            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => <RecipeBoxBig recipe={item} />}
+            keyExtractor={(index) => index.toString()}
             showsHorizontalScrollIndicator={false}
           />
         ) : (
@@ -50,8 +48,8 @@ export default function ReadyToBeMade({ recipes, isPending }: any) {
             <FlatList
               horizontal
               data={[1, 2, 3, 4]}
-              renderItem={({ item, index }) => <RecipeBoxBigSkeleton />}
-              keyExtractor={(item, index) => index.toString()}
+              renderItem={() => <RecipeBoxBigSkeleton />}
+              keyExtractor={(index) => index.toString()}
               showsHorizontalScrollIndicator={false}
             />
           </>

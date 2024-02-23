@@ -1,11 +1,33 @@
+import {
+  RecipeProps,
+  SpoonacularFetchRecommendedRecipes,
+  Step,
+  ExtendedIngredient,
+  recipeType,
+} from "../types/recipe-type";
 /* Migrating to react query */
 
-export async function fetchRecommendedRecipes(requestBody: any) {
+function stripHtmlTags(htmlString: string): string {
+  return htmlString.replace(/<[^>]*>/g, "");
+}
+
+function extractCalories(inputString: string): string | null {
+  const regex = /(\d+)\s*calories\b/i;
+  const match = inputString.match(regex);
+
+  return match && match[1] ? match[1] : null;
+}
+
+export async function fetchRecommendedRecipes(requestBody: any): Promise<{
+  newRecipes: recipeType[];
+  newReadyRecipes: recipeType[];
+  newMissingRecipes: recipeType[];
+}> {
   console.log("Fetching recommended recipes with REACT QUERY...");
 
-  let newRecipes: any[] = [];
-  let newReadyRecipes: any[] = [];
-  let newMissingRecipes: any[] = [];
+  let newRecipes: recipeType[] = [];
+  let newReadyRecipes: recipeType[] = [];
+  let newMissingRecipes: recipeType[] = [];
 
   const apiResponse = await fetch(
     `https://us-central1-recipict-gcp.cloudfunctions.net/function-spoonacular-recipe-by-ingredient`,
@@ -19,21 +41,24 @@ export async function fetchRecommendedRecipes(requestBody: any) {
     }
   );
 
-  const response = await apiResponse.json();
+  const response: SpoonacularFetchRecommendedRecipes = await apiResponse.json();
 
-  response.results.map((recipeInfo: any) => {
+  response.results.map((recipeInfo: RecipeProps) => {
     const {
+      id,
       title,
       summary,
       analyzedInstructions,
       missedIngredientCount,
-      id,
       readyInMinutes,
       extendedIngredients,
       image,
+      servings
     } = recipeInfo;
+
     const requiredEquipment: string[] = [];
-    const instructions = analyzedInstructions[0].steps.map((stepInfo: any) => {
+
+    const instructions = analyzedInstructions[0].steps.map((stepInfo: Step) => {
       for (let i = 0; i < stepInfo.equipment.length; i++) {
         if (!requiredEquipment.includes(stepInfo.equipment[i].name)) {
           requiredEquipment.push(stepInfo.equipment[i].name);
@@ -46,27 +71,32 @@ export async function fetchRecommendedRecipes(requestBody: any) {
       };
     });
 
-    const totalIngredients = extendedIngredients.map((ingredient: any) => {
-      return {
-        name: ingredient.name,
-        amount: ingredient.amount,
-        unit: ingredient.unit == "" ? "pc" : ingredient.unit,
-        original: ingredient.originalName,
-      };
-    });
+    const totalIngredients = extendedIngredients.map(
+      (ingredient: ExtendedIngredient) => {
+        return {
+          name: ingredient.name,
+          amount: ingredient.amount,
+          unit: ingredient.unit == "" ? "pc" : ingredient.unit,
+          original: ingredient.originalName,
+        };
+      }
+    );
 
     const calories = extractCalories(summary);
-    const recipe = {
+    const Cleanedsummary = stripHtmlTags(summary);
+
+    const recipe: recipeType = {
+      id,
       title,
-      summary,
+      Cleanedsummary,
       instructions,
       missedIngredientCount,
-      id,
       readyInMinutes,
       totalIngredients,
       image,
       calories,
       requiredEquipment,
+      servings
     };
 
     newRecipes.push(recipe);
@@ -79,13 +109,6 @@ export async function fetchRecommendedRecipes(requestBody: any) {
   });
 
   return { newRecipes, newReadyRecipes, newMissingRecipes };
-}
-
-function extractCalories(inputString: string): string | null {
-  const regex = /(\d+)\s*calories\b/i;
-  const match = inputString.match(regex);
-
-  return match && match[1] ? match[1] : null;
 }
 
 export async function fetchRandomRecipes(requestBody: any) {
@@ -139,6 +162,8 @@ export async function fetchRandomRecipes(requestBody: any) {
       };
     });
     const calories = extractCalories(summary);
+    const Cleanedsummary = stripHtmlTags(summary);
+
     newRecipes.push({
       title,
       instructions,
@@ -149,6 +174,7 @@ export async function fetchRandomRecipes(requestBody: any) {
       image,
       calories,
       requiredEquipment,
+      Cleanedsummary,
     });
   });
 

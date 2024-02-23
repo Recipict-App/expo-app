@@ -153,3 +153,70 @@ export async function fetchRandomRecipes(requestBody: any) {
 
   return { newRecipes };
 }
+
+export async function searchRecipes(requestBody: any) {
+  console.log("searching recipes...");
+
+  let newRecipes: any[] = [];
+
+  const apiResponse = await fetch(
+    `https://us-central1-recipict-gcp.cloudfunctions.net/function-search-recipe`,
+    {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    }
+  );
+
+  const response = await apiResponse.json();
+  response.results.map((recipeInfo: any) => {
+    const {
+      title,
+      summary,
+      analyzedInstructions,
+      missedIngredientCount,
+      id,
+      readyInMinutes,
+      extendedIngredients,
+      image,
+    } = recipeInfo;
+    const requiredEquipment: string[] = [];
+    const instructions = analyzedInstructions[0].steps.map((stepInfo: any) => {
+      for (let i = 0; i < stepInfo.equipment.length; i++) {
+        if (!requiredEquipment.includes(stepInfo.equipment[i].name)) {
+          requiredEquipment.push(stepInfo.equipment[i].name);
+        }
+      }
+      return {
+        equipment: stepInfo.equipment,
+        ingredients: stepInfo.ingredients,
+        step: stepInfo.step,
+      };
+    });
+
+    const totalIngredients = extendedIngredients.map((ingredient: any) => {
+      return {
+        name: ingredient.name,
+        amount: ingredient.amount,
+        unit: ingredient.unit == "" ? "ea" : ingredient.unit,
+      };
+    });
+    const calories = extractCalories(summary);
+    newRecipes.push({
+      title,
+      instructions,
+      missedIngredientCount,
+      id,
+      readyInMinutes,
+      totalIngredients,
+      image,
+      calories,
+      requiredEquipment,
+    });
+  });
+
+  return newRecipes;
+}

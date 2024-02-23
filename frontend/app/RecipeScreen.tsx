@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { View, Text, ScrollView, TextInput } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
@@ -10,6 +10,7 @@ import { SheetManager } from "react-native-actions-sheet";
 
 import { UserContext } from "../userContext";
 import { useFetchRecommendedRecipes } from "../api/queries";
+import { searchRecipes } from "../api/RecipeFunctions";
 
 export default function recipe() {
   const { userData } = useContext(UserContext);
@@ -33,8 +34,28 @@ export default function recipe() {
   const { isPending, error, data, refetch } =
     useFetchRecommendedRecipes(requestBody);
 
-  const handleShowRecipe = () => {
+  const [query, setQuery] = useState<string>("");
+
+  const handleShowSavedRecipe = () => {
     SheetManager.show("saved-recipes-sheet");
+  };
+
+  const handleSearch = async () => {
+    const requestBody = {
+      subscription: userDetails.subscription,
+      query: query,
+    };
+    setQuery("");
+    const newRecipes: any = await searchRecipes(requestBody);
+    SheetManager.show("search-recipes-sheet", {
+      payload: {
+        recipes: newRecipes,
+      },
+    });
+  };
+
+  const handleChange = (e: any) => {
+    setQuery(e);
   };
 
   return (
@@ -48,7 +69,7 @@ export default function recipe() {
           {/* Recipe Header */}
           <View className="flex w-full justify-between flex-row items-center">
             <Text className="font-pps text-3xl">Recipe</Text>
-            <TouchableOpacity onPress={handleShowRecipe}>
+            <TouchableOpacity onPress={handleShowSavedRecipe}>
               <Image
                 style={{ width: 12, height: 16 }}
                 source={require("../assets/icons/Save.svg")}
@@ -65,11 +86,21 @@ export default function recipe() {
             <TextInput
               className="flex ml-4 font-ppr text-sm w-full"
               placeholder="Search"
+              // autoCorrect={true}
+              onSubmitEditing={handleSearch}
+              value={query}
+              onChangeText={handleChange}
             />
           </View>
 
-          <ReadyToBeMade recipes={data?.newReadyRecipes} isPending={isPending} />
-          <AlmostThere recipes={data?.newMissingRecipes} isPending={isPending} />
+          <ReadyToBeMade
+            recipes={data?.newReadyRecipes}
+            isPending={isPending}
+          />
+          <AlmostThere
+            recipes={data?.newMissingRecipes}
+            isPending={isPending}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

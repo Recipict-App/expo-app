@@ -53,7 +53,7 @@ export async function fetchRecommendedRecipes(requestBody: any): Promise<{
       readyInMinutes,
       extendedIngredients,
       image,
-      servings
+      servings,
     } = recipeInfo;
 
     const requiredEquipment: string[] = [];
@@ -96,7 +96,7 @@ export async function fetchRecommendedRecipes(requestBody: any): Promise<{
       image,
       calories,
       requiredEquipment,
-      servings
+      servings,
     };
 
     newRecipes.push(recipe);
@@ -232,6 +232,8 @@ export async function searchRecipes(requestBody: any) {
       };
     });
     const calories = extractCalories(summary);
+    const Cleanedsummary = stripHtmlTags(summary);
+
     newRecipes.push({
       title,
       instructions,
@@ -242,8 +244,9 @@ export async function searchRecipes(requestBody: any) {
       image,
       calories,
       requiredEquipment,
+      Cleanedsummary,
     });
   });
-
-  return newRecipes;
+  console.log(newRecipes);
+  return { newRecipes };
 }

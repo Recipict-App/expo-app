@@ -41,7 +41,9 @@ export default function AlmostThere({
             horizontal
             data={recipes}
             renderItem={({ item }) => <RecipeBoxBig recipe={item} />}
-            keyExtractor={( index) => index.toString()}
+            keyExtractor={(item, index) => {
+              return index.toString();
+            }}
             showsHorizontalScrollIndicator={false}
           />
         ) : (
@@ -49,7 +51,7 @@ export default function AlmostThere({
             horizontal
             data={[1, 2, 3, 4]}
             renderItem={() => <RecipeBoxBigSkeleton />}
-            keyExtractor={(index) => index.toString()}
+            keyExtractor={(item, index) => index.toString()}
             showsHorizontalScrollIndicator={false}
           />
         )}

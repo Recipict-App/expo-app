@@ -75,6 +75,7 @@ export default function Explore() {
         {data?.newRecipes.map((item: any, index: any) => {
           return (
             <RecipeBox
+              key={item.id}
               recipe={item}
             />
           );

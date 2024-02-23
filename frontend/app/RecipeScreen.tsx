@@ -11,6 +11,7 @@ import { SheetManager } from "react-native-actions-sheet";
 import { UserContext } from "../userContext";
 import { useFetchRecommendedRecipes } from "../api/queries";
 import { searchRecipes } from "../api/RecipeFunctions";
+import { recipeType } from "../types/recipe-type";
 
 export default function recipe() {
   const { userData } = useContext(UserContext);
@@ -46,7 +47,11 @@ export default function recipe() {
       query: query,
     };
     setQuery("");
-    const newRecipes: any = await searchRecipes(requestBody);
+    const { newRecipes }: { newRecipes: recipeType[] } = await searchRecipes(
+      requestBody
+    );
+    console.log("search recipes:" + newRecipes);
+    console.log("-------------------------");
     SheetManager.show("search-recipes-sheet", {
       payload: {
         recipes: newRecipes,

@@ -1,14 +1,15 @@
 import ActionSheet, { SheetProps } from "react-native-actions-sheet";
 import { View, Text, ScrollView } from "react-native";
-import { RecipeBoxProps, RecipeBox } from "../recipe components/RecipeBox";
+import { RecipeBox } from "../recipe components/RecipeBox";
 import { SheetManager } from "react-native-actions-sheet";
+import { recipeType } from "../../types/recipe-type";
 
 const handleCloseSearchRecipe = () => {
   SheetManager.hide("search-recipes-sheet");
 };
 
 export default function SearchRecipesSheet(
-  props: SheetProps<{ recipes: any[] }>
+  props: SheetProps<{ recipes: recipeType[] }>
 ) {
   const recipes = props.payload?.recipes;
   return (
@@ -22,19 +23,9 @@ export default function SearchRecipesSheet(
         </View>
         <ScrollView className="w-full" showsVerticalScrollIndicator={false}>
           <View className="w-full" style={{ gap: 10 }}>
-            {(recipes && recipes.length > 0) ? (
-              recipes.map((item: any, index: any) => {
-                return (
-                  <RecipeBox
-                    key={index}
-                    name={item.title}
-                    duration={item.readyInMinutes}
-                    ingredients={item.totalIngredients}
-                    imageURI={item.image}
-                    equipment={item.requiredEquipment}
-                    calories={item.calories}
-                  />
-                );
+            {recipes && recipes.length > 0 ? (
+              recipes.map((item: recipeType, index: any) => {
+                return <RecipeBox key={index} recipe={item} />;
               })
             ) : (
               <Text>Sorry No Recipes Found</Text>

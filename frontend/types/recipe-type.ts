@@ -21,6 +21,8 @@ export interface recipeType {
   requiredEquipment: string[];
 }
 
+/* Spoonacular type for Recommended recipe function */
+
 export interface SpoonacularFetchRecommendedRecipes {
   results: RecipeProps[];
   offset: number;

@@ -5,35 +5,14 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { SheetManager } from "react-native-actions-sheet";
 
 import { useDebounceCallback } from "usehooks-ts";
+import { recipeType } from "../../types/recipe-type";
 
-export interface RecipeBoxProps {
-  name: string;
-  ingredients: any;
-  duration: number;
-  imageURI: string;
-  equipment: string[];
-  calories: string;
-}
 
-export const RecipeBox: React.FC<RecipeBoxProps> = ({
-  name,
-  ingredients,
-  duration,
-  imageURI,
-  equipment,
-  calories,
-}) => {
+export const RecipeBox= ({ recipe }: { recipe: recipeType }) => {
   const handleShowRecipe = () => {
     SheetManager.show("recipe-ingredient-sheet", {
       payload: {
-        recipe: {
-          name: name,
-          imageURI: imageURI,
-          ingredients: ingredients,
-          duration: duration,
-          equipment: equipment,
-          calories: calories,
-        },
+        recipe: recipe,
       },
     });
   };
@@ -61,7 +40,7 @@ export const RecipeBox: React.FC<RecipeBoxProps> = ({
                   height: "100%",
                 }}
                 source={{
-                  uri: imageURI,
+                  uri: recipe.image,
                 }}
               />
             </View>
@@ -70,20 +49,20 @@ export const RecipeBox: React.FC<RecipeBoxProps> = ({
                 numberOfLines={1}
                 className=" text-base font-pps text-clip max-w-[150px]"
               >
-                {name}
+                {recipe.title}
               </Text>
               <Text className=" text-xs font-ppr">
-                {ingredients.length} ingredients
+                {recipe.totalIngredients.length} ingredients
               </Text>
               <Text className=" text-xs font-ppr">
-                {duration !== -1
-                  ? duration + " minutes"
+                {recipe.readyInMinutes  
+                  ? recipe.readyInMinutes + " minutes"
                   : "Duration Not Available"}
               </Text>
 
               <Text className=" text-xs font-ppr">
-                {calories
-                  ? calories + " calories/serving"
+                {recipe.calories
+                  ? recipe.calories + " calories"
                   : "Calories Not Available"}
               </Text>
             </View>

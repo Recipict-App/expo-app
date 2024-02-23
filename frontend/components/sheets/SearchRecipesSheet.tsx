@@ -1,9 +1,5 @@
 import ActionSheet, { SheetProps } from "react-native-actions-sheet";
-import {
-  View,
-  Text,
-  ScrollView,
-} from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { RecipeBoxProps, RecipeBox } from "../recipe components/RecipeBox";
 import { SheetManager } from "react-native-actions-sheet";
 
@@ -12,8 +8,9 @@ const handleCloseSearchRecipe = () => {
 };
 
 export default function SearchRecipesSheet(
-  props: SheetProps<{ recipes: any }>
+  props: SheetProps<{ recipes: any[] }>
 ) {
+  const recipes = props.payload?.recipes;
   return (
     <ActionSheet id={props.sheetId} containerStyle={{ height: "80%" }}>
       <View
@@ -25,19 +22,23 @@ export default function SearchRecipesSheet(
         </View>
         <ScrollView className="w-full" showsVerticalScrollIndicator={false}>
           <View className="w-full" style={{ gap: 10 }}>
-            {props.payload?.recipes.map((item: any, index: any) => {
-              return (
-                <RecipeBox
-                  key={index}
-                  name={item.title}
-                  duration={item.readyInMinutes}
-                  ingredients={item.totalIngredients}
-                  imageURI={item.image}
-                  equipment={item.requiredEquipment}
-                  calories={item.calories}
-                />
-              );
-            })}
+            {(recipes && recipes.length > 0) ? (
+              recipes.map((item: any, index: any) => {
+                return (
+                  <RecipeBox
+                    key={index}
+                    name={item.title}
+                    duration={item.readyInMinutes}
+                    ingredients={item.totalIngredients}
+                    imageURI={item.image}
+                    equipment={item.requiredEquipment}
+                    calories={item.calories}
+                  />
+                );
+              })
+            ) : (
+              <Text>Sorry No Recipes Found</Text>
+            )}
           </View>
         </ScrollView>
       </View>

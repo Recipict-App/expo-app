@@ -14,7 +14,6 @@ import { Image } from "expo-image";
 import { useWindowDimensions } from "react-native";
 
 const handleCloseRecipe = () => {
-  console.log("Closing...");
   SheetManager.hide("recipe-ingredient-sheet");
 };
 

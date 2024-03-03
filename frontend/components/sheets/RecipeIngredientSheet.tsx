@@ -98,7 +98,7 @@ export default function RecipeIngredientSheet(
                 <View className="bg-[#F8F8F6] w-full rounded-md  flex-row items-center mt-2">
                   <View className="rounded-l-md h-full w-[3px] bg-grey"></View>
                   <Text className="ml-1 text-sm text-[#5A58B5] px-1 py-1">
-                    ({item.amount} {item.unit}){" "}
+                    ({item.amount.toString().substring(0, 5)} {item.unit}){" "}
                     <Text className="font-pps">{item.name}</Text>
                   </Text>
                 </View>

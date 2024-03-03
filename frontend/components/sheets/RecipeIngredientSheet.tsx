@@ -126,7 +126,7 @@ export default function RecipeIngredientSheet(
               return (
                 <View className="bg-[#F8F8F6] w-full rounded-md flex-row items-center mt-2">
                   <View className="rounded-l-md h-full w-1/12 py-1 bg-green items-center">
-                    <Text className="text-white text-base font-ppb">{index}</Text>
+                    <Text className="text-white text-base font-ppb">{index+1}</Text>
                   </View>
 
                   <Text className="w-5/6 ml-3 text-sm font-medium text-green py-2 text-justify">

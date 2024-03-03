@@ -15,10 +15,10 @@ export default function AlmostThere({
   return (
     <View className=" bg-[#FEC1A6] w-full h-[284] rounded-2xl mt-9 pt-[12px] justify-between flex">
       <View
-        className="mr-[10px] flex flex-row justify-end"
+        className="mr-[2vw] flex flex-row justify-end"
         style={{ zIndex: 1 }}
       >
-        <Text className=" font-pps text-2xl text-white text-right pr-1">
+        <Text className=" font-pps text-2xl text-white text-right">
           Almost There
         </Text>
         <Image
@@ -35,7 +35,7 @@ export default function AlmostThere({
         />
       </View>
       {/* list of recipe */}
-      <View className="flex flex-row gap-[9px] overflow-hidden pb-[15px]">
+      <View className="flex flex-row overflow-hidden pb-[15px] justify-center">
         {!isPending ? (
           <FlatList
             horizontal

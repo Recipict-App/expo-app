@@ -15,14 +15,12 @@ export default function ReadyToBeMade({
 }) {
   return (
     <View className=" bg-[#BCBBFF] w-full h-[284] rounded-2xl mt-9 pt-[12px] justify-between flex">
-      <View className="ml-[10px] flex flex-row" style={{ zIndex: 1 }}>
-        <Text className="font-pps text-2xl text-white pl-1">
-          Ready To Be Made
-        </Text>
+      <View className="ml-[2vw] flex flex-row" style={{ zIndex: 1 }}>
+        <Text className="font-pps text-2xl text-white">Ready To Be Made</Text>
         <Image
           style={{
             position: "absolute",
-            right: -30,
+            right: -40,
             top: -50,
             width: 120,
             height: 106,
@@ -34,15 +32,23 @@ export default function ReadyToBeMade({
         />
       </View>
       {/* list of recipe */}
-      <View className="flex flex-row gap-[9px] overflow-hidden pb-[15px]">
+      <View className="flex flex-row overflow-hidden pb-[15px] justify-center">
         {!isPending ? (
-          <FlatList
-            horizontal
-            data={recipes}
-            renderItem={({ item }) => <RecipeBoxBig recipe={item} />}
-            keyExtractor={(index) => index.toString()}
-            showsHorizontalScrollIndicator={false}
-          />
+          recipes?.length !== 0 ? (
+            <FlatList
+              horizontal
+              data={recipes}
+              renderItem={({ item }) => <RecipeBoxBig recipe={item} />}
+              keyExtractor={(index) => index.toString()}
+              showsHorizontalScrollIndicator={false}
+            />
+          ) : (
+            <View className="flex justify-center items-center h-full w-[65%] rounded-2xl pb-10">
+              <Text className="font-ppr text-base text-[#605dfd] text-center">
+                No recipes ready to be made
+              </Text>
+            </View>
+          )
         ) : (
           <>
             <FlatList

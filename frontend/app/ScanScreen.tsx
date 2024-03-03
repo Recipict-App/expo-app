@@ -13,6 +13,8 @@ import {
   Text,
   TouchableOpacity,
   View,
+  useWindowDimensions,
+  Platform,
 } from "react-native";
 import { Image } from "expo-image";
 
@@ -27,11 +29,11 @@ export default function App() {
   const isFocused = useIsFocused();
   const [CameraPermission, requestCameraPermission] =
     Camera.useCameraPermissions();
-  const [galleryPermission, requestgalleryPermission] =
+  const [galleryPermission, requestGalleryPermission] =
     MediaLibrary.usePermissions();
-  const [imagePickerPermission, requestimagePickerPermission] =
+  const [imagePickerPermission, requestImagePickerPermission] =
     ImagePicker.useCameraPermissions();
-
+  let { height, width } = useWindowDimensions();
   const { setScannedIngredients } = useContext(ScannedIngredientsContext);
 
   const cameraRef = React.useRef<Camera>(null);
@@ -39,6 +41,10 @@ export default function App() {
   const [torch, setTorch] = useState<FlashMode>(FlashMode.off);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [imagePadding, setImagePadding] = useState(0);
+  const [ratio, setRatio] = useState("4:3");
+  const [isRatioSet, setIsRatioSet] = useState(false);
 
   /* guards */
   if (isLoading) {
@@ -69,7 +75,7 @@ export default function App() {
     );
   }
   if (!galleryPermission.granted) {
-    requestgalleryPermission();
+    requestGalleryPermission();
     // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
@@ -80,7 +86,7 @@ export default function App() {
     );
   }
   if (!imagePickerPermission.granted) {
-    requestimagePickerPermission();
+    requestImagePickerPermission();
     // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
@@ -136,11 +142,15 @@ export default function App() {
         setIsLoading(true);
 
         const startTime = performance.now();
-        
+
         const items = await ImageToItems(base64ImageData);
 
         const endTime = performance.now();
-        console.log("Execution time:", ((endTime - startTime) / 1000).toFixed(2), "seconds");
+        console.log(
+          "Execution time:",
+          ((endTime - startTime) / 1000).toFixed(2),
+          "seconds"
+        );
 
         setScannedIngredients(items);
         SheetManager.show("scanned-items-sheet");
@@ -156,14 +166,68 @@ export default function App() {
     setTorch(torch === FlashMode.off ? FlashMode.torch : FlashMode.off);
   };
 
+  const setCameraReady = async () => {
+    if (!isRatioSet) {
+      await prepareRatio();
+    }
+  };
+
+  const prepareRatio = async () => {
+    let desiredRatio = "4:3"; // Start with the system default
+    // This issue only affects Android
+    if (Platform.OS === "android" && cameraRef) {
+      const ratios: any = await cameraRef.current?.getSupportedRatiosAsync();
+
+      // Calculate the width/height of each of the supported camera ratios
+      // These width/height are measured in landscape mode
+      // find the ratio that is closest to the screen ratio without going over
+      let distances: any = {};
+      let realRatios: any = {};
+      let minDistance = null;
+      const screenRatio = height / width;
+
+      for (const ratio of ratios) {
+        const parts = ratio.split(":");
+        const realRatio = parseInt(parts[0]) / parseInt(parts[1]);
+        realRatios[ratio] = realRatio;
+        // ratio can't be taller than screen, so we don't want an abs()
+        const distance = screenRatio - realRatio;
+        distances[ratio] = distance;
+        if (minDistance == null) {
+          minDistance = ratio;
+        } else {
+          if (distance >= 0 && distance < distances[minDistance]) {
+            minDistance = ratio;
+          }
+        }
+      }
+      // set the best match
+      desiredRatio = minDistance;
+      //  calculate the difference between the camera width and the screen height
+      const remainder = Math.floor(
+        (height - realRatios[desiredRatio] * width) / 2
+      );
+      // set the preview padding and preview ratio
+      setImagePadding(remainder);
+      setRatio(desiredRatio);
+      // Set a flag so we don't do this
+      // calculation each time the screen refreshes
+      setIsRatioSet(true);
+    }
+  };
+
   return (
     <View style={styles.container}>
       {isFocused && (
         <Camera
-          style={styles.camera}
+          style={[
+            styles.camera
+          ]}
           type={CameraType.back}
           ref={cameraRef}
           flashMode={torch}
+          ratio={ratio}
+          onCameraReady={setCameraReady}
         >
           {/* Inside camera */}
           <View style={styles.buttonContainer}>

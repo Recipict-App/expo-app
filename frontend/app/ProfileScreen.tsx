@@ -20,6 +20,9 @@ export default function Profile() {
   const { userInfo, setUserInfo, userData, setUserData } =
     useContext(UserContext);
   if (!userData) return <Redirect href={"/"} />;
+  const data = userData[0];
+  const name = data.name;
+
 
   /* test */
   // const { isLoading, error, data, refetch } = useQuery({
@@ -70,7 +73,7 @@ export default function Profile() {
             />
             {/* Name */}
             <Text className="font-pps text-xl text-white py-[14] ml-[115]">
-              Hi, Daricky
+              Hi, {name}
             </Text>
           </View>
 

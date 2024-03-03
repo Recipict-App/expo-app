@@ -1,16 +1,16 @@
 export enum ingredientTypes {
-  Vegetables = "Vegetables",
-  Fruits = "Fruits",
-  Liquids = "Liquids",
-  Grains = "Grains",
-  Meats = "Meats",
-  Dairy = "Dairy",
-  Seafood = "Seafood",
-  HerbsAndSpices = "Herbs & spices",
-  Seeds = "Seeds",
+  Vegetables = "Vegetables", //
+  Fruits = "Fruits", //
+  Liquids = "Liquids", //
+  Grains = "Grains", //
+  Meats = "Meats", //
+  Dairy = "Dairy", //
+  Seafood = "Seafood", //
+  HerbsAndSpices = "Herbs & spices", //
+  Seeds = "Seeds", //
   Oils = "Oils",
-  Condiments = "Condiments",
-  NotIngredients = "Not ingredients",
+  Condiments = "Condiments", //
+  NotIngredients = "Not ingredients", //
 }
 
 export interface ingredient {
@@ -77,4 +77,3 @@ interface recipeInfo {
     quantity: String;
   };
 }
-

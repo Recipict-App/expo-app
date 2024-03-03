@@ -2,12 +2,38 @@ import { Text, View } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
-import { ingredientProps } from "../../firebase-type";
+import { ingredientProps, ingredientTypes } from "../../firebase-type";
 import { UserContext } from "../../userContext";
 import { useContext } from "react";
 import { Redirect } from "expo-router";
 
 import { useDebounceCallback } from "usehooks-ts";
+
+const FRUIT_IMG = require("../../assets/icons/ingredients/Fruits.svg");
+const LIQUID_IMG = require("../../assets/icons/ingredients/Liquids.svg");
+const GRAIN_IMG = require("../../assets/icons/ingredients/Grains.svg");
+const MEAT_IMG = require("../../assets/icons/ingredients/Meats.svg");
+const DAIRY_IMG = require("../../assets/icons/ingredients/Dairy.svg");
+const SEAFOOD_IMG = require("../../assets/icons/ingredients/Seafood.svg");
+const HERB_IMG = require("../../assets/icons/ingredients/Herbs & spices.svg");
+const SEED_IMG = require("../../assets/icons/ingredients/Seeds.svg");
+const OIL_IMG = require("../../assets/icons/ingredients/Oils.svg");
+const CONDIMENT_IMG = require("../../assets/icons/ingredients/Condiments.svg");
+const NOT_INGREDIENT_IMG = require("../../assets/icons/ingredients/Not ingredients.svg");
+
+const ingredientImages = {
+  [ingredientTypes.Fruits]: FRUIT_IMG,
+  [ingredientTypes.Liquids]: LIQUID_IMG,
+  [ingredientTypes.Grains]: GRAIN_IMG,
+  [ingredientTypes.Meats]: MEAT_IMG,
+  [ingredientTypes.Dairy]: DAIRY_IMG,
+  [ingredientTypes.Seafood]: SEAFOOD_IMG,
+  [ingredientTypes.HerbsAndSpices]: HERB_IMG,
+  [ingredientTypes.Seeds]: SEED_IMG,
+  [ingredientTypes.Oils]: OIL_IMG,
+  [ingredientTypes.Condiments]: CONDIMENT_IMG,
+  [ingredientTypes.NotIngredients]: NOT_INGREDIENT_IMG,
+};
 
 export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
   name,
@@ -42,15 +68,23 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
     });
   };
 
-  const debouncedhandleShowIngredient = useDebounceCallback(handleShowIngredient, 500, {
-    leading: true,
-    trailing: false,
-  });
-
-  const dayDifference = 1 + Math.max(
-    Math.floor((new Date(expiryDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)),
-    0
+  const debouncedhandleShowIngredient = useDebounceCallback(
+    handleShowIngredient,
+    500,
+    {
+      leading: true,
+      trailing: false,
+    }
   );
+
+  const dayDifference =
+    1 +
+    Math.max(
+      Math.floor(
+        (new Date(expiryDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+      ),
+      0
+    );
 
   return (
     <TouchableOpacity
@@ -60,7 +94,12 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
       <View className="w-full h-[72px] rounded-3xl bg-[#F8F8F6] flex-row pl-[20px] items-center justify-between">
         <View className="flex flex-row">
           {/* Image placeholder */}
-          <View className="bg-[#9B9B9B] rounded-lg h-8 w-8 justify-center flex " />
+          <View className="rounded-lg h-8 w-8 justify-center items-center flex ">
+            <Image
+              className="object-contain h-7 w-7"
+              source={ingredientImages[type as keyof typeof ingredientImages]}
+            />
+          </View>
 
           {/* Text */}
           <View className="ml-4">

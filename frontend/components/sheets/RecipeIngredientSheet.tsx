@@ -21,9 +21,14 @@ export default function RecipeIngredientSheet(
     return (
       <View className="h-full flex items-center px-6" style={{ width: width }}>
         {/* Title */}
-        <Text className="font-pps text-2xl text-center mt-6 px-4">
-          {props.payload?.recipe.title}
-        </Text>
+        <View className="flex max-h-[8vh] w-full mt-6 px-4">
+          <Text
+            className="w-full font-pps text-xl text-center"
+            adjustsFontSizeToFit
+          >
+            {props.payload?.recipe.title}
+          </Text>
+        </View>
 
         {/* Image */}
         <View className="w-full h-1/3 rounded-2xl overflow-hidden justify-center items-center my-6">
@@ -47,7 +52,7 @@ export default function RecipeIngredientSheet(
             </Text>
           </View>
 
-          <View className="h-[50px] w-fit bg-[#A4C893] rounded-2xl flex-row items-center px-2">
+          <View className="h-[50px] w-fit bg-[#A4C893] rounded-2xl flex-row items-center px-2 ">
             <Image
               style={{ width: 32, height: 32 }}
               source={require("../../assets/icons/People.svg")}
@@ -116,7 +121,9 @@ export default function RecipeIngredientSheet(
     return (
       <View className="h-full flex items-center px-6" style={{ width: width }}>
         {/* Instruction */}
-        <Text className="font-pps text-xl text-center mt-6 px-4  pb-3">Steps</Text>
+        <Text className="font-pps text-xl text-center mt-6 px-4  pb-3">
+          Steps
+        </Text>
 
         {/* items */}
         <View className="w-full h-5/6 flex flex-row justify-between px-2">
@@ -126,7 +133,9 @@ export default function RecipeIngredientSheet(
               return (
                 <View className="bg-[#F8F8F6] w-full rounded-md flex-row items-center mt-2">
                   <View className="rounded-l-md h-full w-1/12 py-1 bg-green items-center">
-                    <Text className="text-white text-base font-ppb">{index+1}</Text>
+                    <Text className="text-white text-base font-ppb">
+                      {index + 1}
+                    </Text>
                   </View>
 
                   <Text className="w-5/6 ml-3 text-sm font-medium text-green py-2 text-justify">

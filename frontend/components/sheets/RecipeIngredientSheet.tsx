@@ -85,7 +85,7 @@ export default function RecipeIngredientSheet(
     return (
       <View className="h-full flex items-center px-6" style={{ width: width }}>
         {/* Ingredient  */}
-        <Text className="font-pps text-xl text-center mt-6 px-4 mb-2">
+        <Text className="font-pps text-xl text-center mt-6 px-4 mb-3">
           Ingredients
         </Text>
 
@@ -116,7 +116,7 @@ export default function RecipeIngredientSheet(
     return (
       <View className="h-full flex items-center px-6" style={{ width: width }}>
         {/* Instruction */}
-        <Text className="font-pps text-xl text-center mt-6 px-4">Steps</Text>
+        <Text className="font-pps text-xl text-center mt-6 px-4  pb-3">Steps</Text>
 
         {/* items */}
         <View className="w-full h-5/6 flex flex-row justify-between px-2">

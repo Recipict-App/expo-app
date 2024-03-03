@@ -52,7 +52,9 @@ export default function RecipeIngredientSheet(
               style={{ width: 32, height: 32 }}
               source={require("../../assets/icons/People.svg")}
             />
-            <Text className="ml-1 font-pps text-base text-[#55674D]">{props.payload?.recipe.servings || "-"}</Text>
+            <Text className="ml-1 font-pps text-base text-[#55674D]">
+              {props.payload?.recipe.servings || "-"}
+            </Text>
           </View>
 
           <View className="h-[50px] w-fit bg-[#F3F6C8] rounded-2xl flex-row items-center px-2">
@@ -79,106 +81,70 @@ export default function RecipeIngredientSheet(
     );
   };
 
-  // const InstructionSlide: React.FC = () => {
-  //   return (
-  //     <View
-  //       className=" flex items-center h-full justify-center"
-  //       style={{ width: width }}
-  //     >
-  //       {/* Title */}
-  //       <Text className="font-pps text-2xl text-center">
-  //         sdcj ksd cvksdj cvdk
-  //       </Text>
-  //       {/* Image */}
-  //       <View className=" w-4/5 h-1/3 rounded-2xl overflow-hidden  justify-center">
-  //         <Image
-  //           className="w-[130%] h-[130%]"
-  //           source={{ uri: props.payload?.recipe.imageURI }}
-  //           contentFit="contain"
-  //         />
-  //       </View>
-  //       {/* Summary */}
-  //       <View className="w-full flex flex-row ">
-  //         {/* Ingredients */}
-  //         <View className=" flex h-[275px] w-[200px] items-center p-3">
-  //           <Text className="font-pps text-lg">Ingredients:</Text>
-  //           <FlatList
-  //             data={props.payload?.recipe.ingredients}
-  //             renderItem={({ item }) => (
-  //               <View className="flex w-4/5 flex-row mx-2">
-  //                 <Text className="font-ppr text-base">- </Text>
-  //                 <Text className="font-ppr text-base">
-  //                   {item.amount} {item.unit} {item.name}
-  //                 </Text>
-  //               </View>
-  //             )}
-  //             showsVerticalScrollIndicator={false}
-  //           />
-  //         </View>
-  //         {/* General Information */}
-  //         <View className=" flex h-full w-[200px] space-y-2 p-3">
-  //           <Text className="font-pps text-base">Duration:</Text>
-  //           <Text className="font-ppr text-base">
-  //             {props.payload?.recipe.duration
-  //               ? props.payload?.recipe.duration + " minutes"
-  //               : "Not Available"}
-  //           </Text>
-  //           <Text className="font-pps text-base">Cal/Serving: </Text>
-  //           <Text className="font-ppr text-base">
-  //             {props.payload?.recipe.calories
-  //               ? props.payload?.recipe.calories + " cal"
-  //               : "Not Available"}
-  //           </Text>
-  //           <Text className="font-pps text-base">Equipment(s): </Text>
-  //           <Text className="font-ppr text-base">
-  //             {props.payload?.recipe.equipment[0]
-  //               ? props.payload?.recipe.equipment[0]
-  //               : "None"}
-  //           </Text>
-  //         </View>
-  //       </View>
-  //       {/* footer */}
-  //       <View className="flex h-[40] w-full flex-row justify-between items-center px-[20]">
-  //         {/* close button */}
-  //         <View
-  //           className="flex w-[40] h-full justify-center items-center rounded-xl"
-  //           style={{ backgroundColor: "#FFCCC5" }}
-  //         >
-  //           <TouchableOpacity
-  //             className="min-w-full min-h-full justify-center flex items-center"
-  //             onPress={handleCloseRecipe}
-  //           >
-  //             <Image
-  //               style={{
-  //                 width: 20,
-  //                 height: 20,
-  //                 position: "absolute",
-  //               }}
-  //               source={require("../../assets/icons/Exit.svg")}
-  //             />
-  //           </TouchableOpacity>
-  //         </View>
-  //         {/* see instruction button */}
-  //         <View className="flex w-[70%] h-full items-center bg-green rounded-2xl">
-  //           <TouchableOpacity
-  //             className="flex min-w-full min-h-full justify-center items-center rounded-2xl"
-  //             style={{ width: 100 }}
-  //             onPress={() => {
-  //               console.log("pressed!");
-  //             }}
-  //           >
-  //             <Text className="font-pps text-white text-lg">
-  //               See Instructions
-  //             </Text>
-  //           </TouchableOpacity>
-  //         </View>
-  //       </View>
-  //     </View>
-  //   );
-  // };
+  const IngredientSlide: React.FC = () => {
+    return (
+      <View className="h-full flex items-center px-6" style={{ width: width }}>
+        {/* Ingredient  */}
+        <Text className="font-pps text-xl text-center mt-6 px-4 mb-2">
+          Ingredients
+        </Text>
+
+        {/* items */}
+        <View className="w-full h-5/6 flex flex-row justify-between px-2">
+          <FlatList
+            data={props.payload?.recipe.totalIngredients}
+            renderItem={({ item, index }) => {
+              return (
+                <View className="bg-[#F8F8F6] w-full rounded-md  flex-row items-center mt-2">
+                  <View className="rounded-l-md h-full w-[3px] bg-grey"></View>
+                  <Text className="ml-1 text-sm text-[#5A58B5] px-1 py-1">
+                    ({item.amount} {item.unit}){" "}
+                    <Text className="font-pps">{item.name}</Text>
+                  </Text>
+                </View>
+              );
+            }}
+            keyExtractor={(item, index) => index.toString()}
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+      </View>
+    );
+  };
+
+  const InstructionSlide: React.FC = () => {
+    return (
+      <View className="h-full flex items-center px-6" style={{ width: width }}>
+        {/* Instruction */}
+        <Text className="font-pps text-xl text-center mt-6 px-4">Steps</Text>
+
+        {/* items */}
+        <View className="w-full h-5/6 flex flex-row justify-between px-2">
+          <FlatList
+            data={props.payload?.recipe.instructions}
+            renderItem={({ item, index }) => {
+              return (
+                <View className="bg-[#F8F8F6] w-full rounded-md flex-row items-center mt-2">
+                  <View className="rounded-l-md h-full w-1/12 py-1 bg-green items-center">
+                    <Text className="text-white text-base font-ppb">{index}</Text>
+                  </View>
+
+                  <Text className="w-5/6 ml-3 text-sm font-medium text-green py-2 text-justify">
+                    {item.step}
+                  </Text>
+                </View>
+              );
+            }}
+            keyExtractor={(item, index) => index.toString()}
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+      </View>
+    );
+  };
 
   /* Rendered slides */
-  const slides = ["SummarySlide", "InstructionSlide"];
+  const slides = ["SummarySlide", "IngredientSlide", "InstructionSlide"];
 
   return (
     <ActionSheet id={props.sheetId}>
@@ -200,7 +166,8 @@ export default function RecipeIngredientSheet(
           data={slides}
           renderItem={({ item }) => {
             if (item === "SummarySlide") return <SummarySlide />;
-            // if (item === "InstructionSlide") return <InstructionSlide />;
+            if (item === "IngredientSlide") return <IngredientSlide />;
+            if (item === "InstructionSlide") return <InstructionSlide />;
             return <></>;
           }}
           keyExtractor={(item, index) => index.toString()}

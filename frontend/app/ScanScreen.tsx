@@ -221,8 +221,7 @@ export default function App() {
       {isFocused && (
         <Camera
           style={[
-            styles.camera,
-            { marginTop: imagePadding, marginBottom: imagePadding },
+            styles.camera
           ]}
           type={CameraType.back}
           ref={cameraRef}

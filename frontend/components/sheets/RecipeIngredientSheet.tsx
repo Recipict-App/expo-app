@@ -105,7 +105,7 @@ export default function RecipeIngredientSheet(
               );
             }}
             keyExtractor={(item, index) => index.toString()}
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
           />
         </View>
       </View>
@@ -136,7 +136,7 @@ export default function RecipeIngredientSheet(
               );
             }}
             keyExtractor={(item, index) => index.toString()}
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
           />
         </View>
       </View>

@@ -13,7 +13,7 @@ import { useState } from "react";
 import { SelectCountry } from "react-native-element-dropdown";
 
 import DateTimePicker from "react-native-ui-datepicker";
-import { ingredientProps } from "../../firebase-type";
+import { ingredientProps, ingredientsEnum } from "../../firebase-type";
 
 import * as Crypto from "expo-crypto";
 
@@ -22,57 +22,44 @@ import { ScannedIngredientsContext } from "../../ScannedItemProvider";
 import { getUserDataFromFirebaseAndSetContext } from "../../api/DatabaseFunctions";
 import { useEditIngredientToFirebase } from "../../api/mutations";
 
-export enum ingredientTypes {
-  Vegetables = "Vegetables",
-  Fruits = "Fruits",
-  Liquids = "Liquids",
-  Grains = "Grains",
-  Meats = "Meats",
-  Dairy = "Dairy",
-  Seafood = "Seafood",
-  HerbsAndSpices = "Herbs & spices",
-  Seeds = "Seeds",
-  Oils = "Oils",
-  Condiments = "Condiments",
-  NotIngredients = "Not ingredients",
-}
+
 
 const type_data = [
   {
-    value: ingredientTypes.Vegetables,
+    value: ingredientsEnum.Vegetables,
   },
   {
-    value: ingredientTypes.Fruits,
+    value: ingredientsEnum.Fruits,
   },
   {
-    value: ingredientTypes.Liquids,
+    value: ingredientsEnum.Liquids,
   },
   {
-    value: ingredientTypes.Grains,
+    value: ingredientsEnum.Grains,
   },
   {
-    value: ingredientTypes.Meats,
+    value: ingredientsEnum.Meats,
   },
   {
-    value: ingredientTypes.Dairy,
+    value: ingredientsEnum.Dairy,
   },
   {
-    value: ingredientTypes.Seafood,
+    value: ingredientsEnum.Seafood,
   },
   {
-    value: ingredientTypes.HerbsAndSpices,
+    value: ingredientsEnum.HerbsAndSpices,
   },
   {
-    value: ingredientTypes.Seeds,
+    value: ingredientsEnum.Seeds,
   },
   {
-    value: ingredientTypes.Oils,
+    value: ingredientsEnum.Oils,
   },
   {
-    value: ingredientTypes.Condiments,
+    value: ingredientsEnum.Condiments,
   },
   {
-    value: ingredientTypes.NotIngredients,
+    value: ingredientsEnum.NotIngredients,
   },
 ];
 
@@ -96,7 +83,7 @@ export default function EditIngredientSheet(
       unit: string;
       expiryDate: Date;
       dateAdded: Date;
-      type: ingredientTypes;
+      type: ingredientsEnum;
       id: string;
     };
     mode: string;
@@ -123,12 +110,12 @@ export default function EditIngredientSheet(
     unit: "gr",
     expiryDate: new Date(),
     dateAdded: new Date(),
-    type: ingredientTypes.NotIngredients,
+    type: ingredientsEnum.NotIngredients,
     id: Crypto.randomUUID(),
   };
 
   // for type dropdown
-  const [typeValue, setTypeValue] = useState<ingredientTypes>(
+  const [typeValue, setTypeValue] = useState<ingredientsEnum>(
     chosenIngredient.type
   );
 

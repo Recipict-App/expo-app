@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
-import { ingredientProps, ingredientTypes } from "../../firebase-type";
+import { ingredientProps, ingredientsEnum } from "../../firebase-type";
 import { UserContext } from "../../userContext";
 import { useContext } from "react";
 import { Redirect } from "expo-router";
@@ -22,17 +22,17 @@ const CONDIMENT_IMG = require("../../assets/icons/ingredients/Condiments.svg");
 const NOT_INGREDIENT_IMG = require("../../assets/icons/ingredients/Not ingredients.svg");
 
 const ingredientImages = {
-  [ingredientTypes.Fruits]: FRUIT_IMG,
-  [ingredientTypes.Liquids]: LIQUID_IMG,
-  [ingredientTypes.Grains]: GRAIN_IMG,
-  [ingredientTypes.Meats]: MEAT_IMG,
-  [ingredientTypes.Dairy]: DAIRY_IMG,
-  [ingredientTypes.Seafood]: SEAFOOD_IMG,
-  [ingredientTypes.HerbsAndSpices]: HERB_IMG,
-  [ingredientTypes.Seeds]: SEED_IMG,
-  [ingredientTypes.Oils]: OIL_IMG,
-  [ingredientTypes.Condiments]: CONDIMENT_IMG,
-  [ingredientTypes.NotIngredients]: NOT_INGREDIENT_IMG,
+  [ingredientsEnum.Fruits]: FRUIT_IMG,
+  [ingredientsEnum.Liquids]: LIQUID_IMG,
+  [ingredientsEnum.Grains]: GRAIN_IMG,
+  [ingredientsEnum.Meats]: MEAT_IMG,
+  [ingredientsEnum.Dairy]: DAIRY_IMG,
+  [ingredientsEnum.Seafood]: SEAFOOD_IMG,
+  [ingredientsEnum.HerbsAndSpices]: HERB_IMG,
+  [ingredientsEnum.Seeds]: SEED_IMG,
+  [ingredientsEnum.Oils]: OIL_IMG,
+  [ingredientsEnum.Condiments]: CONDIMENT_IMG,
+  [ingredientsEnum.NotIngredients]: NOT_INGREDIENT_IMG,
 };
 
 export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({

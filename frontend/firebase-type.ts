@@ -1,4 +1,4 @@
-export enum ingredientTypes {
+export enum ingredientsEnum {
   Vegetables = "Vegetables", //
   Fruits = "Fruits", //
   Liquids = "Liquids", //
@@ -13,6 +13,50 @@ export enum ingredientTypes {
   NotIngredients = "Not ingredients", //
 }
 
+export enum cuisinesEnum {
+  African = "African",
+  Asian = "Asian",
+  American = "American",
+  British = "British",
+  Cajun = "Cajun",
+  Caribbean = "Caribbean",
+  Chinese = "Chinese",
+  Eastern_European = "Eastern European",
+  European = "European",
+  French = "French",
+  German = "German",
+  Greek = "Greek",
+  Indian = "Indian",
+  Irish = "Irish",
+  Italian = "Italian",
+  Japanese = "Japanese",
+  Jewish = "Jewish",
+  Korean = "Korean",
+  Latin_American = "Latin American",
+  Mediterranean = "Mediterranean",
+  Mexican = "Mexican",
+  Middle_Eastern = "Middle Eastern",
+  Nordic = "Nordic",
+  Southern = "Southern",
+  Spanish = "Spanish",
+  Thai = "Thai",
+  Vietnamese = "Vietnamese",
+}
+
+export enum dietsEnum {
+  GlutenFree = "Gluten Free",
+  Ketogenic = "Ketogenic",
+  Vegetarian = "Vegetarian",
+  Lacto_Vegetarian = "Lacto-Vegetarian",
+  Ovo_Vegetarian = "Ovo-Vegetarian",
+  Vegan = "Vegan",
+  Pescetarian = "Pescetarian",
+  Paleo = "Paleo",
+  Primal = "Primal",
+  LowFODMAP = "Low FODMAP",
+  Whole30 = "Whole30",
+}
+
 export interface ingredient {
   id: String;
   name: String;
@@ -20,7 +64,7 @@ export interface ingredient {
   unit: String;
   expiryDate: Date;
   dateAdded: Date;
-  type: ingredientTypes;
+  type: ingredientsEnum;
   genericName: string;
 }
 
@@ -61,19 +105,6 @@ export interface ingredientProps {
   unit: String;
   expiryDate: Date;
   dateAdded: Date;
-  type: ingredientTypes;
+  type: ingredientsEnum;
   genericName: string;
-}
-
-interface recipeInfo {
-  title: String;
-  summary: String;
-  instructions: any[];
-  missedIngredientCount: number;
-  id: String;
-  readyInMinutes: number;
-  totalIngredients: {
-    name: String;
-    quantity: String;
-  };
 }

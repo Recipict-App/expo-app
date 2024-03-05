@@ -9,6 +9,8 @@ import { useContext } from "react";
 
 import { deleteCurrentLocalUser } from "../api/DatabaseFunctions";
 
+import { SheetManager } from "react-native-actions-sheet";
+
 export default function Profile() {
   const { userInfo, setUserInfo, userData, setUserData } =
     useContext(UserContext);
@@ -16,7 +18,9 @@ export default function Profile() {
   const data = userData[0];
   const name = data.name;
 
-  const handlePreference = async () => {};
+  const handlePreference = () => {
+    SheetManager.show("preference-sheet");
+  };
   const handleNotification =  () => {};
   const handleAboutUs = () => {};
 

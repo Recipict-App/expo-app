@@ -7,7 +7,7 @@ import ActionSheet, {
 } from "react-native-actions-sheet";
 
 import { ingredientProps } from "../../firebase-type";
-import { Shelf } from "../ingredient components/Shelf";
+import { Shelf } from "../ingredients/Shelf";
 
 import { useContext } from "react";
 import { UserContext } from "../../userContext";

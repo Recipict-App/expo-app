@@ -9,7 +9,7 @@ import { Image } from "expo-image";
 import { SheetManager } from "react-native-actions-sheet";
 import { Redirect } from "expo-router";
 
-import { Shelf } from "../components/ingredient components/Shelf";
+import { Shelf } from "../components/ingredients/Shelf";
 import { ingredientProps } from "../firebase-type";
 
 import { useContext, useState } from "react";

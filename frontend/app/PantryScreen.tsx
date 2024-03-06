@@ -98,7 +98,7 @@ export default function pantry() {
       {/* Add ingredient button */}
       <TouchableOpacity onPress={handleShowIngredient}>
         <Image
-          className="w-[70px] h-[70px] object-contain fixed bottom-[80px] left-[300px] opacity-100 "
+          className="w-[70px] h-[70px] object-contain fixed bottom-[80px] left-[75%] opacity-100 "
           source={require("../assets/icons/AddIngredient.svg")}
         />
       </TouchableOpacity>

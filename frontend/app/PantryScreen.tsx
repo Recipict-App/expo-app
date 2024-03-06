@@ -38,7 +38,7 @@ export default function pantry() {
   const data = userData[0];
   const ingredients = data.ingredients;
   const filteredIngredients = ingredients.filter((ingredient) => {
-    return ingredient.name.toLowerCase().includes(searchInput.toLowerCase());
+    return ingredient?.name?.toLowerCase().includes(searchInput.toLowerCase());
   });
   const groupedItems = groupByType(filteredIngredients);
 

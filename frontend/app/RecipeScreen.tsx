@@ -76,7 +76,7 @@ export default function recipe() {
             <Text className="font-pps text-3xl">Recipe</Text>
             <TouchableOpacity onPress={handleShowSavedRecipe}>
               <Image
-                style={{ width: 12, height: 16 }}
+                style={{ width: 15, height: 20 }}
                 source={require("../assets/icons/Save.svg")}
               />
             </TouchableOpacity>

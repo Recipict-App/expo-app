@@ -61,6 +61,7 @@ export async function getOrCreateUserDataInFirebase(
         ingredients: [],
         preferences: { diet: [], cuisine: [] },
         subscription: "Regular",
+        savedRecipes: []
       },
     ];
 

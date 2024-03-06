@@ -96,6 +96,7 @@ export interface userDataProps {
   ingredients: ingredient[];
   preferences: preferences;
   subscription: String;
+  savedRecipes: string[];
 }
 
 export interface ingredientProps {

@@ -21,8 +21,8 @@ export default function recipe() {
   const ingredientsString = userDetails.ingredients
     .map((ingredient) => ingredient.genericName)
     .join(",");
-  const cuisinesString = userDetails.preferences.cuisine.join(",");
-  const dietsString = userDetails.preferences.diet.join(",");
+  const cuisinesString = userDetails.cuisines.join(",");
+  const dietsString = userDetails.diets.join(",");
 
   const requestBody = {
     ingredients: ingredientsString,

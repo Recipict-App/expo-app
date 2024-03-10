@@ -27,10 +27,8 @@ export const UserContext = createContext<UserContextType>({
       email: "",
       googleToken: "",
       ingredients: [],
-      preferences: {
-        diet: [],
-        cuisine: [],
-      },
+      diets: [],
+      cuisines: [],
       subscription: "",
     },
   ],

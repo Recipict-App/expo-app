@@ -21,9 +21,9 @@ export default function RecipeIngredientSheet(
     return (
       <View className="h-full flex items-center px-6" style={{ width: width }}>
         {/* Title */}
-        <View className="flex max-h-[8vh] w-full mt-6 px-4">
+        <View className="flex max-h-[10vh] w-full mt-4 px-4 ">
           <Text
-            className="w-full font-pps text-xl text-center"
+            className="w-full font-pps text-2xl text-center"
             adjustsFontSizeToFit
           >
             {props.payload?.recipe.title}
@@ -31,7 +31,7 @@ export default function RecipeIngredientSheet(
         </View>
 
         {/* Image */}
-        <View className="w-full h-1/3 rounded-2xl overflow-hidden justify-center items-center my-6">
+        <View className="w-full h-1/3 rounded-2xl overflow-hidden justify-center items-center mb-6 mt-4">
           <Image
             className="w-[130%] h-[130%]"
             source={{ uri: props.payload?.recipe.image }}
@@ -76,7 +76,10 @@ export default function RecipeIngredientSheet(
         {/* Summary */}
 
         <View className="w-full mt-6 px-1">
-          <ScrollView style={{ height: 180 }}>
+          <ScrollView
+            style={{ height: 180 }}
+            showsVerticalScrollIndicator={false}
+          >
             <Text className="font-pp text-justify text-lg leading-6">
               {props.payload?.recipe.Cleanedsummary}
             </Text>
@@ -157,7 +160,7 @@ export default function RecipeIngredientSheet(
 
   return (
     <ActionSheet id={props.sheetId}>
-      <View className="w-full h-fit min-h-[70%] py-2 items-center rounded-xl">
+      <View className="w-full h-fit min-h-[70%] py-2 pb-9 items-center rounded-xl">
         {/* top bar */}
         <View
           style={{

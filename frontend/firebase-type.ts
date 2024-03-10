@@ -73,11 +73,6 @@ export enum subscriptionTypes {
   Pro = "Pro",
 }
 
-export interface preferences {
-  diet: String[];
-  cuisine: String[];
-}
-
 export interface userInfoType {
   email: string;
   family_name: string;
@@ -94,7 +89,8 @@ export interface userDataProps {
   email: String;
   googleToken: String;
   ingredients: ingredient[];
-  preferences: preferences;
+  cuisines: String[];
+  diets: String[];
   subscription: String;
 }
 

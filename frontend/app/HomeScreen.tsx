@@ -21,7 +21,7 @@ export default function Home() {
     <View className="bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
-          className="flex w-full items-center p-[20px] py-[40px] overflow-visible min-h-screen"
+          className="flex w-full items-center p-[20px] pt-[40px] overflow-visible min-h-screen"
           style={{ gap: 75 }}
         >
           <View
@@ -60,7 +60,7 @@ export default function Home() {
             </View>
             <View
               style={{
-                width: 320,
+                width: "100%",
                 paddingTop: 60,
                 display: "flex",
                 flexDirection: "column",
@@ -68,7 +68,7 @@ export default function Home() {
                 gap: 12,
               }}
             >
-              <Text className=" text-lg font-ppr">Things you bought</Text>
+              <Text className=" text-lg font-ppr">Recently Bought</Text>
 
               {
                 // todo: fix loading state
@@ -83,6 +83,7 @@ export default function Home() {
               }
               {ingredients[0] ? (
                 ingredients.map((item: ingredientProps, index: number) => {
+                  if(index >= 5)return;
                   return (
                     <Ingredient
                       key={index}

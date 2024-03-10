@@ -14,6 +14,7 @@ import { searchRecipes } from "../api/RecipeFunctions";
 import { recipeType } from "../types/recipe-type";
 
 export default function recipe() {
+
   const { userData } = useContext(UserContext);
   if (!userData) return null;
   const userDetails = userData[0];
@@ -63,6 +64,7 @@ export default function recipe() {
     setQuery(e);
   };
 
+  console.log("cwelkibfoeuwfhwbufoueifhu");
   return (
     <SafeAreaView
       className="bg-white"

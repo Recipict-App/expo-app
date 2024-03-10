@@ -13,6 +13,7 @@ import { cuisinesEnum, dietsEnum } from "../../firebase-type";
 import { useEditPreferenceToFirebase } from "../../api/mutations";
 import { Redirect } from "expo-router";
 import { UserContext } from "../../userContext";
+import { getUserDataFromFirebaseAndSetContext } from "../../api/DatabaseFunctions";
 
 const cuisines = Object.values(cuisinesEnum).map((cuisine) => ({
   label: cuisine,
@@ -50,6 +51,10 @@ export default function PreferenceSheet(props: SheetProps) {
       newCuisines: selectedCuisines,
       newDiets: selectedDiets,
     });
+
+    // refresh data to get fresh data from firebase
+    await getUserDataFromFirebaseAndSetContext(setUserData);
+    console.log("new data from firebase is fetched");
 
     handleClose();
   };
@@ -152,7 +157,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   icon: {
-
     marginRight: 5,
   },
   selectedStyle: {

@@ -6,7 +6,6 @@ export function useFetchRecommendedRecipes(pantryData: any) {
   return useQuery({
     queryKey: [queryKeysEnum.recipes],
     queryFn: () => fetchRecommendedRecipes(pantryData),
-    staleTime: Infinity,
   });
 }
 

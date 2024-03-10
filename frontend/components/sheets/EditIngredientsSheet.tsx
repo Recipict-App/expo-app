@@ -10,7 +10,7 @@ import { UserContext } from "../../userContext";
 
 import { useState } from "react";
 
-import { SelectCountry } from "react-native-element-dropdown";
+import { Dropdown } from "react-native-element-dropdown";
 
 import DateTimePicker from "react-native-ui-datepicker";
 import { ingredientProps, ingredientsEnum } from "../../firebase-type";
@@ -21,7 +21,6 @@ import { ScannedIngredientsContext } from "../../ScannedItemProvider";
 
 import { getUserDataFromFirebaseAndSetContext } from "../../api/DatabaseFunctions";
 import { useEditIngredientToFirebase } from "../../api/mutations";
-
 
 
 const type_data = [
@@ -340,7 +339,7 @@ export default function EditIngredientSheet(
                   value={quantityValue.toString()}
                   keyboardType="numeric"
                 />
-                <SelectCountry
+                <Dropdown
                   style={unitDropdownStyles.dropdown}
                   selectedTextStyle={unitDropdownStyles.selectedTextStyle}
                   placeholderStyle={unitDropdownStyles.placeholderStyle}
@@ -349,7 +348,6 @@ export default function EditIngredientSheet(
                   data={unit_data}
                   valueField="value"
                   labelField="value"
-                  imageField="image"
                   placeholder="Unit"
                   searchPlaceholder="Search..."
                   onChange={(e) => {
@@ -360,18 +358,16 @@ export default function EditIngredientSheet(
             </View>
             <View className="w-full" style={{ gap: 10 }}>
               <Text className=" font-pps">Type:</Text>
-              <SelectCountry
+              <Dropdown
                 style={typeDropdownStyles.dropdown}
                 selectedTextStyle={typeDropdownStyles.selectedTextStyle}
                 placeholderStyle={typeDropdownStyles.placeholderStyle}
-                imageStyle={typeDropdownStyles.imageStyle}
                 iconStyle={typeDropdownStyles.iconStyle}
                 maxHeight={100}
                 value={typeValue}
                 data={type_data}
                 valueField="value"
                 labelField="value"
-                imageField="image"
                 placeholder="Type"
                 searchPlaceholder="Search..."
                 onChange={(e) => {

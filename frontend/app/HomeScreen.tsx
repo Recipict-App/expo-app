@@ -9,6 +9,7 @@ import { UserContext } from "../userContext";
 import { useContext } from "react";
 import Explore from "../components/recipe components/Explore";
 import IngredientSkeleton from "../components/skeletons/IngredientSkeleton";
+import { FlatList } from "react-native-actions-sheet";
 
 export default function Home() {
   const { userData, setUserData } = useContext(UserContext);
@@ -80,7 +81,6 @@ export default function Home() {
                   </>
                 )
               }
-
               {ingredients[0] ? (
                 ingredients.map((item: ingredientProps, index: number) => {
                   return (

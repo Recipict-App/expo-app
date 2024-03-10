@@ -59,7 +59,8 @@ export async function getOrCreateUserDataInFirebase(
         email: user.email,
         googleToken: `${user.id}`,
         ingredients: [],
-        preferences: { diet: [], cuisine: [] },
+        cuisines: [],
+        diets: [],
         subscription: "Regular",
       },
     ];

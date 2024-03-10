@@ -32,7 +32,7 @@ export default function Explore() {
     useFetchRandomRecipes(requestBody);
 
   return (
-    <View className="flex items-center mt-[50px] w-full">
+    <View className="flex items-center mt-1 w-full">
       {/* Explore Header */}
       <View
         className="flex justify-center items-start pl-[23] mb-14 w-4/5"

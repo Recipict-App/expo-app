@@ -1,6 +1,6 @@
 import ActionSheet, { SheetProps } from "react-native-actions-sheet";
 import { View, Text, ScrollView } from "react-native";
-import { RecipeBox } from "../recipe components/RecipeBox";
+import { RecipeBox } from "../recipes/RecipeBox";
 import { SheetManager } from "react-native-actions-sheet";
 import { recipeType } from "../../types/recipe-type";
 

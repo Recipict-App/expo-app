@@ -1,5 +1,5 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { editIngredientToFirebase } from "./DatabaseFunctions";
+import { editIngredientToFirebase, editPreferenceToFirebase } from "./DatabaseFunctions";
 import { queryKeysEnum } from "./_queryKeys";
 
 import { ingredientProps } from "../firebase-type";
@@ -21,6 +21,30 @@ export function useEditIngredientToFirebase() {
         console.log(error);
       } else {
         console.log("Successfully edited ingredient! 🤩");
+        await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
+      }
+    },
+  });
+}
+
+export function useEditPreferenceToFirebase() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: {
+      userGoogleToken: String;
+      newCuisines: string[];
+      newDiets: string[];
+    }) => await editPreferenceToFirebase(data.userGoogleToken, data.newCuisines, data.newDiets),
+
+    onMutate: () => console.log("Changing preference..."),
+
+    onSettled: async (_, error) => {
+      if (error) {
+        console.log("Encountered an error when trying to edit preference 😡");
+        console.log(error);
+      } else {
+        console.log("Successfully edited preference! 🤩");
         await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
       }
     },

@@ -165,6 +165,7 @@ export async function editPreferenceToFirebase(
   newCuisines: string[],
   newDiets: string[],
 ) {
+
   const response = await fetch(
     "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-preference",
     {

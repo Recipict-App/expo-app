@@ -89,8 +89,8 @@ export interface userDataProps {
   email: String;
   googleToken: String;
   ingredients: ingredient[];
-  cuisines: String[];
-  diets: String[];
+  cuisines: string[];
+  diets: string[];
   subscription: String;
 }
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ActionSheet, {
   SheetProps,
   SheetManager,
@@ -10,6 +10,9 @@ import { StyleSheet } from "react-native";
 import { MultiSelect } from "react-native-element-dropdown";
 
 import { cuisinesEnum, dietsEnum } from "../../firebase-type";
+import { useEditPreferenceToFirebase } from "../../api/mutations";
+import { Redirect } from "expo-router";
+import { UserContext } from "../../userContext";
 
 const cuisines = Object.values(cuisinesEnum).map((cuisine) => ({
   label: cuisine,
@@ -25,26 +28,35 @@ const handleClose = () => {
   SheetManager.hide("preference-sheet");
 };
 
-
 export default function PreferenceSheet(props: SheetProps) {
-  const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
-  const [selectedDiets, setSelectedDiets] = useState<string[]>([]);
+  // initiate mutatation
+  const editPreferenceMutation = useEditPreferenceToFirebase();
 
-  console.log(selectedCuisines);
-  console.log(selectedDiets);
+  // get user data from local
+  const { userData, setUserData } = useContext(UserContext);
+  if (!userData) return <Redirect href="/" />;
+  const data = userData[0];
+  const userGoogleToken = data.googleToken;
+  const userCuisines = data.cuisines;
+  const userDiets = data.diets;
 
-  const handleSubmit = () => {
-    const cuisnesString = selectedCuisines.join(",");
-    const dietsString = selectedDiets.join(",");
+  const [selectedCuisines, setSelectedCuisines] =
+    useState<string[]>(userCuisines);
+  const [selectedDiets, setSelectedDiets] = useState<string[]>(userDiets);
 
-    //TODO: send to backend
+  const handleSubmit = async () => {
+    await editPreferenceMutation.mutateAsync({
+      userGoogleToken: userGoogleToken,
+      newCuisines: selectedCuisines,
+      newDiets: selectedDiets,
+    });
 
     handleClose();
   };
 
   return (
     <ActionSheet id={props.sheetId}>
-      <View className="w-full h-fit min-h-[0%] py-2 items-center rounded-xl">
+      <View className="w-full h-fit min-h-[50%] py-2 items-center rounded-xl">
         {/* top bar */}
         <View
           style={{
@@ -130,7 +142,7 @@ const styles = StyleSheet.create({
   },
   iconStyle: {
     width: 20,
-    color: "#31BD15",
+
     height: 20,
   },
   inputSearchStyle: {
@@ -140,7 +152,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   icon: {
-    color: "#31BD15",
+
     marginRight: 5,
   },
   selectedStyle: {

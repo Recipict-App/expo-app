@@ -15,11 +15,11 @@ const GRAIN_IMG = require("../../assets/icons/ingredients/Grains.svg");
 const MEAT_IMG = require("../../assets/icons/ingredients/Meats.svg");
 const DAIRY_IMG = require("../../assets/icons/ingredients/Dairy.svg");
 const SEAFOOD_IMG = require("../../assets/icons/ingredients/Seafood.svg");
-const HERB_IMG = require("../../assets/icons/ingredients/Herbs & spices.svg");
+const HERB_IMG = require("../../assets/icons/ingredients/Herbs&Spices.svg");
 const SEED_IMG = require("../../assets/icons/ingredients/Seeds.svg");
 const OIL_IMG = require("../../assets/icons/ingredients/Oils.svg");
 const CONDIMENT_IMG = require("../../assets/icons/ingredients/Condiments.svg");
-const NOT_INGREDIENT_IMG = require("../../assets/icons/ingredients/Not ingredients.svg");
+const NOT_INGREDIENT_IMG = require("../../assets/icons/ingredients/NotIngredients.svg");
 
 const ingredientImages = {
   [ingredientsEnum.Fruits]: FRUIT_IMG,

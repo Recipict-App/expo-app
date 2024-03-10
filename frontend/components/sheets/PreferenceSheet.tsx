@@ -3,69 +3,48 @@ import ActionSheet, {
   SheetProps,
   SheetManager,
 } from "react-native-actions-sheet";
-
+import { Image } from "expo-image";
 import { View, Text, TouchableOpacity } from "react-native";
 
-import SelectableBox from "../preferences/SelectableBox";
+import { StyleSheet } from "react-native";
+import { MultiSelect } from "react-native-element-dropdown";
 
-export enum cuisinesEnum {
-  African = "African",
-  Asian = "Asian",
-  American = "American",
-  British = "British",
-  Cajun = "Cajun",
-  Caribbean = "Caribbean",
-  Chinese = "Chinese",
-  Eastern_European = "Eastern European",
-  European = "European",
-  French = "French",
-  German = "German",
-  Greek = "Greek",
-  Indian = "Indian",
-  Irish = "Irish",
-  Italian = "Italian",
-  Japanese = "Japanese",
-  Jewish = "Jewish",
-  Korean = "Korean",
-  Latin_American = "Latin American",
-  Mediterranean = "Mediterranean",
-  Mexican = "Mexican",
-  Middle_Eastern = "Middle Eastern",
-  Nordic = "Nordic",
-  Southern = "Southern",
-  Spanish = "Spanish",
-  Thai = "Thai",
-  Vietnamese = "Vietnamese",
-}
+import { cuisinesEnum, dietsEnum } from "../../firebase-type";
+
+const cuisines = Object.values(cuisinesEnum).map((cuisine) => ({
+  label: cuisine,
+  value: cuisine,
+}));
+
+const diets = Object.values(dietsEnum).map((diet) => ({
+  label: diet,
+  value: diet,
+}));
 
 const handleClose = () => {
   SheetManager.hide("preference-sheet");
 };
 
-const getSelectedLabels = (selectedBoxes: Record<string, boolean>): string => {
-  return Object.keys(selectedBoxes)
-    .filter((key) => selectedBoxes[key])
-    .join(", ");
-};
 
 export default function PreferenceSheet(props: SheetProps) {
-  const [selectedBoxes, setSelectedBoxes] = useState<Record<string, boolean>>(
-    {}
-  );
+  const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
+  const [selectedDiets, setSelectedDiets] = useState<string[]>([]);
 
-  const toggleSelect = (label: string) => {
-    setSelectedBoxes((prevState) => ({
-      ...prevState,
-      [label]: !prevState[label],
-    }));
+  console.log(selectedCuisines);
+  console.log(selectedDiets);
+
+  const handleSubmit = () => {
+    const cuisnesString = selectedCuisines.join(",");
+    const dietsString = selectedDiets.join(",");
+
+    //TODO: send to backend
+
+    handleClose();
   };
-
-  const selectedLabels = getSelectedLabels(selectedBoxes);
-  console.log(selectedLabels);
 
   return (
     <ActionSheet id={props.sheetId}>
-      <View className="w-full h-fit min-h-[70%] py-2 items-center rounded-xl">
+      <View className="w-full h-fit min-h-[0%] py-2 items-center rounded-xl">
         {/* top bar */}
         <View
           style={{
@@ -80,17 +59,95 @@ export default function PreferenceSheet(props: SheetProps) {
         <Text className="font-pps text-2xl text-center mt-6">
           Choose your diets
         </Text>
-        <View className="bg-grey grid-flow-row-dense w-full">
-          {Object.values(cuisinesEnum).map((cuisine) => (
-            <SelectableBox
-              key={cuisine}
-              label={cuisine}
-              isSelected={selectedBoxes[cuisine]}
-              onToggle={() => toggleSelect(cuisine)}
+        <View className="w-full px-8 space-y-4">
+          <MultiSelect
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            search
+            data={cuisines}
+            labelField="label"
+            valueField="value"
+            placeholder="Select cuisines..."
+            searchPlaceholder="Search..."
+            value={selectedCuisines}
+            onChange={(item) => {
+              setSelectedCuisines(item);
+            }}
+            selectedStyle={styles.selectedStyle}
+          />
+
+          <MultiSelect
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            search
+            data={diets}
+            labelField="label"
+            valueField="value"
+            placeholder="Select diets..."
+            searchPlaceholder="Search..."
+            value={selectedDiets}
+            onChange={(item) => {
+              setSelectedDiets(item);
+            }}
+            selectedStyle={styles.selectedStyle}
+          />
+        </View>
+
+        {/* Buttons */}
+        <View className="flex flex-row w-full justify-center items-end py-4 mt-5">
+          <TouchableOpacity onPress={handleSubmit}>
+            <Image
+              style={{ width: 60, height: 60 }}
+              source={require("../../assets/icons/Approve.svg")}
             />
-          ))}
+          </TouchableOpacity>
         </View>
       </View>
     </ActionSheet>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { padding: 16 },
+  dropdown: {
+    height: 50,
+    backgroundColor: "#31BD15D",
+    borderColor: "#31BD15D",
+  },
+  placeholderStyle: {
+    fontSize: 16,
+    color: "#31BD15",
+  },
+  selectedTextStyle: {
+    fontSize: 14,
+    color: "#31BD15",
+  },
+  iconStyle: {
+    width: 20,
+    color: "#31BD15",
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    borderColor: "#31BD15",
+    color: "#31BD15",
+    fontSize: 16,
+  },
+  icon: {
+    color: "#31BD15",
+    marginRight: 5,
+  },
+  selectedStyle: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 24,
+    borderColor: "#31BD15",
+  },
+});

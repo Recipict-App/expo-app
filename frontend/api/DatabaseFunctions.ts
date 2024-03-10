@@ -158,3 +158,33 @@ export async function editIngredientToFirebase(
   // optional
   return data;
 }
+
+export async function editPreferenceToFirebase(
+  userGoogleToken: String,
+  newCuisines: string[],
+  newDiets: string[],
+) {
+  const response = await fetch(
+    "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-preference",
+    {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: userGoogleToken,
+        cuisines: newCuisines,
+        diets: newDiets,
+      }),
+    }
+  );
+
+  if (response.status !== 200)
+    console.log("Something went wrong when trying to edit preference 😡");
+
+  const data = await response.json();
+
+  // optional
+  return data;
+}

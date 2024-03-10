@@ -22,6 +22,7 @@ export function useEditIngredientToFirebase() {
       } else {
         console.log("Successfully edited ingredient! 🤩");
         await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
+        await queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
       }
     },
   });
@@ -46,6 +47,7 @@ export function useEditPreferenceToFirebase() {
       } else {
         console.log("Successfully edited preference! 🤩");
         await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
+        await queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
       }
     },
   });

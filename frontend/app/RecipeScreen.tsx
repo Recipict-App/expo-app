@@ -14,7 +14,6 @@ import { searchRecipes } from "../api/RecipeFunctions";
 import { recipeType } from "../types/recipe-type";
 
 export default function recipe() {
-
   const { userData } = useContext(UserContext);
   if (!userData) return null;
   const userDetails = userData[0];
@@ -33,8 +32,7 @@ export default function recipe() {
     diets: dietsString,
   };
 
-  const { isPending, error, data, refetch } =
-    useFetchRecommendedRecipes(requestBody);
+  const { isPending, data } = useFetchRecommendedRecipes(requestBody);
 
   const [query, setQuery] = useState<string>("");
 
@@ -64,7 +62,7 @@ export default function recipe() {
     setQuery(e);
   };
 
-  console.log("cwelkibfoeuwfhwbufoueifhu");
+  console.log("recipeScreen Re-render");
   return (
     <SafeAreaView
       className="bg-white"

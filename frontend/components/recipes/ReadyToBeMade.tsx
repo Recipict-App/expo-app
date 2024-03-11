@@ -34,7 +34,7 @@ export default function ReadyToBeMade({
       {/* list of recipe */}
       <View className="flex flex-row overflow-hidden pb-[15px] justify-center">
         {!isPending ? (
-          recipes?.length !== 0 ? (
+          recipes?.length !== 0 && recipes ? (
             <FlatList
               horizontal
               data={recipes}
@@ -45,7 +45,7 @@ export default function ReadyToBeMade({
           ) : (
             <View className="flex justify-center items-center h-full w-[65%] rounded-2xl pb-10">
               <Text className="font-ppr text-base text-[#605dfd] text-center">
-                No recipes ready to be made
+                Sorry No Recipes Match Your Available Ingredients
               </Text>
             </View>
           )

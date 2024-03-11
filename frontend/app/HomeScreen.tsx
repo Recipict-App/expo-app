@@ -83,7 +83,7 @@ export default function Home() {
               }
               {ingredients[0] ? (
                 ingredients.map((item: ingredientProps, index: number) => {
-                  if(index >= 5)return;
+                  if (index >= 5) return;
                   return (
                     <Ingredient
                       key={index}
@@ -100,7 +100,7 @@ export default function Home() {
                   );
                 })
               ) : (
-                <Text>Sadly, you have no nothing</Text>
+                <Text>No Ingredient Found</Text>
               )}
             </View>
           </View>

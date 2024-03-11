@@ -103,17 +103,22 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
 
           {/* Text */}
           <View className="ml-4">
-            <Text numberOfLines={1} className="text-sm font-pps max-w-[220px]">
+            <Text
+              numberOfLines={1}
+              className="text-sm font-pps max-w-[200px]"
+              adjustsFontSizeToFit
+            >
               {name}
             </Text>
             <Text
               numberOfLines={1}
-              className="text-xs font-ppr text-grey max-w-[220px]"
+              className="text-xs font-ppr text-grey max-w-[200px]"
+              adjustsFontSizeToFit
             >
               {quantity +
                 " " +
                 unit +
-                "   |   " +
+                "  |  " +
                 dayDifference +
                 " days before expired"}
             </Text>

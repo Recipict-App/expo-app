@@ -37,15 +37,21 @@ export default function AlmostThere({
       {/* list of recipe */}
       <View className="flex flex-row overflow-hidden pb-[15px] justify-center">
         {!isPending ? (
-          <FlatList
-            horizontal
-            data={recipes}
-            renderItem={({ item }) => <RecipeBoxBig recipe={item} />}
-            keyExtractor={(item, index) => {
-              return index.toString();
-            }}
-            showsHorizontalScrollIndicator={false}
-          />
+          recipes?.length !== 0 && recipes ? (
+            <FlatList
+              horizontal
+              data={recipes}
+              renderItem={({ item }) => <RecipeBoxBig recipe={item} />}
+              keyExtractor={(index) => index.toString()}
+              showsHorizontalScrollIndicator={false}
+            />
+          ) : (
+            <View className="flex justify-center items-center h-full w-[65%] rounded-2xl pb-10">
+              <Text className="font-ppr text-base text-[#ff8754] text-center">
+                Sorry No Recipes Match Your Available Ingredients
+              </Text>
+            </View>
+          )
         ) : (
           <FlatList
             horizontal

@@ -41,10 +41,11 @@ export default function pantry() {
     return ingredient?.name?.toLowerCase().includes(searchInput.toLowerCase());
   });
   const groupedItems = groupByType(filteredIngredients);
-
+  const userGoogleToken = data.googleToken;
   // Button handlers
-  const handleShowIngredient = () => {
-    SheetManager.show("edit-ingredients-sheet");
+  const handleShowIngredient = async () => {
+    console.log("awd");
+    await SheetManager.show("edit-ingredients-sheet");
   };
 
   return (
@@ -74,7 +75,7 @@ export default function pantry() {
               />
             </View>
 
-            <View className="w-11/12 justify-center items-center">
+            <View className="w-11/12 justify-center items-center ">
               {/* Shelf */}
               {ingredients[0] ? (
                 /* Dispay items */
@@ -88,7 +89,11 @@ export default function pantry() {
                   );
                 })
               ) : (
-                <Text>Sadly, you have no nothing</Text>
+                <View className="w-full py-[30%] h-[300px] flex items-center justify-center">
+                  <View className=" h-fit flex justify-center items-center border rounded-3xl p-4">
+                    <Text>Sadly, you have no nothing</Text>
+                  </View>
+                </View>
               )}
             </View>
           </View>
@@ -96,12 +101,14 @@ export default function pantry() {
       </ScrollView>
 
       {/* Add ingredient button */}
-      <TouchableOpacity onPress={handleShowIngredient}>
-        <Image
-          className="w-[70px] h-[70px] object-contain fixed bottom-[80px] left-[75%] opacity-100 "
-          source={require("../assets/icons/AddIngredient.svg")}
-        />
-      </TouchableOpacity>
+      <View className="w-[70px] h-[70px fixed bottom-[80px] left-[75%]">
+        <TouchableOpacity onPress={handleShowIngredient}>
+          <Image
+            className="w-[70px] h-[70px] object-contain opacity-100  "
+            source={require("../assets/icons/AddIngredient.svg")}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

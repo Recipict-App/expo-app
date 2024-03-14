@@ -44,7 +44,6 @@ export default function pantry() {
   const userGoogleToken = data.googleToken;
   // Button handlers
   const handleShowIngredient = async () => {
-    console.log("awd");
     await SheetManager.show("edit-ingredients-sheet");
   };
 

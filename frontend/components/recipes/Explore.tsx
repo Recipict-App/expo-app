@@ -24,8 +24,8 @@ export default function Explore() {
     ingredients: ingredientsString,
     subscription: userDetails.subscription,
     mode: "min-missing-ingredient",
-    cuisines: cuisinesString,
-    diets: dietsString,
+    cuisines: "", //  todo: error when passing cuisies and diets
+    diets: "", //  todo: error when passing cuisies and diets
   };
 
   const { isPending, error, data, refetch } =
@@ -73,14 +73,8 @@ export default function Explore() {
         )}
 
         {data?.newRecipes.map((item: any, index: any) => {
-          return (
-            <RecipeBox
-              key={item.id}
-              recipe={item}
-            />
-          );
+          return <RecipeBox key={item.id} recipe={item} />;
         })}
-
       </View>
     </View>
   );

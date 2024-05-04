@@ -1,12 +1,6 @@
-import { initializeApp } from 'firebase/app';
-
-// Optionally import the services that you want to use
+import { initializeApp, getApp } from 'firebase/app';
 import { getAuth } from "firebase/auth";
-// import {...} from "firebase/database";
-// import {...} from "firebase/firestore";
-// import {...} from "firebase/functions";
-// import {...} from "firebase/storage";
-// import { getAnalytics } from "firebase/analytics";
+import { getFirestore } from "firebase/firestore";
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -19,9 +13,13 @@ const firebaseConfig = {
   measurementId: "G-F98KJCM8C5"
 };
 
-const app = initializeApp(firebaseConfig);
+export function initializeServices() {
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const firestore = getFirestore(app);
 
-const auth = getAuth(app);
+  return { app, auth, firestore };
+}
 
 
 // const analytics = getAnalytics(app);

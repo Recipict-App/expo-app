@@ -11,11 +11,16 @@ import Explore from "../components/recipes/Explore";
 import IngredientSkeleton from "../components/skeletons/IngredientSkeleton";
 import { FlatList } from "react-native-actions-sheet";
 
+/* Firebase SDK */
+import firestore from "@react-native-firebase/firestore";
+
 export default function Home() {
-  const { userData, setUserData } = useContext(UserContext);
-  if (!userData) return <Redirect href="/" />;
-  const data = userData[0];
-  const ingredients = data.ingredients;
+  // const { userData, setUserData } = useContext(UserContext);
+  // if (!userData) return <Redirect href="/" />;
+  // const data = userData[0];
+  // const ingredients = data.ingredients;
+
+
 
   return (
     <View className="bg-white">

@@ -68,6 +68,16 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
     });
   };
 
+  let imageSource;
+  try {
+    imageSource = ingredientImages[type as keyof typeof ingredientImages];
+    if (!imageSource) {
+      throw new Error('Image not found');
+    }
+  } catch (error) {
+    imageSource = NOT_INGREDIENT_IMG;
+  }
+
   const debouncedhandleShowIngredient = useDebounceCallback(
     handleShowIngredient,
     500,
@@ -97,7 +107,7 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
           <View className="rounded-lg h-8 w-8 justify-center items-center flex ">
             <Image
               className="object-contain h-7 w-7"
-              source={ingredientImages[type as keyof typeof ingredientImages]}
+              source={imageSource}
             />
           </View>
 

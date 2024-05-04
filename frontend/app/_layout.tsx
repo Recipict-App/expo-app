@@ -26,6 +26,9 @@ import { UserContext } from "../userContext";
 import { ScannedIngredientsContext } from "../ScannedItemProvider";
 import { userInfoType, userDataProps, ingredientProps } from "../firebase-type";
 
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);
+
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 2 } },
 });

@@ -42,7 +42,7 @@ export default function AlmostThere({
               horizontal
               data={recipes}
               renderItem={({ item }) => <RecipeBoxBig recipe={item} />}
-              keyExtractor={(index) => index.toString()}
+              keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator={false}
             />
           ) : (

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
@@ -26,7 +26,36 @@ import { UserContext } from "../userContext";
 
 WebBrowser.maybeCompleteAuthSession();
 
+/* Firebase SDK */
+import auth from "@react-native-firebase/auth";
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+
+
 export default function App() {
+  /* Firebase SDK */
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState<boolean>(true);
+  const [user, setUser] = useState<any>();
+
+  // Handle user state changes
+  function onAuthStateChanged(user: any) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+``
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) return null;
+
+  // If user is already logged in, redirect to HomeScreen
+  if (user) return <Redirect href="/HomeScreen" />;
+
+  /* -------------------------------------- */
+
   const { userInfo, setUserInfo, userData, setUserData } =
     useContext(UserContext);
   const [request, response, promptAsync] = Google.useAuthRequest({

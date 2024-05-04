@@ -29,8 +29,11 @@ export async function fetchRecommendedRecipes(requestBody: any): Promise<{
   let newReadyRecipes: recipeType[] = [];
   let newMissingRecipes: recipeType[] = [];
 
+  const spoonacular_recipe_by_ingredient_url = process.env.EXPO_CF_SPOONACULAR_API_RECIPE_BY_INGREDIENT || "";
+  if (!spoonacular_recipe_by_ingredient_url) throw new Error("spoonacular_recipe_by_ingredient_url not found");
+
   const apiResponse = await fetch(
-    `https://us-central1-recipict-gcp.cloudfunctions.net/function-spoonacular-recipe-by-ingredient`,
+    spoonacular_recipe_by_ingredient_url,
     {
       method: "POST",
       mode: "cors",
@@ -116,8 +119,12 @@ export async function fetchRandomRecipes(requestBody: any) {
 
   let newRecipes: any[] = [];
 
+  const spoonacular_random_recipe_url = process.env.EXPO_CF_SPOONACULAR_API_RANDOM_RECIPE || "";
+  if (!spoonacular_random_recipe_url) throw new Error("spoonacular_random_recipe_url not found");
+
+
   const apiResponse = await fetch(
-    `https://us-central1-recipict-gcp.cloudfunctions.net/function-random-recipe`,
+    spoonacular_random_recipe_url,
     {
       method: "POST",
       mode: "cors",
@@ -186,8 +193,12 @@ export async function searchRecipes(requestBody: any) {
 
   let newRecipes: any[] = [];
 
+  const spoonacular_search_recipe_url = process.env.EXPO_CF_SPOONACULAR_API_SEARCH_RECIPE || "";
+  if (!spoonacular_search_recipe_url) throw new Error("spoonacular_search_recipe_url not found");
+
+
   const apiResponse = await fetch(
-    `https://us-central1-recipict-gcp.cloudfunctions.net/function-search-recipe`,
+    spoonacular_search_recipe_url,
     {
       method: "POST",
       mode: "cors",

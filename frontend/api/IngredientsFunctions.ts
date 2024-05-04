@@ -8,9 +8,11 @@ export async function ImageToItems(
   const requestBody = {
     base64ImageData: base64ImageData,
   };
+  const documentai_api_url = process.env.EXPO_CF_DOCAI_API || "";
+  if (!documentai_api_url) throw new Error("documentai_api_url not found");
 
   const response = await fetch(
-    "https://us-central1-recipict-gcp.cloudfunctions.net/function-document-ai-api",
+    documentai_api_url,
     {
       method: "POST",
       mode: "cors",
@@ -45,8 +47,13 @@ export async function getIngredientProperties(ingredientName: string): Promise<{
   if (!ingredientName) throw new Error("Invalid ingredient name");
 
   // call the api
+  let assign_ingredient_properly_url = process.env.EXPO_CF_DOCAI_API || "";
+  if (!assign_ingredient_properly_url) throw new Error("assign_ingredient_properly_url not found");
+  assign_ingredient_properly_url = assign_ingredient_properly_url +  '?name=' + ingredientName;
+
+
   const response = await fetch(
-    `https://us-central1-recipict-gcp.cloudfunctions.net/function-assign-ingredient-property?name=${ingredientName}`,
+    assign_ingredient_properly_url,
     {
       method: "GET",
       mode: "cors",

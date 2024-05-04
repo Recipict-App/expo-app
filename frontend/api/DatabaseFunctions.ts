@@ -25,7 +25,10 @@ export async function deleteCurrentLocalUser(
 }
 
 export async function getGoogleAccountDetails(AccessTokenGoogle: string) {
-  const response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+  const google_api_url = process.env.EXPO_GOOGLEAPI_ACCOUNT_DETAILS || "";
+  if (!google_api_url) throw new Error("google_api_url not found");
+
+  const response = await fetch(google_api_url, {
     headers: { Authorization: `Bearer ${AccessTokenGoogle}` },
   });
 
@@ -39,8 +42,11 @@ export async function getOrCreateUserDataInFirebase(
   user: any,
   setUserData: React.Dispatch<React.SetStateAction<userDataProps[] | undefined>>
 ) {
+  const retrieve_user_url = process.env.EXPO_CF_RETRIEVE_USER || "";
+  if (!retrieve_user_url) throw new Error("Cloudfunction - retrieve_user_url not found");
+
   const checkUserResponse = await fetch(
-    "https://us-central1-recipict-gcp.cloudfunctions.net/function-retrieve-user",
+    retrieve_user_url,
     {
       method: "POST",
       mode: "cors",
@@ -67,8 +73,10 @@ export async function getOrCreateUserDataInFirebase(
 
     setUserData(localUserData);
 
+    const create_user_url = process.env.EXPO_CF_CREATE_USER || "";
+    if (!create_user_url) throw new Error("Cloudfunction - create_user_url not found");
     const createUserResponse = await fetch(
-      "https://us-central1-recipict-gcp.cloudfunctions.net/function-create-user",
+      create_user_url,
       {
         method: "POST",
         mode: "cors",
@@ -103,8 +111,12 @@ export async function getUserDataFromFirebaseAndSetContext(
   setUserData: React.Dispatch<React.SetStateAction<userDataProps[] | undefined>>
 ) {
   const user = await getLocalUser();
+
+  const retrieve_user_url = process.env.EXPO_CF_RETRIEVE_USER || "";
+  if (!retrieve_user_url) throw new Error("Cloudfunction - retrieve_user_url not found");
+
   const checkUserResponse = await fetch(
-    "https://us-central1-recipict-gcp.cloudfunctions.net/function-retrieve-user",
+    retrieve_user_url,
     {
       method: "POST",
       mode: "cors",
@@ -136,8 +148,11 @@ export async function editIngredientToFirebase(
   userGoogleToken: String,
   newIngredients: ingredientProps[]
 ) {
+  const edit_ingredients_url = process.env.EXPO_CF_EDIT_INGREDIENTS || "";
+  if (!edit_ingredients_url) throw new Error("Cloudfunction - edit_ingredients_url not found");
+
   const response = await fetch(
-    "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-ingredients",
+    edit_ingredients_url,
     {
       method: "POST",
       mode: "cors",
@@ -165,9 +180,11 @@ export async function editPreferenceToFirebase(
   newCuisines: string[],
   newDiets: string[],
 ) {
+  const edit_preferences_url = process.env.EXPO_CF_EDIT_PREFERENCES || "";
+  if (!edit_preferences_url) throw new Error("Cloudfunction - edit_preferences_url not found");
 
   const response = await fetch(
-    "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-preference",
+    edit_preferences_url,
     {
       method: "POST",
       mode: "cors",

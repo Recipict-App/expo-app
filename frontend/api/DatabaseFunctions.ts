@@ -1,4 +1,4 @@
-import { userDataProps, ingredientProps } from "../firebase-type";
+import { userDataType, ingredientProps } from "../firebase-type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export async function getLocalUser() {
@@ -59,7 +59,7 @@ export async function getOrCreateUserDataInFirebase(
 
   if (checkUserResponse.status == 404) {
     console.log("User not found in Firebase, creating new user... 🤔");
-    const localUserData: userDataProps[] = [
+    const localUserData: userDataType = 
       {
         name: user.name,
         email: user.email,
@@ -68,8 +68,7 @@ export async function getOrCreateUserDataInFirebase(
         cuisines: [],
         diets: [],
         subscription: "Regular",
-      },
-    ];
+      }
 
     setUserData(localUserData);
 
@@ -108,7 +107,7 @@ export async function getOrCreateUserDataInFirebase(
 }
 
 export async function getUserDataFromFirebaseAndSetContext(
-  setUserData: React.Dispatch<React.SetStateAction<userDataProps[] | undefined>>
+  setUserData: React.Dispatch<React.SetStateAction<userDataType[] | undefined>>
 ) {
   const user = await getLocalUser();
 

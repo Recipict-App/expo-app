@@ -27,10 +27,24 @@ export const helloWorld = onRequest((request, response) => {
   response.send("Hello from Firebase!");
 });
 
+/* EVENT-BASED FUNCTIONS */
+
 exports.createUser = functions.user().onCreate((user: UserRecord) => {
+  const new_user_data = {
+    uid: user.uid,
+    name: user.displayName,
+    email: user.email,
+    metadata: user.metadata,
+    photoURL: user.photoURL,
+    ingredients: [],
+    cuisines: [],
+    diets: [],
+    subscription: false,
+  }
+
   return admin
     .firestore()
     .collection("users")
     .doc(user.uid)
-    .set(JSON.parse(JSON.stringify(user)));
+    .set(JSON.parse(JSON.stringify(new_user_data)));
 });

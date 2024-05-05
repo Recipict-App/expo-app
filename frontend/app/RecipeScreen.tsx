@@ -16,17 +16,16 @@ import { recipeType } from "../types/recipe-type";
 export default function recipe() {
   const { userData } = useContext(UserContext);
   if (!userData) return null;
-  const userDetails = userData[0];
 
-  const ingredientsString = userDetails.ingredients
+  const ingredientsString = userData.ingredients
     .map((ingredient) => ingredient.genericName)
     .join(",");
-  const cuisinesString = userDetails.cuisines.join(",");
-  const dietsString = userDetails.diets.join(",");
+  const cuisinesString = userData.cuisines.join(",");
+  const dietsString = userData.diets.join(",");
 
   const requestBody = {
     ingredients: ingredientsString,
-    subscription: userDetails.subscription,
+    subscription: userData.subscription,
     mode: "min-missing-ingredient",
     cuisines: cuisinesString,
     diets: dietsString,
@@ -42,7 +41,7 @@ export default function recipe() {
 
   const handleSearch = async () => {
     const requestBody = {
-      subscription: userDetails.subscription,
+      subscription: userData.subscription,
       query: query,
     };
     setQuery("");

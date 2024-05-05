@@ -8,21 +8,24 @@ import { useContext } from "react";
 
 import { useFetchRandomRecipes } from "../../api/queries";
 import RecipeBoxSkeleton from "../skeletons/RecipeBoxSkeleton";
+import { userDataType } from "../../firebase-type";
 
-export default function Explore() {
-  const { userData } = useContext(UserContext);
+export default function Explore({ userData }: { userData: userDataType | undefined }) {
   if (!userData) return null;
-  const userDetails = userData[0];
+  console.log("User Data from context EXPLOREE:", userData);
 
-  const ingredientsString = userDetails.ingredients
-    .map((ingredient) => ingredient.genericName)
-    .join(",");
-  const cuisinesString = userDetails.cuisines.join(",");
-  const dietsString = userDetails.diets.join(",");
+  const ingredientsString =
+    userData.ingredients.length > 0
+      ? userData.ingredients
+          .map((ingredient) => ingredient.genericName)
+          .join(",")
+      : "";
+  const cuisinesString = userData.cuisines.join(",");
+  const dietsString = userData.diets.join(",");
 
   const requestBody = {
     ingredients: ingredientsString,
-    subscription: userDetails.subscription,
+    subscription: userData.subscription,
     mode: "min-missing-ingredient",
     cuisines: "", //  todo: error when passing cuisies and diets
     diets: "", //  todo: error when passing cuisies and diets

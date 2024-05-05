@@ -35,13 +35,13 @@ export default function pantry() {
   if (!userData) return <Redirect href="/" />;
 
   // process the data
-  const data = userData[0];
+  const data = userData;
   const ingredients = data.ingredients;
   const filteredIngredients = ingredients.filter((ingredient) => {
     return ingredient?.name?.toLowerCase().includes(searchInput.toLowerCase());
   });
   const groupedItems = groupByType(filteredIngredients);
-  const userGoogleToken = data.googleToken;
+  const userGoogleToken = data.uid;
   // Button handlers
   const handleShowIngredient = async () => {
     await SheetManager.show("edit-ingredients-sheet");

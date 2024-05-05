@@ -12,11 +12,10 @@ import { deleteCurrentLocalUser } from "../api/DatabaseFunctions";
 import { SheetManager } from "react-native-actions-sheet";
 
 export default function Profile() {
-  const { userInfo, setUserInfo, userData, setUserData } =
+  const { userData, setUserData } =
     useContext(UserContext);
   if (!userData) return <Redirect href={"/"} />;
-  const data = userData[0];
-  const name = data.name;
+  const name = userData.name;
 
   const handlePreference = () => {
     SheetManager.show("preference-sheet");
@@ -28,9 +27,9 @@ export default function Profile() {
   // const handleAppereance =  () => {};
 
   const handleLogOut = async () => {
-    await deleteCurrentLocalUser(setUserInfo, setUserData);
-    console.log("Logging out");
-  };
+    // await deleteCurrentLocalUser(setUserInfo, setUserData);
+    console.log("Logging out -> todo: implement logout function");
+  }; 
 
   return (
     <View className="bg-white ">

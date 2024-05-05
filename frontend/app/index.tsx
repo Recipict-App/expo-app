@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect, useState, useContext } from "react";
+import { UserContext } from "../userContext";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
-  Button,
 } from "react-native";
 import { Image } from "expo-image";
-
 import { Redirect } from "expo-router";
 
 /* Firebase SDK */
 import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { userDataType } from "../firebase-type";
 
 GoogleSignin.configure({
   webClientId:
@@ -26,18 +26,15 @@ GoogleSignin.configure({
 async function onGoogleButtonPress() {
   // Check if your device supports Google Play
   await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-  // Get the users ID token
   const { idToken } = await GoogleSignin.signIn();
-
-  // Create a Google credential with the token
   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
-  // Sign-in the user with the credential
   return auth().signInWithCredential(googleCredential);
 }
 
 export default function App() {
-  /* Firebase SDK */
+  const { userData, setUserData } = useContext(UserContext);
+
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState<boolean>(true);
   const [user, setUser] = useState<any>(null);
@@ -45,23 +42,42 @@ export default function App() {
   // Handle user state changes
   function onAuthStateChanged(user: any) {
     setUser(user);
+    if (user) {
+      loadUserData(user);
+    }
     if (initializing) setInitializing(false);
+  }
+
+  // Get user data from Firestore
+  async function loadUserData(user: any) {
+    try {
+      const doc = await firestore().collection("users").doc(user.uid).get();
+      if (doc.exists) {
+        const data = doc.data() as userDataType;
+        // console.log("User Data:", data);
+        setUserData(data);
+        return data;
+      } else {
+        console.log("User Not Found in Firestore!");
+      }
+    } catch (error) {
+      console.error("Error getting document:", error);
+    }
   }
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber(); // unsubscribe on unmount
+    return subscriber; // unsubscribe on unmount
   }, []);
 
   if (initializing) return null;
-  console.log(user);
+
   // If user is already logged in, redirect to HomeScreen
   if (user) {
-    console.log(user);
-    
+    // console.log(user.uid);
+    // loadUserData(user);
+    return <Redirect href="/HomeScreen" />;
   }
-
-  /* -------------------------------------- */
 
   return (
     <View style={styles.container}>

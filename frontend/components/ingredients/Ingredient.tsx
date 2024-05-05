@@ -47,13 +47,11 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
 }) => {
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
-  const data = userData[0];
-  const userGoogleToken = data.googleToken;
+
 
   const handleShowIngredient = async () => {
     await SheetManager.show("edit-ingredients-sheet", {
       payload: {
-        userGoogleToken: userGoogleToken,
         ingredient: {
           name: name,
           quantity: quantity,

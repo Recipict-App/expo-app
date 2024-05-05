@@ -43,7 +43,6 @@ export default function App() {
   function onAuthStateChanged(user: any) {
     setUser(user);
     if (user) loadUserData(user);
-    
     if (initializing) setInitializing(false);
   }
 

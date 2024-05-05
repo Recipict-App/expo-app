@@ -32,16 +32,15 @@ export default function pantry() {
 
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
+  // console.log("User Data from pantryy:", userData)
   if (!userData) return <Redirect href="/" />;
 
   // process the data
-  const data = userData;
-  const ingredients = data.ingredients;
-  const filteredIngredients = ingredients.filter((ingredient) => {
+  const filteredIngredients = userData.ingredients.filter((ingredient) => {
     return ingredient?.name?.toLowerCase().includes(searchInput.toLowerCase());
   });
   const groupedItems = groupByType(filteredIngredients);
-  const userGoogleToken = data.uid;
+
   // Button handlers
   const handleShowIngredient = async () => {
     await SheetManager.show("edit-ingredients-sheet");
@@ -76,7 +75,7 @@ export default function pantry() {
 
             <View className="w-11/12 justify-center items-center ">
               {/* Shelf */}
-              {ingredients[0] ? (
+              {userData.ingredients[0] ? (
                 /* Dispay items */
                 Object.keys(groupedItems).map((key, index) => {
                   return (

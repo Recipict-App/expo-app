@@ -3,16 +3,13 @@ import { Image } from "expo-image";
 import React from "react";
 import { RecipeBox } from "./RecipeBox";
 
-import { UserContext } from "../../userContext";
-import { useContext } from "react";
-
 import { useFetchRandomRecipes } from "../../api/queries";
 import RecipeBoxSkeleton from "../skeletons/RecipeBoxSkeleton";
 import { userDataType } from "../../firebase-type";
 
 export default function Explore({ userData }: { userData: userDataType | undefined }) {
   if (!userData) return null;
-  console.log("User Data from context EXPLOREE:", userData);
+  // console.log("User Data from context EXPLOREE:", userData);
 
   const ingredientsString =
     userData.ingredients.length > 0

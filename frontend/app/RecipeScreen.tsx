@@ -4,6 +4,8 @@ import { Image } from "expo-image";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 import ReadyToBeMade from "../components/recipes/ReadyToBeMade";
 import AlmostThere from "../components/recipes/AlmostThere";
 import { SheetManager } from "react-native-actions-sheet";
@@ -15,25 +17,28 @@ import { recipeType } from "../types/recipe-type";
 
 export default function recipe() {
   const { userData } = useContext(UserContext);
-  if (!userData) return null;
+  console.log("User Data from recipe:", userData);
 
-  const ingredientsString = userData.ingredients
-    .map((ingredient) => ingredient.genericName)
-    .join(",");
-  const cuisinesString = userData.cuisines.join(",");
-  const dietsString = userData.diets.join(",");
+const ingredientsString = userData?.ingredients
+  ? userData.ingredients
+      .map((ingredient) => ingredient.genericName)
+      .join(",")
+  : "";
 
-  const requestBody = {
-    ingredients: ingredientsString,
-    subscription: userData.subscription,
-    mode: "min-missing-ingredient",
-    cuisines: cuisinesString,
-    diets: dietsString,
-  };
+const cuisinesString = userData?.cuisines ? userData.cuisines.join(",") : "";
+const dietsString = userData?.diets ? userData.diets.join(",") : "";
 
-  const { isPending, data } = useFetchRecommendedRecipes(requestBody);
+const requestBody = {
+  ingredients: ingredientsString,
+  subscription: userData?.subscription ?? false,
+  mode: "min-missing-ingredient",
+  cuisines: cuisinesString,
+  diets: dietsString,
+};
 
-  const [query, setQuery] = useState<string>("");
+const { isPending, data } = useFetchRecommendedRecipes(requestBody);
+
+const [query, setQuery] = useState<string>("");
 
   const handleShowSavedRecipe = () => {
     SheetManager.show("saved-recipes-sheet");
@@ -41,7 +46,7 @@ export default function recipe() {
 
   const handleSearch = async () => {
     const requestBody = {
-      subscription: userData.subscription,
+      subscription: userData?.subscription ?? false,
       query: query,
     };
     setQuery("");
@@ -63,6 +68,7 @@ export default function recipe() {
 
   console.log("recipeScreen Re-render");
   return (
+    <GestureHandlerRootView style={{flex: 1}}>
     <SafeAreaView
       className="bg-white"
       style={{ paddingBottom: 0 }}
@@ -108,5 +114,6 @@ export default function recipe() {
         </View>
       </ScrollView>
     </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }

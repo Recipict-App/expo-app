@@ -21,9 +21,7 @@ export default function Explore({ userData }: { userData: userDataType | undefin
   const dietsString = userData.diets.join(",");
 
   const requestBody = {
-    ingredients: ingredientsString,
     subscription: userData.subscription,
-    mode: "min-missing-ingredient",
     cuisines: "", //  todo: error when passing cuisies and diets
     diets: "", //  todo: error when passing cuisies and diets
   };

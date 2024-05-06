@@ -45,6 +45,7 @@ export async function fetchRecommendedRecipes(requestBody: any): Promise<{
   );
 
   const response: SpoonacularFetchRecommendedRecipes = await apiResponse.json();
+  console.log(response);
 
   response.results.map((recipeInfo: RecipeProps) => {
     const {
@@ -116,7 +117,7 @@ export async function fetchRecommendedRecipes(requestBody: any): Promise<{
 
 export async function fetchRandomRecipes(requestBody: any) {
   console.log("Fetching random recipes with REACT QUERY...");
-  console.log(requestBody);
+  // console.log(requestBody);
 
   let newRecipes: any[] = [];
 
@@ -137,7 +138,7 @@ export async function fetchRandomRecipes(requestBody: any) {
   );
 
   const response = await apiResponse.json();
-  console.log(response);
+  // console.log(response);
   response.recipes.map((recipeInfo: any) => {
     const {
       title,

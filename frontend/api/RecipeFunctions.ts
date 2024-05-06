@@ -23,7 +23,7 @@ export async function fetchRecommendedRecipes(requestBody: any): Promise<{
   newReadyRecipes: recipeType[];
   newMissingRecipes: recipeType[];
 }> {
-  console.log("Fetching recommended recipes with REACT QUERY...");
+  console.log("REACT QUERY - Fetching recommended recipes");
 
   let newRecipes: recipeType[] = [];
   let newReadyRecipes: recipeType[] = [];
@@ -45,7 +45,7 @@ export async function fetchRecommendedRecipes(requestBody: any): Promise<{
   );
 
   const response: SpoonacularFetchRecommendedRecipes = await apiResponse.json();
-  console.log(response);
+  // console.log(response);
 
   response.results.map((recipeInfo: RecipeProps) => {
     const {
@@ -116,7 +116,7 @@ export async function fetchRecommendedRecipes(requestBody: any): Promise<{
 }
 
 export async function fetchRandomRecipes(requestBody: any) {
-  console.log("Fetching random recipes with REACT QUERY...");
+  console.log("REACT QUERY - Fetching random recipes");
   // console.log(requestBody);
 
   let newRecipes: any[] = [];
@@ -261,6 +261,6 @@ export async function searchRecipes(requestBody: any) {
       Cleanedsummary,
     });
   });
-  console.log(newRecipes);
+  // console.log(newRecipes);
   return { newRecipes };
 }

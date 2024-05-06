@@ -97,6 +97,7 @@ export default function EditIngredientSheet(
 
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
+  const queryClient = useQueryClient();
   if (!userData) return <Redirect href="/" />;
   const ingredients = userData.ingredients;
 
@@ -250,7 +251,6 @@ export default function EditIngredientSheet(
     }
     
     // refresh the recipes
-    const queryClient = useQueryClient();
     await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
     await queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
   };

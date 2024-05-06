@@ -13,8 +13,9 @@ import { cuisinesEnum, dietsEnum, userDataType } from "../../firebase-type";
 import { Redirect } from "expo-router";
 import { UserContext } from "../../userContext";
 
-
 import firestore from "@react-native-firebase/firestore";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeysEnum } from "../../api/_queryKeys";
 
 const cuisines = Object.values(cuisinesEnum).map((cuisine) => ({
   label: cuisine,
@@ -33,6 +34,7 @@ const handleClose = () => {
 export default function PreferenceSheet(props: SheetProps) {
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
+  const queryClient = useQueryClient();
   if (!userData) return <Redirect href="/" />;
   const userCuisines = userData.cuisines;
   const userDiets = userData.diets;
@@ -70,6 +72,11 @@ export default function PreferenceSheet(props: SheetProps) {
       const data = doc.data() as userDataType;
       setUserData(data);
     }
+
+    // refresh the recipes
+    
+    await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
+    await queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
 
     handleClose();
   };

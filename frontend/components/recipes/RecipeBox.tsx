@@ -1,7 +1,7 @@
-import { View, Text } from "react-native";
+import { View, Text,TouchableOpacity } from "react-native";
 import { ImageBackground, Image } from "expo-image";
 import React from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
 import { SheetManager } from "react-native-actions-sheet";
 
 import { useDebounceCallback } from "usehooks-ts";

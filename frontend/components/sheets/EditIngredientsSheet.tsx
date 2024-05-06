@@ -1,6 +1,5 @@
 import ActionSheet, { SheetProps } from "react-native-actions-sheet";
-import { View, Text, StyleSheet, Button, Modal } from "react-native";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, StyleSheet, Button, Modal, TextInput, TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
 import { Redirect } from "expo-router";
 import { Image } from "expo-image";
@@ -24,6 +23,8 @@ import * as Crypto from "expo-crypto";
 import { ScannedIngredientsContext } from "../../ScannedItemProvider";
 
 import firestore from "@react-native-firebase/firestore";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeysEnum } from "../../api/_queryKeys";
 
 const type_data = [
   {
@@ -247,6 +248,11 @@ export default function EditIngredientSheet(
       const data = doc.data() as userDataType;
       setUserData(data);
     }
+    
+    // refresh the recipes
+    const queryClient = useQueryClient();
+    await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
+    await queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
   };
 
   return (

@@ -74,9 +74,9 @@ export default function PreferenceSheet(props: SheetProps) {
     }
 
     // refresh the recipes
-    
-    await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
-    await queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
+
+    queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
+    queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
 
     handleClose();
   };

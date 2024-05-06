@@ -14,6 +14,7 @@
 import { onRequest } from "firebase-functions/v2/https";
 // import * as logger from "firebase-functions/logger";
 
+const { DocumentProcessorServiceClient } = require("@google-cloud/documentai").v1;
 import { UserRecord } from "firebase-admin/auth";
 const functions = require("firebase-functions/v1/auth");
 const admin = require("firebase-admin");
@@ -62,6 +63,32 @@ export const recipe_by_random = onRequest(async (req, res) => {
   const result = await apiResponse.json();
 
   res.status(200).json(result);
+});
+
+export const receipt_extractor_api = onRequest(async (req, res) => {
+  const base64ImageData = req?.body?.base64ImageData;
+
+  const client = new DocumentProcessorServiceClient();
+  const projectId = "recipict-dev-gcp";
+  const locationId = "us"; 
+  const processorId = "93c825aa3842bef3"; 
+
+  // Request body to Document AI
+  const request = {
+    name: `projects/${projectId}/locations/${locationId}/processors/${processorId}`,
+    rawDocument: {
+      content: base64ImageData, // pass to API
+      mimeType: "image/jpeg",
+    },
+    // fieldMask: "date"
+  };
+
+  try {
+    const [result] = await client.processDocument(request);
+    res.status(200).json(result);
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
 });
 
 

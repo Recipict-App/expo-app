@@ -12,7 +12,7 @@
 // https://firebase.google.com/docs/functions/typescript
 
 import { onRequest } from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
+// import * as logger from "firebase-functions/logger";
 
 import { UserRecord } from "firebase-admin/auth";
 const functions = require("firebase-functions/v1/auth");
@@ -27,11 +27,6 @@ admin.initializeApp({
 
 
 /* ONREQUEST FUNCTIONS */
-
-export const hello_world = onRequest((request, response) => {
-  logger.info("Hello logs!", { structuredData: true });
-  response.send("Hello from Firebase!");
-});
 
 export const recipe_by_ingredients = onRequest(async (req, res) => {
   const ingredientsString = req.body.ingredients;

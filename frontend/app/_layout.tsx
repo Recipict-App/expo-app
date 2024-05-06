@@ -24,7 +24,7 @@ import { useAppState } from "../hooks/useAppState";
 import { useEffect, useState } from "react";
 import { UserContext } from "../userContext";
 import { ScannedIngredientsContext } from "../ScannedItemProvider";
-import { userInfoType, userDataProps, ingredientProps } from "../firebase-type";
+import { userInfoType, userDataType, ingredientProps } from "../firebase-type";
 
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);
@@ -44,8 +44,7 @@ export default function RootLayout() {
   useOnlineManager();
   useAppState(onAppStateChange);
 
-  const [userInfo, setUserInfo] = useState<userInfoType>();
-  const [userData, setUserData] = useState<userDataProps[]>();
+  const [userData, setUserData] = useState<userDataType>();
 
   const [scannedIngredients, setScannedIngredients] =
     useState<ingredientProps[]>();
@@ -63,8 +62,6 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <UserContext.Provider
         value={{
-          userInfo,
-          setUserInfo,
           userData,
           setUserData,
         }}
@@ -145,7 +142,7 @@ export default function RootLayout() {
                 name="index"
                 options={{
                   href: null,
-                  // tabBarStyle: { display: "none" }, // comment for development
+                  tabBarStyle: { display: "none" }, // comment for development
                 }}
               />
 

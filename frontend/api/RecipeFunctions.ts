@@ -24,7 +24,7 @@ export async function fetchRecommendedRecipes(requestBody: any): Promise<{
   newMissingRecipes: recipeType[];
 }> {
   console.log("REACT QUERY - Fetching recommended recipes");
-  console.log(requestBody);
+  // console.log(requestBody);
 
   let newRecipes: recipeType[] = [];
   let newReadyRecipes: recipeType[] = [];

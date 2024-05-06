@@ -73,8 +73,7 @@ export default function PreferenceSheet(props: SheetProps) {
       setUserData(data);
     }
 
-    // refresh the recipes
-
+    // refresh the recipes (no await so the useContext can update first before the query is invalidated)
     queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
     queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
 

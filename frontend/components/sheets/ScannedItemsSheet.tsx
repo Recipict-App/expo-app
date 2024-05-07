@@ -47,7 +47,6 @@ export default function ScannedItemsSheet(props: SheetProps) {
       ...scannedIngredients,
     ];
 
-    // todo: use firebase sdk to push to firebase
 
     // update diets to firebase
     await firestore()

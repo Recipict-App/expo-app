@@ -6,22 +6,27 @@ import ActionSheet, {
   SheetManager,
 } from "react-native-actions-sheet";
 
-import { ingredientProps } from "../../firebase-type";
+import { ingredientProps, userDataType } from "../../firebase-type";
 import { Shelf } from "../ingredients/Shelf";
 
 import { useContext } from "react";
 import { UserContext } from "../../userContext";
 import { ScannedIngredientsContext } from "../../ScannedItemProvider";
 
+import firestore from "@react-native-firebase/firestore";
+import { useQueryClient } from "@tanstack/react-query";
+
 import {
   getUserDataFromFirebaseAndSetContext,
   editIngredientToFirebase,
 } from "../../api/DatabaseFunctions";
+import { queryKeysEnum } from "../../api/_queryKeys";
 
 export default function ScannedItemsSheet(props: SheetProps) {
   const { scannedIngredients, setScannedIngredients } = useContext(
     ScannedIngredientsContext
   );
+  const queryClient = useQueryClient();
 
   // console.log(scannedIngredients);
 
@@ -44,9 +49,27 @@ export default function ScannedItemsSheet(props: SheetProps) {
 
     // todo: use firebase sdk to push to firebase
 
-    // push to firebase, and refresh context
-    // await editIngredientToFirebase(userGoogleToken, newIngredients);
-    // await getUserDataFromFirebaseAndSetContext(setUserData);
+    // update diets to firebase
+    await firestore()
+      .collection("users")
+      .doc(userData.uid)
+      .update({
+        ingredients: newIngredients,
+      })
+      .then(() => {
+        console.log("Preference - ingredients updated! (added)");
+      });
+
+    // refresh data to get fresh data from firebase to useContext
+    const doc = await firestore().collection("users").doc(userData.uid).get();
+    if (doc.exists) {
+      const data = doc.data() as userDataType;
+      setUserData(data);
+    }
+
+    // refresh the recipes
+    await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
+    await queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
 
     SheetManager.hide("scanned-items-sheet");
   };

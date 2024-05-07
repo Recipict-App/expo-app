@@ -5,8 +5,7 @@ import { UserRecord } from "firebase-admin/auth";
 import { v4 as uuidv4 } from "uuid";
 
 const { DocumentProcessorServiceClient } =
-require("@google-cloud/documentai").v1;
-// const aiplatform = require("@google-cloud/aiplatform");
+  require("@google-cloud/documentai").v1;
 const admin = require("firebase-admin");
 const functions = require("firebase-functions/v1/auth");
 
@@ -115,8 +114,6 @@ export const receipt_extractor_api = onRequest(async (req, res) => {
     return { product_quantity, quantity_unit };
   };
 
-
-
   let receipt_date = "";
   const items: any[] = await Promise.all(
     document_ai_result[0].document.entities.map(async (item: any) => {
@@ -164,79 +161,48 @@ export const receipt_extractor_api = onRequest(async (req, res) => {
 
 // * HELPER FUNCTIONS
 
-// export const get_ingredient_property = onRequest(async (req, res) => {
-//   const name = req?.body?.name || req?.query?.name;
-//   if (!name) {
-//     res.status(401).json({
-//       category: "missing property",
-//       expiration: 0,
-//       generic_name: "missing property",
-//     });
-//   }
+export const get_ingredient_property = onRequest(async (req, res) => {
+  // Configure the parent resource
 
-//   const { PredictionServiceClient } = aiplatform.v1;
-//   const { helpers } = aiplatform;
+  const ingredientsString = req.body.name;
 
-//   const clientOptions = {
-//     apiEndpoint: "us-central1-aiplatform.googleapis.com",
-//   };
-//   const publisher = "google";
-//   const model = "text-bison@002";
+  const apiEndpoint = `https://us-central1-aiplatform.googleapis.com/v1/projects/${projectId}/locations/us-central1/publishers/google/models/text-bison:predict
+  `;
 
-//   // Instantiates a client
-//   const predictionServiceClient = new PredictionServiceClient(clientOptions);
+  const requestBody = {
+    instances: [
+      {
+        prompt: `Provide answers for the following questions based on the given object. Seperate each answer with comma in given question order.
+            
+      1. What is the category of the object? Choices: Vegetables, Fruits, Liquids, Grains, Meats, Dairy, Seafood, Herbs & spices, Seeds, Oils, Condiments, or Not ingredients. Only answer the category of the object, nothing else.
+      2. What is the most likely duration of expiration, measured in days, for the given object? Choices: 1, 2, 3, 4, 5, 6, 7, 10, 14, 21, 30, 60, 90, 180, 365. Only answer the number, nothing else.
+      3. What is the generic name of the given grocery product name, excluding brand, code, or punctuation marks. Only answer the generic name, nothing else.
 
-//   // Configure the parent resource
-//   const endpoint = `projects/${projectId}/locations/${DocAI_locationId}/publishers/${publisher}/models/${model}`;
+      input: ${ingredientsString}
+      output:`,
+      },
+    ],
 
-//   const prompt = `
-//   Provide answers for the following questions based on the given object. Seperate each answer with comma in given question order.
-      
-//   1. What is the category of the object? Choices: Vegetables, Fruits, Liquids, Grains, Meats, Dairy, Seafood, Herbs & spices, Seeds, Oils, Condiments, or Not ingredients. Only answer the category of the object, nothing else.
-//   2. What is the most likely duration of expiration, measured in days, for the given object? Choices: 1, 2, 3, 4, 5, 6, 7, 10, 14, 21, 30, 60, 90, 180, 365. Only answer the number, nothing else.
-//   3. What is the generic name of the given grocery product name, excluding brand, code, or punctuation marks. Only answer the generic name, nothing else.
+    parameters: {
+      temperature: 0,
+      maxOutputTokens: 128,
+      topP: 1,
+      topK: 40,
+    },
+  };
 
-//   input: ${name}
-//   output:
-// `;
+  const response = await fetch(apiEndpoint, {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestBody),
+  });
 
-//   const instanceValue = helpers.toValue(prompt);
-//   const instances = [instanceValue];
-
-//   const parameter = {
-//     temperature: 0.0,
-//     maxOutputTokens: 128,
-//     topP: 0.95,
-//     topK: 40,
-//   };
-//   const parameters = helpers.toValue(parameter);
-
-//   const request = {
-//     endpoint,
-//     instances,
-//     parameters,
-//   };
-
-//   // Predict request
-//   const response = await predictionServiceClient.predict(request);
-//   console.log("Get text prompt response");
-//   console.log(response);
-
-//   logger.log("raw response: ", response);
-
-//   const data = response.outputs[0].content.stringVal[0];
-
-//   logger.log("digged response: ", data);
-
-//   const result_list = data.text.split(",");
-//   const result = {
-//     category: result_list[0].trim(),
-//     expiration: result_list[1].trim(),
-//     generic_name: result_list[2].trim(),
-//   };
-
-//   res.status(200).json(result);
-// });
+  const result = await response.json();
+  res.status(200).json(result);
+});
 
 // * EVENT-BASED FUNCTIONS
 

@@ -192,6 +192,8 @@ export async function fetchRandomRecipes(requestBody: any) {
   return { newRecipes };
 }
 
+// todo fix search
+
 export async function searchRecipes(requestBody: any) {
   console.log("searching recipes...");
 

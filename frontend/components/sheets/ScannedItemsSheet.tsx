@@ -16,10 +16,6 @@ import { ScannedIngredientsContext } from "../../ScannedItemProvider";
 import firestore from "@react-native-firebase/firestore";
 import { useQueryClient } from "@tanstack/react-query";
 
-import {
-  getUserDataFromFirebaseAndSetContext,
-  editIngredientToFirebase,
-} from "../../api/DatabaseFunctions";
 import { queryKeysEnum } from "../../api/_queryKeys";
 
 export default function ScannedItemsSheet(props: SheetProps) {

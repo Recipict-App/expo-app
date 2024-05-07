@@ -19,7 +19,9 @@ export default function Profile() {
   const handlePreference = () => {
     SheetManager.show("preference-sheet");
   };
-  const handleNotification = () => {};
+  const handleNotification = async () => {
+
+  };
   const handleAboutUs = () => {};
 
   // const handleLocation = () => {};

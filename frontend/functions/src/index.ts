@@ -130,12 +130,16 @@ export const receipt_extractor_api = onRequest(async (req, res) => {
       const { product_quantity, quantity_unit } =
         extractQuantityAndUnit(raw_product_quantity);
 
-      // const { category, expiration, generic_name } = await getIngredientProperties(product_name);
-      const { category, expiration, generic_name } = {
-        category: "test",
-        expiration: 0,
-        generic_name: "test",
-      };
+      // get the ingredient properties
+      let assign_ingredient_properly_url = `https://us-central1-recipict-dev-gcp.cloudfunctions.net/get_ingredient_properties_py?name=${product_name}`;
+      const properties_response = await fetch(assign_ingredient_properly_url, {
+        method: "GET",
+        mode: "cors",
+      });
+      const { category, expiration, generic_name } =
+        await properties_response.json();
+
+
 
       return {
         name: product_name,
@@ -157,51 +161,6 @@ export const receipt_extractor_api = onRequest(async (req, res) => {
 
   // create a new object
   res.status(200).json({ items: filteredItems });
-});
-
-// * HELPER FUNCTIONS
-
-export const get_ingredient_property = onRequest(async (req, res) => {
-  // Configure the parent resource
-
-  const ingredientsString = req.body.name;
-
-  const apiEndpoint = `https://us-central1-aiplatform.googleapis.com/v1/projects/${projectId}/locations/us-central1/publishers/google/models/text-bison:predict
-  `;
-
-  const requestBody = {
-    instances: [
-      {
-        prompt: `Provide answers for the following questions based on the given object. Seperate each answer with comma in given question order.
-            
-      1. What is the category of the object? Choices: Vegetables, Fruits, Liquids, Grains, Meats, Dairy, Seafood, Herbs & spices, Seeds, Oils, Condiments, or Not ingredients. Only answer the category of the object, nothing else.
-      2. What is the most likely duration of expiration, measured in days, for the given object? Choices: 1, 2, 3, 4, 5, 6, 7, 10, 14, 21, 30, 60, 90, 180, 365. Only answer the number, nothing else.
-      3. What is the generic name of the given grocery product name, excluding brand, code, or punctuation marks. Only answer the generic name, nothing else.
-
-      input: ${ingredientsString}
-      output:`,
-      },
-    ],
-
-    parameters: {
-      temperature: 0,
-      maxOutputTokens: 128,
-      topP: 1,
-      topK: 40,
-    },
-  };
-
-  const response = await fetch(apiEndpoint, {
-    method: "POST",
-    mode: "cors",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(requestBody),
-  });
-
-  const result = await response.json();
-  res.status(200).json(result);
 });
 
 // * EVENT-BASED FUNCTIONS

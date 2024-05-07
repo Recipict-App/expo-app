@@ -28,9 +28,7 @@ export default function ScannedItemsSheet(props: SheetProps) {
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return null;
-  const data = userData[0];
-  const userGoogleToken = data.googleToken;
-  const ingredients = data.ingredients;
+  const ingredients = userData.ingredients;
 
   // Button handlers
   const handleDelete = () => {
@@ -44,9 +42,11 @@ export default function ScannedItemsSheet(props: SheetProps) {
       ...scannedIngredients,
     ];
 
+    // todo: use firebase sdk to push to firebase
+
     // push to firebase, and refresh context
-    await editIngredientToFirebase(userGoogleToken, newIngredients);
-    await getUserDataFromFirebaseAndSetContext(setUserData);
+    // await editIngredientToFirebase(userGoogleToken, newIngredients);
+    // await getUserDataFromFirebaseAndSetContext(setUserData);
 
     SheetManager.hide("scanned-items-sheet");
   };

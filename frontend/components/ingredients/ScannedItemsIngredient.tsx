@@ -20,15 +20,10 @@ export const ScannedItemsIngredient: React.FC<ingredientProps> = ({
 }) => {
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
-  const data = userData[0];
-  const userGoogleToken = data.googleToken;
-
-  
 
   const handleShowIngredient = async () => {
     await SheetManager.show("edit-ingredients-sheet", {
       payload: {
-        userGoogleToken: userGoogleToken,
         ingredient: {
           name: name,
           quantity: quantity,
@@ -42,12 +37,15 @@ export const ScannedItemsIngredient: React.FC<ingredientProps> = ({
     });
   };
 
-  const debouncedhandleShowIngredient = useDebounceCallback(handleShowIngredient, 500, {
-    leading: true,
-    trailing: false,
-  });
+  const debouncedhandleShowIngredient = useDebounceCallback(
+    handleShowIngredient,
+    500,
+    {
+      leading: true,
+      trailing: false,
+    }
+  );
 
-  
   const showDate = dateAdded?.toString().slice(0, 10) || "Undefined";
 
   return (

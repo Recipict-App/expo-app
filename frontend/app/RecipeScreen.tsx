@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -18,10 +18,20 @@ import { UserContext } from "../userContext";
 import { useFetchRecommendedRecipes } from "../api/queries";
 import { searchRecipes } from "../api/RecipeFunctions";
 import { recipeType } from "../types/recipe-type";
+import { queryKeysEnum } from "../api/_queryKeys";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function recipe() {
   const { userData, setUserData } = useContext(UserContext);
-  // console.log("User Data from recipe:", userData);
+  const queryClient = useQueryClient();
+
+
+//  invalidates the recipes query when the user data changes
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
+    queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
+    console.log("Recipes query invalidated");
+  }, [userData]);
 
   const ingredientsString = userData?.ingredients
     ? userData.ingredients.map((ingredient) => ingredient.genericName).join(",")
@@ -69,7 +79,6 @@ export default function recipe() {
     setQuery(e);
   };
 
-  console.log("recipeScreen re-render");
   return (
     <SafeAreaView
       className="bg-white"

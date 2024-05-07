@@ -46,7 +46,7 @@ export async function fetchRecommendedRecipes(requestBody: any): Promise<{
   );
 
   const response: SpoonacularFetchRecommendedRecipes = await apiResponse.json();
-  console.log(response);
+
 
   response.results.map((recipeInfo: RecipeProps) => {
     const {

@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "719179759408-1gj97c72fe255vtm91a9ch72qiktd41h.apps.googleusercontent.com",
+          "client_id": "719179759408-cinktv5vdleq6pup1erh0l36jes13s40.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.recipict.recipict",
-            "certificate_hash": "127576345dc2d5e297ce9c364c3c4d9b3d224d10"
+            "certificate_hash": "016d61a7bfc6c5f86a83a2207e5a6df60d55b1d6"
           }
         },
         {

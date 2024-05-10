@@ -14,47 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "719179759408-c0u3h5q204l5ra7inj33vrj5jp2h1rb8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAN1CCQBnzO603O6WwiYrEEL4cO0IQA20Q"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "719179759408-c0u3h5q204l5ra7inj33vrj5jp2h1rb8.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "719179759408-5kdasuf5vdu4jab2j2qr1kvljhal9j22.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.recipict.firebasesignin"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:719179759408:android:0e18554c023b2a925e52f5",
-        "android_client_info": {
-          "package_name": "com.recipict.recipictAndroid"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "719179759408-n9tlvdoooo7s63okhl81sg7ossqbgrfr.apps.googleusercontent.com",
+          "client_id": "719179759408-1gj97c72fe255vtm91a9ch72qiktd41h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.recipict.recipictAndroid",
-            "certificate_hash": "b0b97dac100245159651ff198665860b15daf249"
+            "package_name": "com.recipict.recipict",
+            "certificate_hash": "127576345dc2d5e297ce9c364c3c4d9b3d224d10"
           }
         },
         {

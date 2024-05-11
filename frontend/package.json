@@ -65,7 +65,6 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.14",
-    "eas-cli": "^8.0.0",
     "firebase-tools": "^13.8.0",
     "react-native-dotenv": "^3.4.9",
     "tailwindcss": "^3.3.2",

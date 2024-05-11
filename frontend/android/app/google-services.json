@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "719179759408",
+    "project_id": "recipict-dev-gcp",
+    "storage_bucket": "recipict-dev-gcp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719179759408:android:6643af8bfa368dfe5e52f5",
+        "android_client_info": {
+          "package_name": "com.recipict.recipict"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719179759408-cinktv5vdleq6pup1erh0l36jes13s40.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.recipict.recipict",
+            "certificate_hash": "016d61a7bfc6c5f86a83a2207e5a6df60d55b1d6"
+          }
+        },
+        {
+          "client_id": "719179759408-c0u3h5q204l5ra7inj33vrj5jp2h1rb8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAN1CCQBnzO603O6WwiYrEEL4cO0IQA20Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719179759408-c0u3h5q204l5ra7inj33vrj5jp2h1rb8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "719179759408-5kdasuf5vdu4jab2j2qr1kvljhal9j22.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.recipict.firebasesignin"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

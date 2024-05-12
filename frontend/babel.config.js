@@ -12,6 +12,7 @@ module.exports = function (api) {
           path: ".env",
         },
       ],
+      "expo-router/babel",
     ],
   };
 };

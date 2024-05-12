@@ -14,6 +14,7 @@ import auth from "@react-native-firebase/auth";
 export default function Profile() {
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href={"/"} />;
+  
   const name = userData.name;
 
   const handlePreference = () => {

@@ -14,7 +14,7 @@ import IngredientSkeleton from "../components/skeletons/IngredientSkeleton";
 
 export default function Home() {
   const { userData, setUserData } = useContext(UserContext);
-  // if (!userData) return <Redirect href="/" />;
+
   // console.log("User Data from context:", userData);
   const ingredients: ingredientProps[] = userData?.ingredients ?? [];
 

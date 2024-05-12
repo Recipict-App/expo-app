@@ -32,8 +32,8 @@ export default function pantry() {
 
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
-  // console.log("User Data from pantryy:", userData)
   if (!userData) return <Redirect href="/" />;
+  // console.log("User Data from pantryy:", userData)
 
   // process the data
   const filteredIngredients = userData.ingredients.filter((ingredient) => {

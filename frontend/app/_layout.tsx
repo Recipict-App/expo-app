@@ -9,7 +9,7 @@ import { Tabs } from "expo-router/tabs";
 import { Image } from "expo-image";
 
 import { SheetProvider } from "react-native-actions-sheet";
-import "../sheets";
+import "../components/sheets/sheets";
 
 import { AppStateStatus, Platform } from "react-native";
 import {
@@ -21,13 +21,15 @@ import { useOnlineManager } from "../hooks/useOnlineManager";
 import { useAppState } from "../hooks/useAppState";
 
 // todo: refactor these to a better place
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { UserContext } from "../providers/userContext";
 import { ScannedIngredientsContext } from "../providers/ScannedItemProvider";
-import { userInfoType, userDataType, ingredientProps } from "../types/firebase-type";
+import { userDataType, ingredientProps } from "../types/firebase-type";
 
-import { LogBox } from 'react-native';
-LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);
+import { LogBox } from "react-native";
+LogBox.ignoreLogs([
+  "Sending `onAnimatedValueUpdate` with no listeners registered.",
+]);
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 2 } },

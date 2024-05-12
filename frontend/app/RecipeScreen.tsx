@@ -20,9 +20,11 @@ import { searchRecipes } from "../api/RecipeFunctions";
 import { recipeType } from "../types/recipe-type";
 import { queryKeysEnum } from "../api/_queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
+import { Redirect } from "expo-router";
 
 export default function recipe() {
   const { userData, setUserData } = useContext(UserContext);
+  if (!userData) return <Redirect href={"/"} />;
   const queryClient = useQueryClient();
 
 

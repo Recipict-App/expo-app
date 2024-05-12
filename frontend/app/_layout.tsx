@@ -22,9 +22,9 @@ import { useAppState } from "../hooks/useAppState";
 
 // todo: refactor these to a better place
 import { useEffect, useState } from "react";
-import { UserContext } from "../userContext";
-import { ScannedIngredientsContext } from "../ScannedItemProvider";
-import { userInfoType, userDataType, ingredientProps } from "../firebase-type";
+import { UserContext } from "../providers/userContext";
+import { ScannedIngredientsContext } from "../providers/ScannedItemProvider";
+import { userInfoType, userDataType, ingredientProps } from "../types/firebase-type";
 
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);

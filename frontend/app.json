@@ -79,6 +79,18 @@
         {
           "photosPermission": "Allow Recipict to access your photos"
         }
+      ],
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      "@react-native-google-signin/google-signin",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "14.0",
+            "useFrameworks": "static"
+          }
+        }
       ]
     ],
     "extra": {

@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+
 import ActionSheet, {
   SheetProps,
   SheetManager,
@@ -9,13 +10,14 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
 import { MultiSelect } from "react-native-element-dropdown";
 
-import { cuisinesEnum, dietsEnum, userDataType } from "../../firebase-type";
+import { cuisinesEnum, dietsEnum, userDataType } from "../../types/firebase-type";
 import { Redirect } from "expo-router";
-import { UserContext } from "../../userContext";
+
 
 import firestore from "@react-native-firebase/firestore";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeysEnum } from "../../api/_queryKeys";
+import { UserContext } from "../../providers/userContext";
 
 const cuisines = Object.values(cuisinesEnum).map((cuisine) => ({
   label: cuisine,
@@ -44,6 +46,27 @@ export default function PreferenceSheet(props: SheetProps) {
   const [selectedDiets, setSelectedDiets] = useState<string[]>(userDiets);
 
   const handleSubmit = async () => {
+    // update cuisines to firebase
+    await firestore()
+      .collection("users")
+      .doc(userData.uid)
+      .update({
+        cuisines: selectedCuisines,
+      })
+      .then(() => {
+        console.log("Preference - cuisines updated!");
+      });
+
+    // update diets to firebase
+    await firestore()
+      .collection("users")
+      .doc(userData.uid)
+      .update({
+        diets: selectedDiets,
+      })
+      .then(() => {
+        console.log("Preference - diets updated!");
+      });
     // update cuisines to firebase
     await firestore()
       .collection("users")

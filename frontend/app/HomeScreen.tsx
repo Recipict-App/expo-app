@@ -4,8 +4,8 @@ import { TouchableOpacity } from "react-native";
 import { Ingredient } from "../components/ingredients/Ingredient";
 import { Link, Redirect } from "expo-router";
 
-import { ingredientProps } from "../firebase-type";
-import { UserContext } from "../userContext";
+import { ingredientProps } from "../types/firebase-type";
+import { UserContext } from "../providers/userContext";
 import { useContext } from "react";
 import Explore from "../components/recipes/Explore";
 import IngredientSkeleton from "../components/skeletons/IngredientSkeleton";

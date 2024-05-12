@@ -14,7 +14,7 @@ import ReadyToBeMade from "../components/recipes/ReadyToBeMade";
 import AlmostThere from "../components/recipes/AlmostThere";
 import { SheetManager } from "react-native-actions-sheet";
 
-import { UserContext } from "../userContext";
+import { UserContext } from "../providers/userContext";
 import { useFetchRecommendedRecipes } from "../api/queries";
 import { searchRecipes } from "../api/RecipeFunctions";
 import { recipeType } from "../types/recipe-type";

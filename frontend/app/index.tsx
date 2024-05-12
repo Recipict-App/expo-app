@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { UserContext } from "../userContext";
+import { UserContext } from "../providers/userContext";
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ import { Redirect } from "expo-router";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { userDataType } from "../firebase-type";
+import { userDataType } from "../types/firebase-type";
 
 GoogleSignin.configure({
   webClientId:

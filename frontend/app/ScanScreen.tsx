@@ -21,7 +21,7 @@ import { Image } from "expo-image";
 import { SheetManager } from "react-native-actions-sheet";
 
 import { useContext } from "react";
-import { ScannedIngredientsContext } from "../ScannedItemProvider";
+import { ScannedIngredientsContext } from "../providers/ScannedItemProvider";
 
 import { ImageToItems } from "../api/IngredientsFunctions";
 

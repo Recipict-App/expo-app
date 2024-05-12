@@ -4,7 +4,7 @@ import { Image } from "expo-image";
 import OptionCard from "../components/OptionCard";
 import { Redirect } from "expo-router";
 
-import { UserContext } from "../userContext";
+import { UserContext } from "../providers/userContext";
 import { useContext } from "react";
 
 import { SheetManager } from "react-native-actions-sheet";

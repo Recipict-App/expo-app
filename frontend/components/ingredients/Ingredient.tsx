@@ -2,12 +2,13 @@ import { Text, View } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
-import { ingredientProps, ingredientsEnum } from "../../firebase-type";
-import { UserContext } from "../../userContext";
+
 import { useContext } from "react";
 import { Redirect } from "expo-router";
 
 import { useDebounceCallback } from "usehooks-ts";
+import { ingredientProps, ingredientsEnum } from "../../types/firebase-type";
+import { UserContext } from "../../providers/userContext";
 
 const FRUIT_IMG = require("../../assets/icons/ingredients/Fruits.svg");
 const LIQUID_IMG = require("../../assets/icons/ingredients/Liquids.svg");

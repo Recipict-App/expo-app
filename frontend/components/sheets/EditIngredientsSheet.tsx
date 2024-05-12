@@ -5,7 +5,7 @@ import { Redirect } from "expo-router";
 import { Image } from "expo-image";
 
 import { useContext } from "react";
-import { UserContext } from "../../userContext";
+import { UserContext } from "../../providers/userContext";
 
 import { useState } from "react";
 
@@ -16,11 +16,11 @@ import {
   ingredientProps,
   ingredientsEnum,
   userDataType,
-} from "../../firebase-type";
+} from "../../types/firebase-type";
 
 import * as Crypto from "expo-crypto";
 
-import { ScannedIngredientsContext } from "../../ScannedItemProvider";
+import { ScannedIngredientsContext } from "../../providers/ScannedItemProvider";
 
 import firestore from "@react-native-firebase/firestore";
 import { useQueryClient } from "@tanstack/react-query";

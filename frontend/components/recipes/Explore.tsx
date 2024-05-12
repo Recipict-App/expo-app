@@ -5,7 +5,8 @@ import { RecipeBox } from "./RecipeBox";
 
 import { useFetchRandomRecipes } from "../../api/queries";
 import RecipeBoxSkeleton from "../skeletons/RecipeBoxSkeleton";
-import { userDataType } from "../../firebase-type";
+import { userDataType } from "../../types/firebase-type";
+
 
 export default function Explore({ userData }: { userData: userDataType | undefined }) {
   if (!userData) return null;

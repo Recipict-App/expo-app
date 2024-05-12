@@ -1,5 +1,5 @@
 import { createContext, Dispatch } from "react";
-import { ingredientProps } from "./firebase-type";
+import { ingredientProps } from "../types/firebase-type";
 
 interface ScannedIngredientsContextType {
   scannedIngredients: any;

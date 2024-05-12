@@ -1,5 +1,5 @@
-import { ingredientProps } from "../firebase-type";
-import * as Crypto from "expo-crypto";
+import { ingredientProps } from "../types/firebase-type";
+
 
 export async function ImageToItems(
   base64ImageData: string

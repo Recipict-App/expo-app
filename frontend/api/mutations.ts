@@ -1,8 +1,11 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { editIngredientToFirebase, editPreferenceToFirebase } from "./DatabaseFunctions";
+import {
+  editIngredientToFirebase,
+  editPreferenceToFirebase,
+} from "./DatabaseFunctions";
 import { queryKeysEnum } from "./_queryKeys";
 
-import { ingredientProps } from "../firebase-type";
+import { ingredientProps } from "../types/firebase-type";
 
 export function useEditIngredientToFirebase() {
   const queryClient = useQueryClient();
@@ -11,7 +14,8 @@ export function useEditIngredientToFirebase() {
     mutationFn: async (data: {
       userGoogleToken: String;
       newIngredients: ingredientProps[];
-    }) =>  await editIngredientToFirebase(data.userGoogleToken, data.newIngredients),
+    }) =>
+      await editIngredientToFirebase(data.userGoogleToken, data.newIngredients),
 
     onMutate: () => console.log("Changing ingredient..."),
 
@@ -21,7 +25,9 @@ export function useEditIngredientToFirebase() {
         console.log(error);
       } else {
         console.log("Successfully edited ingredient! 🤩");
-        await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
+        await queryClient.invalidateQueries({
+          queryKey: [queryKeysEnum.recipes],
+        });
         await queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
       }
     },
@@ -36,7 +42,12 @@ export function useEditPreferenceToFirebase() {
       userGoogleToken: String;
       newCuisines: string[];
       newDiets: string[];
-    }) => await editPreferenceToFirebase(data.userGoogleToken, data.newCuisines, data.newDiets),
+    }) =>
+      await editPreferenceToFirebase(
+        data.userGoogleToken,
+        data.newCuisines,
+        data.newDiets
+      ),
 
     onMutate: () => console.log("Changing preference..."),
 
@@ -46,7 +57,9 @@ export function useEditPreferenceToFirebase() {
         console.log(error);
       } else {
         console.log("Successfully edited preference! 🤩");
-        await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
+        await queryClient.invalidateQueries({
+          queryKey: [queryKeysEnum.recipes],
+        });
         await queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
       }
     },

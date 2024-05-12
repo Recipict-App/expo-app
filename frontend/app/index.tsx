@@ -22,7 +22,7 @@ import { Image } from "expo-image";
 import { Redirect } from "expo-router";
 
 import { useContext } from "react";
-import { UserContext } from "../userContext";
+import { UserContext } from "../providers/userContext";
 
 WebBrowser.maybeCompleteAuthSession();
 

@@ -1,4 +1,4 @@
-import { ingredientProps } from "../firebase-type";
+import { ingredientProps } from "../types/firebase-type";
 import * as Crypto from "expo-crypto";
 
 export async function ImageToItems(
@@ -104,13 +104,14 @@ async function AssignPropertiesToIngredient(rawData: any): Promise<{
         // todo: do something with product_code
 
         // call helper to get category for each item
-        const {category, expiration, generic_name} = await getIngredientProperties(product_name);
+        const { category, expiration, generic_name } =
+          await getIngredientProperties(product_name);
         // console.log('-----------------');
         // console.log(category);
         // console.log(Number(expiration));
         // console.log(generic_name);
         // console.log('-----------------');
-        
+
         // create json object based on date
         if (date) {
           return {

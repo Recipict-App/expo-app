@@ -1,4 +1,4 @@
-import { userDataProps, ingredientProps } from "../firebase-type";
+import { userDataProps, ingredientProps } from "../types/firebase-type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export async function getLocalUser() {
@@ -163,9 +163,8 @@ export async function editIngredientToFirebase(
 export async function editPreferenceToFirebase(
   userGoogleToken: String,
   newCuisines: string[],
-  newDiets: string[],
+  newDiets: string[]
 ) {
-
   const response = await fetch(
     "https://us-central1-recipict-gcp.cloudfunctions.net/function-edit-preference",
     {

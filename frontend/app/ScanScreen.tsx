@@ -21,7 +21,7 @@ import { Image } from "expo-image";
 import { SheetManager } from "react-native-actions-sheet";
 
 import { useContext } from "react";
-import { ScannedIngredientsContext } from "../ScannedItemProvider";
+import { ScannedIngredientsContext } from "../providers/ScannedItemProvider";
 
 import { ImageToItems } from "../api/IngredientsFunctions";
 
@@ -220,9 +220,7 @@ export default function App() {
     <View style={styles.container}>
       {isFocused && (
         <Camera
-          style={[
-            styles.camera
-          ]}
+          style={[styles.camera]}
           type={CameraType.back}
           ref={cameraRef}
           flashMode={torch}

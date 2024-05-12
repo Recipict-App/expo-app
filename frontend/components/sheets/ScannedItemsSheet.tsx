@@ -6,12 +6,12 @@ import ActionSheet, {
   SheetManager,
 } from "react-native-actions-sheet";
 
-import { ingredientProps } from "../../firebase-type";
+import { ingredientProps } from "../../types/firebase-type";
 import { Shelf } from "../ingredients/Shelf";
 
 import { useContext } from "react";
-import { UserContext } from "../../userContext";
-import { ScannedIngredientsContext } from "../../ScannedItemProvider";
+import { UserContext } from "../../providers/userContext";
+import { ScannedIngredientsContext } from "../../providers/ScannedItemProvider";
 
 import {
   getUserDataFromFirebaseAndSetContext,

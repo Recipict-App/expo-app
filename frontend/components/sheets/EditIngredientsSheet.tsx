@@ -6,22 +6,21 @@ import { Redirect } from "expo-router";
 import { Image } from "expo-image";
 
 import { useContext } from "react";
-import { UserContext } from "../../userContext";
+import { UserContext } from "../../providers/userContext";
 
 import { useState } from "react";
 
 import { Dropdown } from "react-native-element-dropdown";
 
 import DateTimePicker from "react-native-ui-datepicker";
-import { ingredientProps, ingredientsEnum } from "../../firebase-type";
+import { ingredientProps, ingredientsEnum } from "../../types/firebase-type";
 
 import * as Crypto from "expo-crypto";
 
-import { ScannedIngredientsContext } from "../../ScannedItemProvider";
+import { ScannedIngredientsContext } from "../../providers/ScannedItemProvider";
 
 import { getUserDataFromFirebaseAndSetContext } from "../../api/DatabaseFunctions";
 import { useEditIngredientToFirebase } from "../../api/mutations";
-
 
 const type_data = [
   {

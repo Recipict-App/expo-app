@@ -4,7 +4,7 @@ import { Image } from "expo-image";
 import OptionCard from "../components/OptionCard";
 import { Redirect } from "expo-router";
 
-import { UserContext } from "../userContext";
+import { UserContext } from "../providers/userContext";
 import { useContext } from "react";
 
 import { deleteCurrentLocalUser } from "../api/DatabaseFunctions";
@@ -21,7 +21,7 @@ export default function Profile() {
   const handlePreference = () => {
     SheetManager.show("preference-sheet");
   };
-  const handleNotification =  () => {};
+  const handleNotification = () => {};
   const handleAboutUs = () => {};
 
   // const handleLocation = () => {};

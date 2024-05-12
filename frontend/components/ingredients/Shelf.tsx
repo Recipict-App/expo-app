@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 import { Ingredient } from "./Ingredient";
-import { ingredientProps } from "../../firebase-type";
+import { ingredientProps } from "../../types/firebase-type";
 
 export interface ShelfProps {
   category: string;

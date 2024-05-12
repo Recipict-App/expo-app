@@ -9,10 +9,10 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
 import { MultiSelect } from "react-native-element-dropdown";
 
-import { cuisinesEnum, dietsEnum } from "../../firebase-type";
+import { cuisinesEnum, dietsEnum } from "../../types/firebase-type";
 import { useEditPreferenceToFirebase } from "../../api/mutations";
 import { Redirect } from "expo-router";
-import { UserContext } from "../../userContext";
+import { UserContext } from "../../providers/userContext";
 import { getUserDataFromFirebaseAndSetContext } from "../../api/DatabaseFunctions";
 
 const cuisines = Object.values(cuisinesEnum).map((cuisine) => ({

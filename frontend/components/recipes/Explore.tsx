@@ -3,7 +3,7 @@ import { Image } from "expo-image";
 import React from "react";
 import { RecipeBox } from "./RecipeBox";
 
-import { UserContext } from "../../userContext";
+import { UserContext } from "../../providers/userContext";
 import { useContext } from "react";
 
 import { useFetchRandomRecipes } from "../../api/queries";

@@ -22,12 +22,18 @@ import { useAppState } from "../hooks/useAppState";
 
 // todo: refactor these to a better place
 import { useEffect, useState } from "react";
-import { UserContext } from "../userContext";
-import { ScannedIngredientsContext } from "../ScannedItemProvider";
-import { userInfoType, userDataProps, ingredientProps } from "../firebase-type";
+import { UserContext } from "../providers/userContext";
+import { ScannedIngredientsContext } from "../providers/ScannedItemProvider";
+import {
+  userInfoType,
+  userDataProps,
+  ingredientProps,
+} from "../types/firebase-type";
 
-import { LogBox } from 'react-native';
-LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);
+import { LogBox } from "react-native";
+LogBox.ignoreLogs([
+  "Sending `onAnimatedValueUpdate` with no listeners registered.",
+]);
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 2 } },

@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+
 import ActionSheet, {
   SheetProps,
   SheetManager,
@@ -45,6 +46,27 @@ export default function PreferenceSheet(props: SheetProps) {
   const [selectedDiets, setSelectedDiets] = useState<string[]>(userDiets);
 
   const handleSubmit = async () => {
+    // update cuisines to firebase
+    await firestore()
+      .collection("users")
+      .doc(userData.uid)
+      .update({
+        cuisines: selectedCuisines,
+      })
+      .then(() => {
+        console.log("Preference - cuisines updated!");
+      });
+
+    // update diets to firebase
+    await firestore()
+      .collection("users")
+      .doc(userData.uid)
+      .update({
+        diets: selectedDiets,
+      })
+      .then(() => {
+        console.log("Preference - diets updated!");
+      });
     // update cuisines to firebase
     await firestore()
       .collection("users")

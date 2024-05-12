@@ -45,7 +45,7 @@ export default function ReadyToBeMade({
           ) : (
             <View className="flex justify-center items-center h-full w-[65%] rounded-2xl pb-10">
               <Text className="font-ppr text-base text-[#605dfd] text-center">
-                Sorry No Recipes Match Your Available Ingredients
+                Just a few more ingredients and you'll be cooking up a storm!
               </Text>
             </View>
           )

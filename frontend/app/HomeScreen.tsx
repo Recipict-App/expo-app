@@ -9,13 +9,14 @@ import { UserContext } from "../userContext";
 import { useContext } from "react";
 import Explore from "../components/recipes/Explore";
 import IngredientSkeleton from "../components/skeletons/IngredientSkeleton";
-import { FlatList } from "react-native-actions-sheet";
+
+
 
 export default function Home() {
   const { userData, setUserData } = useContext(UserContext);
-  if (!userData) return <Redirect href="/" />;
-  const data = userData[0];
-  const ingredients = data.ingredients;
+  // if (!userData) return <Redirect href="/" />;
+  // console.log("User Data from context:", userData);
+  const ingredients: ingredientProps[] = userData?.ingredients ?? [];
 
   return (
     <View className="bg-white">
@@ -104,7 +105,7 @@ export default function Home() {
               )}
             </View>
           </View>
-          <Explore />
+          <Explore userData={userData}/>
         </View>
       </ScrollView>
     </View>

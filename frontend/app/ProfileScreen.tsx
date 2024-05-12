@@ -7,29 +7,33 @@ import { Redirect } from "expo-router";
 import { UserContext } from "../userContext";
 import { useContext } from "react";
 
-import { deleteCurrentLocalUser } from "../api/DatabaseFunctions";
-
 import { SheetManager } from "react-native-actions-sheet";
 
+import auth from "@react-native-firebase/auth";
+
 export default function Profile() {
-  const { userInfo, setUserInfo, userData, setUserData } =
-    useContext(UserContext);
+  const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href={"/"} />;
-  const data = userData[0];
-  const name = data.name;
+  const name = userData.name;
 
   const handlePreference = () => {
     SheetManager.show("preference-sheet");
   };
-  const handleNotification =  () => {};
+  const handleNotification = async () => {
+
+  };
   const handleAboutUs = () => {};
 
   // const handleLocation = () => {};
   // const handleAppereance =  () => {};
 
   const handleLogOut = async () => {
-    await deleteCurrentLocalUser(setUserInfo, setUserData);
-    console.log("Logging out");
+    auth()
+      .signOut()
+      .then(() => {
+        console.log("User signed out!");
+        setUserData(undefined);
+      });
   };
 
   return (

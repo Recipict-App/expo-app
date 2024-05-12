@@ -84,14 +84,39 @@ export interface userInfoType {
   verified_email: boolean;
 }
 
-export interface userDataProps {
-  name: String;
-  email: String;
-  googleToken: String;
-  ingredients: ingredient[];
-  cuisines: string[];
-  diets: string[];
-  subscription: String;
+export declare class UserMetadata {
+  /**
+   * The date the user was created, formatted as a UTC string.
+   */
+  readonly creationTime: string;
+  /**
+   * The date the user last signed in, formatted as a UTC string.
+   */
+  readonly lastSignInTime: string;
+  /**
+   * The time at which the user was last active (ID token refreshed),
+   * formatted as a UTC Date string (eg 'Sat, 03 Feb 2001 04:05:06 GMT').
+   * Returns null if the user was never active.
+   */
+  readonly lastRefreshTime?: string | null;
+  /**
+   * Returns a JSON-serializable representation of this object.
+   *
+   * @returns A JSON-serializable representation of this object.
+   */
+  toJSON(): object;
+}
+
+export interface userDataType {
+  uid: string,
+  name: string,
+  email: string,
+  metadata: UserMetadata,
+  photoURL: string,
+  ingredients: ingredient[],
+  cuisines: string[],
+  diets: string[],
+  subscription: Boolean,
 }
 
 export interface ingredientProps {

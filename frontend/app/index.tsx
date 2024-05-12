@@ -1,15 +1,5 @@
-import React, { useEffect } from "react";
-
-import * as WebBrowser from "expo-web-browser";
-import * as Google from "expo-auth-session/providers/google";
-
-import {
-  getOrCreateUserDataInFirebase,
-  getLocalUser,
-  setLocalUser,
-  getGoogleAccountDetails,
-} from "../api/DatabaseFunctions";
-
+import React, { useEffect, useState, useContext } from "react";
+import { UserContext } from "../userContext";
 import {
   View,
   Text,
@@ -18,66 +8,74 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Image } from "expo-image";
-
 import { Redirect } from "expo-router";
 
-import { useContext } from "react";
-import { UserContext } from "../userContext";
+/* Firebase SDK */
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { userDataType } from "../firebase-type";
 
-WebBrowser.maybeCompleteAuthSession();
+GoogleSignin.configure({
+  webClientId:
+    "719179759408-c0u3h5q204l5ra7inj33vrj5jp2h1rb8.apps.googleusercontent.com",
+  iosClientId:
+    "719179759408-5ps02vu55kqoktdoc2hb0ibninbb898p.apps.googleusercontent.com",
+});
+
+async function onGoogleButtonPress() {
+  // Check if your device supports Google Play
+  await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  const { idToken } = await GoogleSignin.signIn();
+  const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+  return auth().signInWithCredential(googleCredential);
+}
 
 export default function App() {
-  const { userInfo, setUserInfo, userData, setUserData } =
-    useContext(UserContext);
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId:
-      "746895610022-8vssk9oqlglohdvj4m6hgc4oljpa69ck.apps.googleusercontent.com",
-    iosClientId:
-      "746895610022-j07khkro48h1imfum80fu1o1dr7ndkps.apps.googleusercontent.com",
-    webClientId:
-      "746895610022-tfkvvdm4ps5t8r1b1cs7pdmvv3rprn35.apps.googleusercontent.com",
-  });
-  ``;
-  useEffect(() => {
-    handleEffect();
-  }, [response]);
+  const { userData, setUserData } = useContext(UserContext);
 
-  async function handleEffect() {
-    const user = await getLocalUser();
-    setUserInfo(user);
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState<boolean>(true);
+  const [user, setUser] = useState<any>(null);
 
-    if (!user) {
-      console.log("No user detected in local storage 😡");
-      if (response?.type === "success") {
-        await getUserInfo(response?.authentication?.accessToken);
+  // Handle user state changes
+  function onAuthStateChanged(user: any) {
+    setUser(user);
+    if (user) loadUserData(user);
+    if (initializing) setInitializing(false);
+  }
+
+  // Get user data from Firestore
+  async function loadUserData(user: any) {
+    try {
+      const doc = await firestore().collection("users").doc(user.uid).get();
+      if (doc.exists) {
+        const data = doc.data() as userDataType;
+        // console.log("User Data:", data);
+        setUserData(data);
+        return data;
+      } else {
+        console.log("User Not Found in Firestore!");
       }
-    } else {
-      console.log("Previous user detected in local storage ✅");
-
-      await getOrCreateUserDataInFirebase(user, setUserData);
-      // <Redirect href="/ " />;
+    } catch (error) {
+      console.error("Error getting document:", error);
     }
   }
 
-  const getUserInfo = async (accessTokenGoogle: string | undefined) => {
-    if (!accessTokenGoogle) return;
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
 
-    try {
-      // Set user info to local storage
-      const user = await getGoogleAccountDetails(accessTokenGoogle);
-      await setLocalUser(user, setUserInfo);
-      console.log("User Info: ", user);
-
-      // Get user data from Firebase
-      console.log("Authenticating user... 🚜");
-      await getOrCreateUserDataInFirebase(user, setUserData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  if (initializing) return null;
 
   // If user is already logged in, redirect to HomeScreen
-  if (userData) return <Redirect href="/HomeScreen" />;
+  if (user) {
+    // console.log(user.uid);
+    // loadUserData(user);
+    return <Redirect href="/HomeScreen" />;
+  }
 
   return (
     <View style={styles.container}>
@@ -168,44 +166,33 @@ export default function App() {
         source={require("../assets/images/Satay.png")}
       />
 
-      {!userInfo ? (
-        <View className="z-5 absolute bottom-[130] space-y-4">
-          {/* Sign in  */}
-          <TouchableOpacity
-            disabled={!request}
-            onPress={() => {
-              promptAsync();
-            }}
-          >
-            <View className="flex w-[319px] h-[72px] left-0 top-0 bg-green rounded-3xl justify-center">
-              <Text className="pl-6 text-white text-base font-ppr">
-                Sign In
-              </Text>
-            </View>
-          </TouchableOpacity>
+      <View className="z-5 absolute bottom-[130] space-y-4">
+        {/* Sign in  */}
+        <TouchableOpacity
+          onPress={() =>
+            onGoogleButtonPress().then(() =>
+              console.log("Signed in with Google!")
+            )
+          }
+        >
+          <View className="flex w-[319px] h-[72px] left-0 top-0 bg-green rounded-3xl justify-center">
+            <Text className="pl-6 text-white text-base font-ppr">Sign In</Text>
+          </View>
+        </TouchableOpacity>
 
-          {/* Sign up  */}
-          <TouchableOpacity
-            disabled={!request}
-            onPress={() => {
-              promptAsync();
-            }}
-          >
-            <View className="flex w-[319px] h-[72px] left-0 top-0 rounded-3xl justify-center border-green border-[1px]">
-              <Text className="pl-6 text-green text-base font-ppr">
-                Sign Up
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <ActivityIndicator
-          size="large"
-          color="#00ff00"
-          style={{ zIndex: 6 }}
-          className="absolute bottom-[200] space-y-4"
-        />
-      )}
+        {/* Sign up  */}
+        <TouchableOpacity
+          onPress={() =>
+            onGoogleButtonPress().then(() =>
+              console.log("Signed in with Google!")
+            )
+          }
+        >
+          <View className="flex w-[319px] h-[72px] left-0 top-0 rounded-3xl justify-center border-green border-[1px]">
+            <Text className="pl-6 text-green text-base font-ppr">Sign Up</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
 
       <Image
         style={{

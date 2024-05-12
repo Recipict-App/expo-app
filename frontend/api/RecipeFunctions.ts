@@ -23,14 +23,18 @@ export async function fetchRecommendedRecipes(requestBody: any): Promise<{
   newReadyRecipes: recipeType[];
   newMissingRecipes: recipeType[];
 }> {
-  console.log("Fetching recommended recipes with REACT QUERY...");
+  console.log("REACT QUERY - Fetching recommended recipes");
+  // console.log(requestBody);
 
   let newRecipes: recipeType[] = [];
   let newReadyRecipes: recipeType[] = [];
   let newMissingRecipes: recipeType[] = [];
 
+  const spoonacular_recipe_by_ingredient_url = process.env.EXPO_CF_SPOONACULAR_API_RECIPE_BY_INGREDIENT || "";
+  if (!spoonacular_recipe_by_ingredient_url) throw new Error("spoonacular_recipe_by_ingredient_url not found");
+
   const apiResponse = await fetch(
-    `https://us-central1-recipict-gcp.cloudfunctions.net/function-spoonacular-recipe-by-ingredient`,
+    spoonacular_recipe_by_ingredient_url,
     {
       method: "POST",
       mode: "cors",
@@ -42,6 +46,7 @@ export async function fetchRecommendedRecipes(requestBody: any): Promise<{
   );
 
   const response: SpoonacularFetchRecommendedRecipes = await apiResponse.json();
+
 
   response.results.map((recipeInfo: RecipeProps) => {
     const {
@@ -112,12 +117,17 @@ export async function fetchRecommendedRecipes(requestBody: any): Promise<{
 }
 
 export async function fetchRandomRecipes(requestBody: any) {
-  console.log("Fetching random recipes with REACT QUERY...");
+  console.log("REACT QUERY - Fetching random recipes");
+  // console.log(requestBody);
 
   let newRecipes: any[] = [];
 
+  const spoonacular_random_recipe_url = process.env.EXPO_CF_SPOONACULAR_API_RANDOM_RECIPE || "";
+  if (!spoonacular_random_recipe_url) throw new Error("spoonacular_random_recipe_url not found");
+
+
   const apiResponse = await fetch(
-    `https://us-central1-recipict-gcp.cloudfunctions.net/function-random-recipe`,
+    spoonacular_random_recipe_url,
     {
       method: "POST",
       mode: "cors",
@@ -129,6 +139,7 @@ export async function fetchRandomRecipes(requestBody: any) {
   );
 
   const response = await apiResponse.json();
+  // console.log(response);
   response.recipes.map((recipeInfo: any) => {
     const {
       title,
@@ -181,13 +192,19 @@ export async function fetchRandomRecipes(requestBody: any) {
   return { newRecipes };
 }
 
+// todo fix search
+
 export async function searchRecipes(requestBody: any) {
   console.log("searching recipes...");
 
   let newRecipes: any[] = [];
 
+  const spoonacular_search_recipe_url = process.env.EXPO_CF_SPOONACULAR_API_SEARCH_RECIPE || "";
+  if (!spoonacular_search_recipe_url) throw new Error("spoonacular_search_recipe_url not found");
+
+
   const apiResponse = await fetch(
-    `https://us-central1-recipict-gcp.cloudfunctions.net/function-search-recipe`,
+    spoonacular_search_recipe_url,
     {
       method: "POST",
       mode: "cors",
@@ -247,6 +264,6 @@ export async function searchRecipes(requestBody: any) {
       Cleanedsummary,
     });
   });
-  console.log(newRecipes);
+  // console.log(newRecipes);
   return { newRecipes };
 }

@@ -1,6 +1,5 @@
 import ActionSheet, { SheetProps } from "react-native-actions-sheet";
-import { View, Text, FlatList, ScrollView, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, FlatList, ScrollView, StyleSheet,TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
 import { Image } from "expo-image";
 import { useWindowDimensions } from "react-native";

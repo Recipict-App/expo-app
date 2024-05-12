@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ActionSheet, {
   SheetProps,
   SheetManager,
@@ -9,11 +9,14 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
 import { MultiSelect } from "react-native-element-dropdown";
 
-import { cuisinesEnum, dietsEnum } from "../../types/firebase-type";
-import { useEditPreferenceToFirebase } from "../../api/mutations";
+import { cuisinesEnum, dietsEnum, userDataType } from "../../types/firebase-type";
 import { Redirect } from "expo-router";
+
+
+import firestore from "@react-native-firebase/firestore";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeysEnum } from "../../api/_queryKeys";
 import { UserContext } from "../../providers/userContext";
-import { getUserDataFromFirebaseAndSetContext } from "../../api/DatabaseFunctions";
 
 const cuisines = Object.values(cuisinesEnum).map((cuisine) => ({
   label: cuisine,
@@ -30,31 +33,50 @@ const handleClose = () => {
 };
 
 export default function PreferenceSheet(props: SheetProps) {
-  // initiate mutatation
-  const editPreferenceMutation = useEditPreferenceToFirebase();
-
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
+  const queryClient = useQueryClient();
   if (!userData) return <Redirect href="/" />;
-  const data = userData[0];
-  const userGoogleToken = data.googleToken;
-  const userCuisines = data.cuisines;
-  const userDiets = data.diets;
+  const userCuisines = userData.cuisines;
+  const userDiets = userData.diets;
 
   const [selectedCuisines, setSelectedCuisines] =
     useState<string[]>(userCuisines);
   const [selectedDiets, setSelectedDiets] = useState<string[]>(userDiets);
 
   const handleSubmit = async () => {
-    await editPreferenceMutation.mutateAsync({
-      userGoogleToken: userGoogleToken,
-      newCuisines: selectedCuisines,
-      newDiets: selectedDiets,
-    });
+    // update cuisines to firebase
+    await firestore()
+      .collection("users")
+      .doc(userData.uid)
+      .update({
+        cuisines: selectedCuisines,
+      })
+      .then(() => {
+        console.log("Preference - cuisines updated!");
+      });
 
-    // refresh data to get fresh data from firebase
-    await getUserDataFromFirebaseAndSetContext(setUserData);
-    console.log("new data from firebase is fetched");
+    // update diets to firebase
+    await firestore()
+      .collection("users")
+      .doc(userData.uid)
+      .update({
+        diets: selectedDiets,
+      })
+      .then(() => {
+        console.log("Preference - diets updated!");
+      });
+
+    // refresh data to get fresh data from firebase to useContext
+    const doc = await firestore().collection("users").doc(userData.uid).get();
+    if (doc.exists) {
+      const data = doc.data() as userDataType;
+      setUserData(data);
+    }
+
+    // refresh the recipes (no await so the useContext can update first before the query is invalidated)
+    queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
+    queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
 
     handleClose();
   };

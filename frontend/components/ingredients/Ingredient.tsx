@@ -2,12 +2,13 @@ import { Text, View } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
-import { ingredientProps, ingredientsEnum } from "../../types/firebase-type";
-import { UserContext } from "../../providers/userContext";
+
 import { useContext } from "react";
 import { Redirect } from "expo-router";
 
 import { useDebounceCallback } from "usehooks-ts";
+import { ingredientProps, ingredientsEnum } from "../../types/firebase-type";
+import { UserContext } from "../../providers/userContext";
 
 const FRUIT_IMG = require("../../assets/icons/ingredients/Fruits.svg");
 const LIQUID_IMG = require("../../assets/icons/ingredients/Liquids.svg");
@@ -47,13 +48,11 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
 }) => {
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
-  const data = userData[0];
-  const userGoogleToken = data.googleToken;
+
 
   const handleShowIngredient = async () => {
     await SheetManager.show("edit-ingredients-sheet", {
       payload: {
-        userGoogleToken: userGoogleToken,
         ingredient: {
           name: name,
           quantity: quantity,
@@ -72,7 +71,7 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
   try {
     imageSource = ingredientImages[type as keyof typeof ingredientImages];
     if (!imageSource) {
-      throw new Error("Image not found");
+      throw new Error('Image not found');
     }
   } catch (error) {
     imageSource = NOT_INGREDIENT_IMG;
@@ -105,7 +104,10 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
         <View className="flex flex-row">
           {/* Image placeholder */}
           <View className="rounded-lg h-8 w-8 justify-center items-center flex ">
-            <Image className="object-contain h-7 w-7" source={imageSource} />
+            <Image
+              className="object-contain h-7 w-7"
+              source={imageSource}
+            />
           </View>
 
           {/* Text */}

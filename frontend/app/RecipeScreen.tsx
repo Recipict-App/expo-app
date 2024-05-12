@@ -1,9 +1,15 @@
-import { useContext, useState } from "react";
-import { View, Text, ScrollView, TextInput } from "react-native";
+import { useContext, useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { Image } from "expo-image";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
 import ReadyToBeMade from "../components/recipes/ReadyToBeMade";
 import AlmostThere from "../components/recipes/AlmostThere";
 import { SheetManager } from "react-native-actions-sheet";
@@ -12,24 +18,35 @@ import { UserContext } from "../providers/userContext";
 import { useFetchRecommendedRecipes } from "../api/queries";
 import { searchRecipes } from "../api/RecipeFunctions";
 import { recipeType } from "../types/recipe-type";
+import { queryKeysEnum } from "../api/_queryKeys";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function recipe() {
-  const { userData } = useContext(UserContext);
-  if (!userData) return null;
-  const userDetails = userData[0];
+  const { userData, setUserData } = useContext(UserContext);
+  const queryClient = useQueryClient();
 
-  const ingredientsString = userDetails.ingredients
-    .map((ingredient) => ingredient.genericName)
-    .join(",");
-  const cuisinesString = userDetails.cuisines.join(",");
-  const dietsString = userDetails.diets.join(",");
+
+//  invalidates the recipes query when the user data changes
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
+    queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
+    console.log("Recipes query invalidated");
+  }, [userData]);
+
+  const ingredientsString = userData?.ingredients
+    ? userData.ingredients.map((ingredient) => ingredient.genericName).join(",")
+    : "";
+
+  const cuisinesString = userData?.cuisines ? userData.cuisines.join(",") : "";
+  const dietsString = userData?.diets ? userData.diets.join(",") : "";
 
   const requestBody = {
-    ingredients: ingredientsString,
-    subscription: userDetails.subscription,
-    mode: "min-missing-ingredient",
+    subscription: userData?.subscription ?? false,
     cuisines: cuisinesString,
     diets: dietsString,
+    ingredients: ingredientsString,
+    mode: "XXXXXXX",
+    equipments: "",
   };
 
   const { isPending, data } = useFetchRecommendedRecipes(requestBody);
@@ -42,7 +59,7 @@ export default function recipe() {
 
   const handleSearch = async () => {
     const requestBody = {
-      subscription: userDetails.subscription,
+      subscription: userData?.subscription ?? false,
       query: query,
     };
     setQuery("");
@@ -62,7 +79,6 @@ export default function recipe() {
     setQuery(e);
   };
 
-  console.log("recipeScreen Re-render");
   return (
     <SafeAreaView
       className="bg-white"

@@ -48,7 +48,7 @@ export default function AlmostThere({
           ) : (
             <View className="flex justify-center items-center h-full w-[65%] rounded-2xl pb-10">
               <Text className="font-ppr text-base text-[#ff8754] text-center">
-                Sorry No Recipes Match Your Available Ingredients
+              Out of groceries? Or too picky?
               </Text>
             </View>
           )

@@ -2,12 +2,14 @@ import { Text, View } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
-import { ingredientProps } from "../../types/firebase-type";
-import { UserContext } from "../../providers/userContext";
+
+
 import { useContext } from "react";
 import { Redirect } from "expo-router";
 
 import { useDebounceCallback } from "usehooks-ts";
+import { ingredientProps } from "../../types/firebase-type";
+import { UserContext } from "../../providers/userContext";
 
 export const ScannedItemsIngredient: React.FC<ingredientProps> = ({
   name,
@@ -20,13 +22,10 @@ export const ScannedItemsIngredient: React.FC<ingredientProps> = ({
 }) => {
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
-  const data = userData[0];
-  const userGoogleToken = data.googleToken;
 
   const handleShowIngredient = async () => {
     await SheetManager.show("edit-ingredients-sheet", {
       payload: {
-        userGoogleToken: userGoogleToken,
         ingredient: {
           name: name,
           quantity: quantity,

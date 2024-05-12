@@ -3,6 +3,7 @@ import React from "react";
 import { Ingredient } from "./Ingredient";
 import { ingredientProps } from "../../types/firebase-type";
 
+
 export interface ShelfProps {
   category: string;
   ingredients: ingredientProps[];

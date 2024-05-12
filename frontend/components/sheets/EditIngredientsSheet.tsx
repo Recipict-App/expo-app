@@ -1,6 +1,5 @@
 import ActionSheet, { SheetProps } from "react-native-actions-sheet";
-import { View, Text, StyleSheet, Button, Modal } from "react-native";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, StyleSheet, Button, Modal, TextInput, TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
 import { Redirect } from "expo-router";
 import { Image } from "expo-image";
@@ -13,14 +12,19 @@ import { useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 
 import DateTimePicker from "react-native-ui-datepicker";
-import { ingredientProps, ingredientsEnum } from "../../types/firebase-type";
+import {
+  ingredientProps,
+  ingredientsEnum,
+  userDataType,
+} from "../../types/firebase-type";
 
 import * as Crypto from "expo-crypto";
 
 import { ScannedIngredientsContext } from "../../providers/ScannedItemProvider";
 
-import { getUserDataFromFirebaseAndSetContext } from "../../api/DatabaseFunctions";
-import { useEditIngredientToFirebase } from "../../api/mutations";
+import firestore from "@react-native-firebase/firestore";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeysEnum } from "../../api/_queryKeys";
 
 const type_data = [
   {
@@ -91,15 +95,11 @@ export default function EditIngredientSheet(
     ScannedIngredientsContext
   );
 
-  // initiate mutatation
-  const editIngredientMutation = useEditIngredientToFirebase();
-
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
+  const queryClient = useQueryClient();
   if (!userData) return <Redirect href="/" />;
-  const data = userData[0];
-  const userGoogleToken = data.googleToken;
-  const ingredients = data.ingredients;
+  const ingredients = userData.ingredients;
 
   //default value for ingredient
   let chosenIngredient = props.payload?.ingredient || {
@@ -119,7 +119,7 @@ export default function EditIngredientSheet(
 
   // for expiry date
   const [dateValue, setDateValue] = useState<Date>(
-    new Date(chosenIngredient.expiryDate)
+    chosenIngredient.expiryDate
   );
   const [dateModal, setDateModal] = useState<boolean>(false);
 
@@ -145,21 +145,28 @@ export default function EditIngredientSheet(
       (eachIngredient) => eachIngredient.id !== chosenIngredient.id
     );
 
-    // push to firebase
-    // await editIngredientToFirebase(userGoogleToken, newIngredients);
-    await editIngredientMutation.mutateAsync({
-      userGoogleToken: userGoogleToken,
-      newIngredients: newIngredients,
-    });
+    // update diets to firebase
+    await firestore()
+      .collection("users")
+      .doc(userData.uid)
+      .update({
+        ingredients: newIngredients,
+      })
+      .then(() => {
+        console.log("Preference - ingredients updated! (deleted)");
+      });
 
-    // refresh data to get fresh data from firebase
-    await getUserDataFromFirebaseAndSetContext(setUserData);
-    console.log("new data from firebase is fetched");
+    // refresh data to get fresh data from firebase to useContext
+    const doc = await firestore().collection("users").doc(userData.uid).get();
+    if (doc.exists) {
+      const data = doc.data() as userDataType;
+      setUserData(data);
+    }
 
     SheetManager.hide("edit-ingredients-sheet");
   };
 
-  const handleEditLocal = async () => {
+  const handleSubmitLocal = async () => {
     console.log("edit local...");
     const newIngredient: ingredientProps = {
       id: chosenIngredient.id,
@@ -192,12 +199,12 @@ export default function EditIngredientSheet(
 
   const handleChange = () => {
     if (props.payload?.mode === "temporary") {
-      handleEditLocal();
-    } else handleEdit();
+      handleSubmitLocal();
+    } else handleSubmitGlobal();
     SheetManager.hide("edit-ingredients-sheet");
   };
 
-  const handleEdit = async () => {
+  const handleSubmitGlobal = async () => {
     console.log("edit global...");
     const newIngredient: ingredientProps = {
       id: chosenIngredient.id,
@@ -225,15 +232,27 @@ export default function EditIngredientSheet(
       return eachIngredient;
     });
 
-    // push to firebase, and refresh context
-    // await editIngredientToFirebase(userGoogleToken, newIngredients);
-    await editIngredientMutation.mutateAsync({
-      userGoogleToken: userGoogleToken,
-      newIngredients: newIngredients,
-    });
+    // update diets to firebase
+    await firestore()
+      .collection("users")
+      .doc(userData.uid)
+      .update({
+        ingredients: newIngredients,
+      })
+      .then(() => {
+        console.log("Preference - ingredients updated! (added)");
+      });
 
-    // refresh data to get fresh data from firebase
-    await getUserDataFromFirebaseAndSetContext(setUserData);
+    // refresh data to get fresh data from firebase to useContext
+    const doc = await firestore().collection("users").doc(userData.uid).get();
+    if (doc.exists) {
+      const data = doc.data() as userDataType;
+      setUserData(data);
+    }
+    
+    // refresh the recipes
+    await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
+    await queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
   };
 
   return (

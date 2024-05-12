@@ -220,7 +220,9 @@ export default function App() {
     <View style={styles.container}>
       {isFocused && (
         <Camera
-          style={[styles.camera]}
+          style={[
+            styles.camera
+          ]}
           type={CameraType.back}
           ref={cameraRef}
           flashMode={torch}

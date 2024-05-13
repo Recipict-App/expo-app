@@ -7,10 +7,9 @@ import { UserContext } from "../providers/userContext";
 import { useContext } from "react";
 
 import { SheetManager } from "react-native-actions-sheet";
-
 import auth from "@react-native-firebase/auth";
-
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import * as Linking from 'expo-linking';
 
 export default function Profile() {
   const { userData, setUserData } = useContext(UserContext);
@@ -24,7 +23,9 @@ export default function Profile() {
   const handleNotification = async () => {
 
   };
-  const handleAboutUs = () => {};
+  const handleAboutUs = () => {
+    Linking.openURL("https://www.recipict.app/");
+  };
 
   // const handleLocation = () => {};
   // const handleAppereance =  () => {};

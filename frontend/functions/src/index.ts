@@ -82,8 +82,10 @@ export const receipt_extractor_api = onRequest(async (req, res) => {
     );
     // res.status(200).json(document_ai_result);
   } catch (error: any) {
-    res.status(500).send(error.message);
+    res.status(500).send("Error when calling DocAI_client");
   }
+
+  // logger.log("succcessfully called DocAI_client -----------");
 
   /* ------- GET EXTRACTED DATA AND OBJECTIFY IT -------- */
 
@@ -131,15 +133,29 @@ export const receipt_extractor_api = onRequest(async (req, res) => {
         extractQuantityAndUnit(raw_product_quantity);
 
       // get the ingredient properties
-      let assign_ingredient_properly_url = `https://us-central1-recipict-dev-gcp.cloudfunctions.net/get_ingredient_property_py?name=${product_name}`;
-      const properties_response = await fetch(assign_ingredient_properly_url, {
-        method: "GET",
-        mode: "cors",
-      });
-      const { category, expiration, generic_name } =
-        await properties_response.json();
+      let {
+        category = "Not ingredients",
+        expiration = "7",
+        generic_name = "",
+      } = {};
 
+      try {
+        let assign_ingredient_properly_url = `https://us-central1-recipict-dev-gcp.cloudfunctions.net/get_ingredient_property_py?name=${product_name}`;
+        const properties_response = await fetch(
+          assign_ingredient_properly_url,
+          {
+            method: "GET",
+            mode: "cors",
+          }
+        );
 
+        ({ category, expiration, generic_name } =
+          await properties_response.json());
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
+
+      // logger.log("generic_name", generic_name);
 
       return {
         name: product_name,

@@ -11,8 +11,8 @@ const functions = require("firebase-functions/v1/auth");
 
 // * API KEYS
 
-const SPOONACULAR_API_KEY = "fe291eb222404e7ab4b7858023ff1d90";
 const projectId = "recipict-dev-gcp";
+const SPOONACULAR_API_KEY = "fe291eb222404e7ab4b7858023ff1d90";
 const DocAI_locationId = "us";
 const DocAI_processorId = "93c825aa3842bef3";
 
@@ -131,7 +131,7 @@ export const receipt_extractor_api = onRequest(async (req, res) => {
         extractQuantityAndUnit(raw_product_quantity);
 
       // get the ingredient properties
-      let assign_ingredient_properly_url = `https://us-central1-recipict-dev-gcp.cloudfunctions.net/get_ingredient_properties_py?name=${product_name}`;
+      let assign_ingredient_properly_url = `https://us-central1-recipict-dev-gcp.cloudfunctions.net/get_ingredient_property_py?name=${product_name}`;
       const properties_response = await fetch(assign_ingredient_properly_url, {
         method: "GET",
         mode: "cors",

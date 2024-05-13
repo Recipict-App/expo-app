@@ -3,13 +3,14 @@ import { View, Text, ScrollView } from "react-native";
 import { Image } from "expo-image";
 import OptionCard from "../components/OptionCard";
 import { Redirect } from "expo-router";
-
 import { UserContext } from "../providers/userContext";
 import { useContext } from "react";
 
 import { SheetManager } from "react-native-actions-sheet";
 
 import auth from "@react-native-firebase/auth";
+
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export default function Profile() {
   const { userData, setUserData } = useContext(UserContext);
@@ -29,6 +30,7 @@ export default function Profile() {
   // const handleAppereance =  () => {};
 
   const handleLogOut = async () => {
+    GoogleSignin.signOut();
     auth()
       .signOut()
       .then(() => {

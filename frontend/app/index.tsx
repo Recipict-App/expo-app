@@ -135,7 +135,7 @@ export default function App() {
 
       <Image
         style={{
-          zIndex: 4,
+          zIndex: 20,
           position: "absolute",
           right: -60,
           top: 320,
@@ -166,7 +166,7 @@ export default function App() {
         source={require("../assets/images/Satay.png")}
       />
 
-      <View className="z-5 absolute bottom-[130] space-y-4">
+      <View className="z-5 absolute bottom-[130] space-y-4 z-10">
         {/* Sign in  */}
         <TouchableOpacity
           onPress={() =>

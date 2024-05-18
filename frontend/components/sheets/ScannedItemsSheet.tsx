@@ -1,12 +1,9 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 
-import ActionSheet, {
-  SheetProps,
-  SheetManager,
-} from "react-native-actions-sheet";
+import ActionSheet, { SheetProps, SheetManager } from "react-native-actions-sheet";
 
-import { ingredientProps, userDataType } from "../../types/firebase-type";
+import { ingredientType, userDataType } from "../../types/firebase-type";
 import { Shelf } from "../ingredients/Shelf";
 
 import { useContext } from "react";
@@ -19,12 +16,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { queryKeysEnum } from "../../api/_queryKeys";
 
 export default function ScannedItemsSheet(props: SheetProps) {
-  const { scannedIngredients, setScannedIngredients } = useContext(
-    ScannedIngredientsContext
-  );
+  const { scannedIngredients, setScannedIngredients } = useContext(ScannedIngredientsContext);
   const queryClient = useQueryClient();
 
-  // console.log(scannedIngredients);
+  console.log(scannedIngredients);
 
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
@@ -38,11 +33,7 @@ export default function ScannedItemsSheet(props: SheetProps) {
   };
 
   const handleAdd = async () => {
-    const newIngredients: ingredientProps[] = [
-      ...ingredients,
-      ...scannedIngredients,
-    ];
-
+    const newIngredients: ingredientType[] = [...ingredients, ...scannedIngredients];
 
     // update diets to firebase
     await firestore()
@@ -70,9 +61,9 @@ export default function ScannedItemsSheet(props: SheetProps) {
   };
 
   // Group items by type for display
-  function groupByType(objectArray: Array<ingredientProps>) {
+  function groupByType(objectArray: Array<ingredientType>) {
     if (!objectArray) return;
-    return objectArray.reduce(function (acc: any, obj: ingredientProps) {
+    return objectArray.reduce(function (acc: any, obj: ingredientType) {
       var key = obj["type"];
       if (!acc[key]) {
         acc[key] = [];
@@ -96,37 +87,19 @@ export default function ScannedItemsSheet(props: SheetProps) {
         <ScrollView>
           <View className="flex items-center gap-4 pt-2">
             {/* Scroll */}
-            <View
-              style={{ gap: 12 }}
-              className="justify-center items-center w-10/12 flex"
-            >
+            <View style={{ gap: 12 }} className="justify-center items-center w-10/12 flex">
               {/* Dispay items */}
               {Object.keys(groupedItems).map(function (key, index) {
-                return (
-                  <Shelf
-                    key={index}
-                    category={key}
-                    ingredients={groupedItems[key]}
-                    mode="temporary"
-                  />
-                );
+                return <Shelf key={index} category={key} ingredients={groupedItems[key]} mode="temporary" />;
               })}
               {/* Buttons */}
               <View className=" h-fit flex flex-row space-x-7 pb-1 pt-4 justify-center">
                 <TouchableOpacity onPress={handleDelete}>
-                  <Image
-                    className="w-[56px] h-[56px]"
-                    contentFit="contain"
-                    source={require("../../assets/icons/DeleteIngredient.svg")}
-                  />
+                  <Image className="w-[56px] h-[56px]" contentFit="contain" source={require("../../assets/icons/DeleteIngredient.svg")} />
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={handleAdd}>
-                  <Image
-                    className="w-[56px] h-[56px]"
-                    contentFit="contain"
-                    source={require("../../assets/icons/ApproveIngredient.svg")}
-                  />
+                  <Image className="w-[56px] h-[56px]" contentFit="contain" source={require("../../assets/icons/ApproveIngredient.svg")} />
                 </TouchableOpacity>
               </View>
             </View>

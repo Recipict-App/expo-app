@@ -179,3 +179,43 @@ export interface UnusedIngredient {
   meta: any[];
   image: string;
 }
+
+export interface JSON_FORMAT {
+  date: string;
+  ingredients: [
+    {
+      name: String;
+      quantity: number;
+      unit:
+        | "teaspoon"
+        | "tablespoon"
+        | "cup"
+        | "milliliters"
+        | "liters"
+        | "grams"
+        | "kilograms"
+        | "ounces"
+        | "pounds"
+        | "pieces";
+      daysBeforeExpired: number;
+      dateAdded: string | "";
+      type:
+        | "Vegetables"
+        | "Fruits"
+        | "Liquids"
+        | "Grains"
+        | "Meats"
+        | "Dairy"
+        | "Seafood"
+        | "Herbs & spices"
+        | "Seeds"
+        | "Oils"
+        | "Condiments"
+        | "Not ingredients";
+      genericName: string;
+      productCode: string;
+    }
+  ];
+}
+
+15930 - 14093

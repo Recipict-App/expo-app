@@ -7,7 +7,7 @@ import { useContext } from "react";
 import { Redirect } from "expo-router";
 
 import { useDebounceCallback } from "usehooks-ts";
-import { ingredientProps, ingredientsEnum } from "../../types/firebase-type";
+import { ingredientType, ingredientsEnum } from "../../types/firebase-type";
 import { UserContext } from "../../providers/userContext";
 
 const FRUIT_IMG = require("../../assets/icons/ingredients/Fruits.svg");
@@ -36,11 +36,13 @@ const ingredientImages = {
   [ingredientsEnum.NotIngredients]: NOT_INGREDIENT_IMG,
 };
 
-export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
+export const Ingredient: React.FC<ingredientType & { mode: string }> = ({
   name,
   quantity,
   unit,
-  expiryDate,
+  daysBeforeExpired,
+  productCode,
+  genericName,
   dateAdded,
   type,
   id,
@@ -49,15 +51,17 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
 
-
   const handleShowIngredient = async () => {
+    console.log("from ingredient: ", daysBeforeExpired);
     await SheetManager.show("edit-ingredients-sheet", {
       payload: {
         ingredient: {
           name: name,
           quantity: quantity,
           unit: unit,
-          expiryDate: expiryDate,
+          daysBeforeExpired: daysBeforeExpired,
+          productCode: productCode,
+          genericName: genericName,
           dateAdded: dateAdded,
           type: type,
           id: id,
@@ -71,7 +75,7 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
   try {
     imageSource = ingredientImages[type as keyof typeof ingredientImages];
     if (!imageSource) {
-      throw new Error('Image not found');
+      throw new Error("Image not found");
     }
   } catch (error) {
     imageSource = NOT_INGREDIENT_IMG;
@@ -86,14 +90,6 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
     }
   );
 
-  const dayDifference =
-    1 +
-    Math.max(
-      Math.floor(
-        (new Date(expiryDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
-      ),
-      0
-    );
 
   return (
     <TouchableOpacity
@@ -104,10 +100,7 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
         <View className="flex flex-row">
           {/* Image placeholder */}
           <View className="rounded-lg h-8 w-8 justify-center items-center flex ">
-            <Image
-              className="object-contain h-7 w-7"
-              source={imageSource}
-            />
+            <Image className="object-contain h-7 w-7" source={imageSource} />
           </View>
 
           {/* Text */}
@@ -128,7 +121,7 @@ export const Ingredient: React.FC<ingredientProps & { mode: string }> = ({
                 " " +
                 unit +
                 "  |  " +
-                dayDifference +
+                daysBeforeExpired +
                 " days before expired"}
             </Text>
           </View>

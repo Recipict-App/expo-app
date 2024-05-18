@@ -1,12 +1,11 @@
 import { View, Text } from "react-native";
 import React from "react";
 import { Ingredient } from "./Ingredient";
-import { ingredientProps } from "../../types/firebase-type";
-
+import { ingredientType } from "../../types/firebase-type";
 
 export interface ShelfProps {
   category: string;
-  ingredients: ingredientProps[];
+  ingredients: ingredientType[];
   mode?: string;
 }
 
@@ -40,7 +39,8 @@ export const Shelf: React.FC<ShelfProps> = ({
               name={item.name}
               quantity={item.quantity}
               unit={item.unit}
-              expiryDate={item.expiryDate}
+              daysBeforeExpired={item.daysBeforeExpired}
+              productCode={item.productCode}
               dateAdded={item.dateAdded}
               type={item.type}
               genericName={item.genericName}

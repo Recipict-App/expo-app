@@ -161,9 +161,7 @@ export const receipt_extractor_api = onRequest(async (req, res) => {
         name: product_name,
         quantity: product_quantity,
         unit: quantity_unit || "pc",
-        expiryDate: new Date(
-          new Date().getTime() + Number(expiration) * 24 * 60 * 60 * 1000
-        ),
+        daysBeforeExpired: expiration,
         dateAdded: receipt_date || new Date(),
         type: category,
         id: uuidv4(),

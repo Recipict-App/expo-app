@@ -12,11 +12,7 @@ import { useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 
 import DateTimePicker from "react-native-ui-datepicker";
-import {
-  ingredientProps,
-  ingredientsEnum,
-  userDataType,
-} from "../../types/firebase-type";
+import { ingredientType, ingredientsEnum, userDataType } from "../../types/firebase-type";
 
 import * as Crypto from "expo-crypto";
 
@@ -83,17 +79,17 @@ export default function EditIngredientSheet(
       name: string;
       quantity: number;
       unit: string;
-      expiryDate: Date;
-      dateAdded: Date;
+      daysBeforeExpired: number;
+      productCode: string;
+      genericName: string;
+      dateAdded: string;
       type: ingredientsEnum;
       id: string;
     };
     mode: string;
   }>
 ) {
-  const { scannedIngredients, setScannedIngredients } = useContext(
-    ScannedIngredientsContext
-  );
+  const { scannedIngredients, setScannedIngredients } = useContext(ScannedIngredientsContext);
 
   // get user data from local
   const { userData, setUserData } = useContext(UserContext);
@@ -104,23 +100,21 @@ export default function EditIngredientSheet(
   //default value for ingredient
   let chosenIngredient = props.payload?.ingredient || {
     name: "something",
+    genericName: "",
+    productCode: "",
     quantity: 1,
     unit: "gr",
-    expiryDate: new Date(),
-    dateAdded: new Date(),
+    daysBeforeExpired: 0,
+    dateAdded: new Date().toISOString().split("T")[0],
     type: ingredientsEnum.NotIngredients,
     id: Crypto.randomUUID(),
   };
 
   // for type dropdown
-  const [typeValue, setTypeValue] = useState<ingredientsEnum>(
-    chosenIngredient.type
-  );
+  const [typeValue, setTypeValue] = useState<ingredientsEnum>(chosenIngredient.type);
 
   // for expiry date
-  const [dateValue, setDateValue] = useState<Date>(
-    chosenIngredient.expiryDate
-  );
+  const [dateValue, setDateValue] = useState<string>(new Date(new Date().setDate(new Date().getDate() + chosenIngredient.daysBeforeExpired)).toISOString().split("T")[0]);
   const [dateModal, setDateModal] = useState<boolean>(false);
 
   // for quantity and unit
@@ -130,9 +124,10 @@ export default function EditIngredientSheet(
   const [nameValue, setNameValue] = useState<string>(chosenIngredient.name);
 
   // for quantity
-  const [quantityValue, setQuantityValue] = useState<string>(
-    chosenIngredient.quantity.toString()
-  );
+  const [quantityValue, setQuantityValue] = useState<string>(chosenIngredient.quantity.toString());
+
+  // console.log(chosenIngredient.daysBeforeExpired);
+  console.log("dateValue:", dateValue);
 
   // handling buttons
 
@@ -141,9 +136,7 @@ export default function EditIngredientSheet(
   };
 
   const handleDelete = async () => {
-    const newIngredients = ingredients.filter(
-      (eachIngredient) => eachIngredient.id !== chosenIngredient.id
-    );
+    const newIngredients = ingredients.filter((eachIngredient) => eachIngredient.id !== chosenIngredient.id);
 
     // update diets to firebase
     await firestore()
@@ -168,21 +161,20 @@ export default function EditIngredientSheet(
 
   const handleSubmitLocal = async () => {
     console.log("edit local...");
-    const newIngredient: ingredientProps = {
+    const newIngredient: ingredientType = {
       id: chosenIngredient.id,
       name: nameValue,
       quantity: parseInt(quantityValue),
       unit: unitValue,
-      expiryDate: dateValue,
-      dateAdded: chosenIngredient.dateAdded,
       type: typeValue,
       genericName: nameValue,
+      daysBeforeExpired: chosenIngredient.daysBeforeExpired,
+      dateAdded: chosenIngredient.dateAdded,
+      productCode: chosenIngredient.productCode,
     };
 
     // if there is no ingredient in ingredients, add new ingredient
-    const ingredientExists = scannedIngredients.some(
-      (ingredient: any) => ingredient.id === chosenIngredient.id
-    );
+    const ingredientExists = scannedIngredients.some((ingredient: any) => ingredient.id === chosenIngredient.id);
     if (!ingredientExists) {
       scannedIngredients.push(newIngredient);
     }
@@ -206,21 +198,20 @@ export default function EditIngredientSheet(
 
   const handleSubmitGlobal = async () => {
     console.log("edit global...");
-    const newIngredient: ingredientProps = {
+    const newIngredient: ingredientType = {
       id: chosenIngredient.id,
       name: nameValue,
       quantity: parseInt(quantityValue),
       unit: unitValue,
-      expiryDate: dateValue,
-      dateAdded: chosenIngredient.dateAdded,
       type: typeValue,
       genericName: nameValue,
+      daysBeforeExpired: chosenIngredient.daysBeforeExpired,
+      dateAdded: chosenIngredient.dateAdded,
+      productCode: chosenIngredient.productCode,
     };
 
     // if there is no ingredient in ingredients, add new ingredient
-    const ingredientExists = ingredients.some(
-      (ingredient) => ingredient.id === chosenIngredient.id
-    );
+    const ingredientExists = ingredients.some((ingredient) => ingredient.id === chosenIngredient.id);
     if (!ingredientExists) {
       ingredients.push(newIngredient);
     }
@@ -249,7 +240,7 @@ export default function EditIngredientSheet(
       const data = doc.data() as userDataType;
       setUserData(data);
     }
-    
+
     // refresh the recipes
     await queryClient.invalidateQueries({ queryKey: [queryKeysEnum.recipes] });
     await queryClient.removeQueries({ queryKey: [queryKeysEnum.recipes] });
@@ -257,10 +248,7 @@ export default function EditIngredientSheet(
 
   return (
     <ActionSheet id={props.sheetId}>
-      <View
-        className="h-fit min-h-[42%] flex items-center px-5 py-2 "
-        style={{ gap: 25 }}
-      >
+      <View className="h-fit min-h-[42%] flex items-center px-5 py-2 " style={{ gap: 25 }}>
         <View
           style={{
             width: "50%",
@@ -269,10 +257,7 @@ export default function EditIngredientSheet(
             backgroundColor: "#9F9F9F",
           }}
         >
-          <TouchableOpacity
-            className="min-h-full min-w-full"
-            onPress={handleClose}
-          />
+          <TouchableOpacity className="min-h-full min-w-full" onPress={handleClose} />
         </View>
 
         {/* Screen */}
@@ -291,11 +276,7 @@ export default function EditIngredientSheet(
             <View className="h-[50px] rounded-xl bg-[#F8F8F6]">
               {/* pop up */}
               <View className="">
-                <Modal
-                  animationType={"slide"}
-                  transparent={true}
-                  visible={dateModal}
-                >
+                <Modal animationType={"slide"} transparent={true} visible={dateModal}>
                   {/*All views of Modal*/}
                   <View style={modalStyles.modal}>
                     <DateTimePicker
@@ -310,7 +291,7 @@ export default function EditIngredientSheet(
                       mode={"date"}
                       selectedItemColor="#1BD15D"
                       onValueChange={(date: any) => {
-                        setDateValue(date);
+                        setDateValue(date.substring(0, 10));
                       }}
                     />
 
@@ -320,10 +301,7 @@ export default function EditIngredientSheet(
                       }}
                     >
                       <View className="w-[270] h-fit items-center justify-center ">
-                        <Image
-                          className="flex w-[12px] h-[20px] object-contain rotate-90 "
-                          source={require("../../assets/icons/ArrowWhite.svg")}
-                        />
+                        <Image className="flex w-[12px] h-[20px] object-contain rotate-90 " source={require("../../assets/icons/ArrowWhite.svg")} />
                       </View>
                     </TouchableOpacity>
                   </View>
@@ -338,7 +316,7 @@ export default function EditIngredientSheet(
                 }}
               >
                 <View className=" w-full h-full justify-center items-center">
-                  <Text>{dateValue.toString().substring(0, 10)}</Text>
+                  <Text>{dateValue}</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -397,21 +375,12 @@ export default function EditIngredientSheet(
         </View>
 
         {/* Buttons */}
-        <View
-          className="flex flex-row w-full justify-center items-end"
-          style={{ gap: 50 }}
-        >
+        <View className="flex flex-row w-full justify-center items-end" style={{ gap: 50 }}>
           <TouchableOpacity onPress={handleDelete}>
-            <Image
-              style={{ width: 60, height: 60 }}
-              source={require("../../assets/icons/DeleteIngredient.svg")}
-            />
+            <Image style={{ width: 60, height: 60 }} source={require("../../assets/icons/DeleteIngredient.svg")} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleChange}>
-            <Image
-              style={{ width: 60, height: 60 }}
-              source={require("../../assets/icons/Approve.svg")}
-            />
+            <Image style={{ width: 60, height: 60 }} source={require("../../assets/icons/Approve.svg")} />
           </TouchableOpacity>
         </View>
       </View>

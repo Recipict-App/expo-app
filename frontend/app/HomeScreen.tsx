@@ -4,19 +4,17 @@ import { TouchableOpacity } from "react-native";
 import { Ingredient } from "../components/ingredients/Ingredient";
 import { Link, Redirect } from "expo-router";
 
-import { ingredientProps } from "../types/firebase-type";
+import { ingredientType } from "../types/firebase-type";
 import { UserContext } from "../providers/userContext";
 import { useContext } from "react";
 import Explore from "../components/recipes/Explore";
 import IngredientSkeleton from "../components/skeletons/IngredientSkeleton";
 
-
-
 export default function Home() {
   const { userData, setUserData } = useContext(UserContext);
 
   // console.log("User Data from context:", userData);
-  const ingredients: ingredientProps[] = userData?.ingredients ?? [];
+  const ingredients: ingredientType[] = userData?.ingredients ?? [];
 
   return (
     <View className="bg-white">
@@ -83,7 +81,7 @@ export default function Home() {
                 )
               }
               {ingredients[0] ? (
-                ingredients.map((item: ingredientProps, index: number) => {
+                ingredients.map((item: ingredientType, index: number) => {
                   if (index >= 5) return;
                   return (
                     <Ingredient
@@ -93,9 +91,10 @@ export default function Home() {
                       quantity={item.quantity}
                       unit={item.unit}
                       dateAdded={item.dateAdded}
-                      expiryDate={item.expiryDate}
+                      daysBeforeExpired={item.daysBeforeExpired}
                       type={item.type}
                       genericName={item.genericName}
+                      productCode={item.productCode}
                       mode="normal"
                     />
                   );
@@ -105,7 +104,7 @@ export default function Home() {
               )}
             </View>
           </View>
-          <Explore userData={userData}/>
+          <Explore userData={userData} />
         </View>
       </ScrollView>
     </View>

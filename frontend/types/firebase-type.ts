@@ -57,17 +57,6 @@ export enum dietsEnum {
   Whole30 = "Whole30",
 }
 
-export interface ingredient {
-  id: String;
-  name: String;
-  quantity: number;
-  unit: String;
-  expiryDate: Date;
-  dateAdded: Date;
-  type: ingredientsEnum;
-  genericName: string;
-}
-
 export enum subscriptionTypes {
   Regular = "Regular",
   Pro = "Pro",
@@ -108,24 +97,25 @@ export declare class UserMetadata {
 }
 
 export interface userDataType {
-  uid: string,
-  name: string,
-  email: string,
-  metadata: UserMetadata,
-  photoURL: string,
-  ingredients: ingredient[],
-  cuisines: string[],
-  diets: string[],
-  subscription: Boolean,
+  uid: string;
+  name: string;
+  email: string;
+  metadata: UserMetadata;
+  photoURL: string;
+  ingredients: ingredientType[];
+  cuisines: string[];
+  diets: string[];
+  subscription: Boolean;
 }
 
-export interface ingredientProps {
-  id: String;
-  name: String;
-  quantity: number;
-  unit: String;
-  expiryDate: Date;
-  dateAdded: Date;
-  type: ingredientsEnum;
+export interface ingredientType {
+  dateAdded: string;
+  daysBeforeExpired: number;
   genericName: string;
+  name: String;
+  productCode: String;
+  quantity: number;
+  type: ingredientsEnum;
+  unit: String;
+  id: String;
 }

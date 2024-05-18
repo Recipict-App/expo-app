@@ -24,7 +24,7 @@ import { useAppState } from "../hooks/useAppState";
 import { useState } from "react";
 import { UserContext } from "../providers/userContext";
 import { ScannedIngredientsContext } from "../providers/ScannedItemProvider";
-import { userDataType, ingredientProps } from "../types/firebase-type";
+import { userDataType, ingredientType } from "../types/firebase-type";
 
 import { LogBox } from "react-native";
 LogBox.ignoreLogs([
@@ -49,7 +49,7 @@ export default function RootLayout() {
   const [userData, setUserData] = useState<userDataType>();
 
   const [scannedIngredients, setScannedIngredients] =
-    useState<ingredientProps[]>();
+    useState<ingredientType[]>();
 
   let [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,

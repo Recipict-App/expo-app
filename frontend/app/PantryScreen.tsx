@@ -10,14 +10,14 @@ import { SheetManager } from "react-native-actions-sheet";
 import { Redirect } from "expo-router";
 
 import { Shelf } from "../components/ingredients/Shelf";
-import { ingredientProps } from "../types/firebase-type";
+import { ingredientType } from "../types/firebase-type";
 
 import { useContext, useState } from "react";
 import { UserContext } from "../providers/userContext";
 
 // Group items by type for display
-function groupByType(objectArray: ingredientProps[]) {
-  return objectArray.reduce(function (acc: any, obj: ingredientProps) {
+function groupByType(objectArray: ingredientType[]) {
+  return objectArray.reduce(function (acc: any, obj: ingredientType) {
     var key = obj["type"];
     if (!acc[key]) {
       acc[key] = [];

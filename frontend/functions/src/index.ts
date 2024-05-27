@@ -1,13 +1,13 @@
 /* eslint-disable */
 import { onRequest } from "firebase-functions/v2/https";
-// import * as logger from "firebase-functions/logger";
+import * as logger from "firebase-functions/logger";
 import { UserRecord } from "firebase-admin/auth";
 import { v4 as uuidv4 } from "uuid";
 
-const { DocumentProcessorServiceClient } =
-  require("@google-cloud/documentai").v1;
+const { DocumentProcessorServiceClient } = require("@google-cloud/documentai").v1;
 const admin = require("firebase-admin");
 const functions = require("firebase-functions/v1/auth");
+const { onSchedule } = require("firebase-functions/v2/scheduler");
 
 // * API KEYS
 
@@ -28,10 +28,7 @@ const DocAI_client = new DocumentProcessorServiceClient();
 export const recipe_by_ingredients = onRequest(async (req, res) => {
   const ingredientsString = req.body.ingredients;
   const recipeAmount = req.body.subscription == true ? 24 : 12;
-  const mode =
-    req.body.mode === "ready"
-      ? "max-used-ingredients"
-      : "min-missing-ingredients";
+  const mode = req.body.mode === "ready" ? "max-used-ingredients" : "min-missing-ingredients";
   const cuisinesString = req.body.cuisines || "";
   const dietsString = req.body.diets || "";
   const equipmentsString = req.body.equipments || "";
@@ -77,9 +74,7 @@ export const receipt_extractor_api = onRequest(async (req, res) => {
 
   try {
     // suprisingly, the line below return a list, and we need the first element
-    document_ai_result = await DocAI_client.processDocument(
-      document_ai_request_body
-    );
+    document_ai_result = await DocAI_client.processDocument(document_ai_request_body);
     // res.status(200).json(document_ai_result);
   } catch (error: any) {
     res.status(500).send("Error when calling DocAI_client");
@@ -97,8 +92,7 @@ export const receipt_extractor_api = onRequest(async (req, res) => {
     properties.forEach((property: any) => {
       if (property.type == "product_code") product_code = property.mentionText;
       if (property.type == "product_name") product_name = property.mentionText;
-      if (property.type == "product_quantity")
-        product_quantity = property.mentionText;
+      if (property.type == "product_quantity") product_quantity = property.mentionText;
     });
 
     return { product_code, product_name, product_quantity };
@@ -124,33 +118,20 @@ export const receipt_extractor_api = onRequest(async (req, res) => {
         return;
       }
 
-      const {
-        product_code,
-        product_name,
-        product_quantity: raw_product_quantity,
-      } = extractProperties(item.properties);
-      const { product_quantity, quantity_unit } =
-        extractQuantityAndUnit(raw_product_quantity);
+      const { product_code, product_name, product_quantity: raw_product_quantity } = extractProperties(item.properties);
+      const { product_quantity, quantity_unit } = extractQuantityAndUnit(raw_product_quantity);
 
       // get the ingredient properties
-      let {
-        category = "Not ingredients",
-        expiration = "7",
-        generic_name = "",
-      } = {};
+      let { category = "Not ingredients", expiration = "7", generic_name = "" } = {};
 
       try {
         let assign_ingredient_properly_url = `https://us-central1-recipict-dev-gcp.cloudfunctions.net/get_ingredient_property_py?name=${product_name}`;
-        const properties_response = await fetch(
-          assign_ingredient_properly_url,
-          {
-            method: "GET",
-            mode: "cors",
-          }
-        );
+        const properties_response = await fetch(assign_ingredient_properly_url, {
+          method: "GET",
+          mode: "cors",
+        });
 
-        ({ category, expiration, generic_name } =
-          await properties_response.json());
+        ({ category, expiration, generic_name } = await properties_response.json());
       } catch (error) {
         console.error("An error occurred:", error);
       }
@@ -197,4 +178,40 @@ exports.create_user_event = functions.user().onCreate((user: UserRecord) => {
     .collection("users")
     .doc(user.uid)
     .set(JSON.parse(JSON.stringify(new_user_data)));
+});
+
+exports.deduct_expiry_date_everyday = onSchedule("every day 00:00", async () => {
+  try {
+    // Fetch all users
+    const usersSnapshot = await admin.firestore().collection("users").get();
+    const userDocs = usersSnapshot.docs;
+
+    // Process each user document
+    const promises = userDocs.map(async (userDoc: any) => {
+      const userData = userDoc.data();
+
+      // Check if the user has ingredients
+      if (Array.isArray(userData.ingredients) && userData.ingredients.length > 0) {
+        const updatedIngredients = userData.ingredients.map((ingredient: any) => {
+          // Decrement daysBeforeExpired
+          return {
+            ...ingredient,
+            daysBeforeExpired: ingredient.daysBeforeExpired > 0 ? ingredient.daysBeforeExpired - 1 : 0,
+          };
+        });
+
+        // Update user document with the new ingredients array
+        await admin.firestore().collection("users").doc(userDoc.id).update({
+          ingredients: updatedIngredients,
+        });
+      }
+    });
+
+    // Wait for all promises to complete
+    await Promise.all(promises);
+
+    logger.log("Successfully decremented daysBeforeExpired for all users.");
+  } catch (error) {
+    logger.log("Error decrementing daysBeforeExpired:", error);
+  }
 });

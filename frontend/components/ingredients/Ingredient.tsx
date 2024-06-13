@@ -36,18 +36,7 @@ const ingredientImages = {
   [ingredientsEnum.NotIngredients]: NOT_INGREDIENT_IMG,
 };
 
-export const Ingredient: React.FC<ingredientType & { mode: string }> = ({
-  name,
-  quantity,
-  unit,
-  daysBeforeExpired,
-  productCode,
-  genericName,
-  dateAdded,
-  type,
-  id,
-  mode,
-}) => {
+export const Ingredient: React.FC<ingredientType & { mode: string }> = ({ name, quantity, unit, daysBeforeExpired, productCode, genericName, dateAdded, type, id, mode }) => {
   const { userData, setUserData } = useContext(UserContext);
   if (!userData) return <Redirect href="/" />;
 
@@ -81,22 +70,14 @@ export const Ingredient: React.FC<ingredientType & { mode: string }> = ({
     imageSource = NOT_INGREDIENT_IMG;
   }
 
-  const debouncedhandleShowIngredient = useDebounceCallback(
-    handleShowIngredient,
-    500,
-    {
-      leading: true,
-      trailing: false,
-    }
-  );
-
+  const debouncedhandleShowIngredient = useDebounceCallback(handleShowIngredient, 500, {
+    leading: true,
+    trailing: false,
+  });
 
   return (
-    <TouchableOpacity
-      className="w-full"
-      onPress={debouncedhandleShowIngredient}
-    >
-      <View className="w-full h-[72px] rounded-3xl bg-[#F8F8F6] flex-row pl-[20px] items-center justify-between">
+    <TouchableOpacity className="w-full" onPress={debouncedhandleShowIngredient}>
+      <View className={`w-full h-[72px] rounded-3xl  ${daysBeforeExpired === 0 ? "bg-[#ffecec]" : "bg-[#F8F8F6]"} flex-row pl-[20px] items-center justify-between`}>
         <View className="flex flex-row">
           {/* Image placeholder */}
           <View className="rounded-lg h-8 w-8 justify-center items-center flex ">
@@ -105,33 +86,22 @@ export const Ingredient: React.FC<ingredientType & { mode: string }> = ({
 
           {/* Text */}
           <View className="ml-4">
-            <Text
-              numberOfLines={1}
-              className="text-sm font-pps max-w-[200px]"
-              adjustsFontSizeToFit
-            >
+            <Text numberOfLines={1} className="text-sm font-pps max-w-[200px]" adjustsFontSizeToFit>
               {name}
             </Text>
-            <Text
-              numberOfLines={1}
-              className="text-xs font-ppr text-grey max-w-[200px]"
-              adjustsFontSizeToFit
-            >
-              {quantity +
-                " " +
-                unit +
-                "  |  " +
-                daysBeforeExpired +
-                " days before expired"}
-            </Text>
+            <View className="flex-row">
+              <Text numberOfLines={1} className="text-xs font-ppr max-w-[200px] text-grey" adjustsFontSizeToFit>
+                {quantity + " " + unit + "  |  "}
+              </Text>
+              <Text className={`text-xs font-ppr ${daysBeforeExpired === 0 ? "text-[#FE0303]" : "text-grey"}`} adjustsFontSizeToFit>
+                {daysBeforeExpired + " days before expired"}
+              </Text>
+            </View>
           </View>
         </View>
 
         {/* Arrow */}
-        <Image
-          className="flex w-[6px] h-[10px] object-contain mr-7"
-          source={require("../../assets/icons/Arrow.svg")}
-        />
+        <Image className="flex w-[6px] h-[10px] object-contain mr-7" source={require("../../assets/icons/Arrow.svg")} />
       </View>
     </TouchableOpacity>
   );

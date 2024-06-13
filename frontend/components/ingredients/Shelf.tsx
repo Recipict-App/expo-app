@@ -18,7 +18,7 @@ export const Shelf: React.FC<ShelfProps> = ({
     <View className="w-11/12 mt-3">
       <Text
         numberOfLines={1}
-        className="text-[#FE0303] text-lg font-pps mb-2 max-w-[300px]"
+        className="text-[#5cd358] text-lg font-pps mb-2 max-w-[300px]"
       >
         {category}
       </Text>
